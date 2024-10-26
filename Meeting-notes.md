@@ -7,7 +7,7 @@ In each meeting, you are required to discuss:
 3. Plan for the next week for everyone
 4. Deviations and changes to the project plan, if any
 
-# Meeting 25.10.2024 14:15-15:30
+# Meeting dd.mm.yy
 
 **Participants**: 
 1. Rautapää Jaakko
