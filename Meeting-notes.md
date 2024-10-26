@@ -7,7 +7,7 @@ In each meeting, you are required to discuss:
 3. Plan for the next week for everyone
 4. Deviations and changes to the project plan, if any
 
-# Meeting dd.mm.yy
+# Meeting dd.mm.yy hh:mm
 
 **Participants**: 
 1. Rautapää Jaakko
