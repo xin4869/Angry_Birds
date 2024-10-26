@@ -7,14 +7,14 @@ In each meeting, you are required to discuss:
 3. Plan for the next week for everyone
 4. Deviations and changes to the project plan, if any
 
-
-# Meeting dd.mm.2021 HH::MM
+# Meeting 25.10.2024 14:15-15:30
 
 **Participants**: 
-1. Member 1
-2. Member 2
-3. Member 3
-4. Member 4 
+1. Rautapää Jaakko
+2. Amini Yalda 
+3. Zharkynuly Daniyar
+4. Zambelly Soma
+5. Xin Lin
 
 ## Summary of works
 1. Member 1 
@@ -50,3 +50,28 @@ Short summary of current project status.
 ### TODOs
 1. Member 1: Write an action.
 2. ...
+
+
+# Meeting 25.10.2024 14:15-15:30
+
+**Participants**: 
+1. Rautapää Jaakko
+2. Amini Yalda 
+3. Zharkynuly Daniyar
+4. Zambelly Soma
+5. Xin Lin
+
+## Summary of works
+Set up repository, local clone, project plan template
+
+## Challenges
+
+It feels a bit messy intially, and it took quite some time to sort out things together and get started. The main reason is that there is no clear meeting goal set, or preparation work done before the meeting.
+
+
+## Actions
+All members are going to do some independant research and discuss ideas in next week's meeting. 
+
+
+## Project status 
+Getting started. Now working on the project plan.
