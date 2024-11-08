@@ -21,12 +21,18 @@ file(GLOB SOURCES_HPP "src/*.hpp")
 file(GLOB SOURCES_H "src/*.h")
 set(SOURCES ${SOURCES_C} ${SOURCES_CPP} ${SOURCES_H} ${SOURCES_HPP})
 message(STATUS "SRC directory source code files: \n\t-- HEADERS: ${SOURCES_H}${SOURCES_HPP}\n\t-- C SOURCES: ${SOURCES_C}\n\t-- CPP SOURCE:${SOURCES_CPP}\n\t-- ALL:${SOURCES}")
+
+# Add packages
+find_package(box2d REQUIRED)
+
 # add the executable target
 add_executable(angry_birds)
 
 target_sources(angry_birds PUBLIC ${SOURCES})
 target_include_directories(angry_birds PUBLIC .)
 target_include_directories(angry_birds PUBLIC src)
+
+target_link_libraries(angry_birds box2d)
 
 # get a lot of warnings
 if(MSVC)
