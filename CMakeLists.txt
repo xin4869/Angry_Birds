@@ -23,7 +23,8 @@ set(SOURCES ${SOURCES_C} ${SOURCES_CPP} ${SOURCES_H} ${SOURCES_HPP})
 message(STATUS "SRC directory source code files: \n\t-- HEADERS: ${SOURCES_H}${SOURCES_HPP}\n\t-- C SOURCES: ${SOURCES_C}\n\t-- CPP SOURCE:${SOURCES_CPP}\n\t-- ALL:${SOURCES}")
 
 # Add packages
-find_package(box2d REQUIRED)
+find_package(box2d 2.4 REQUIRED)
+find_package(SFML 2.5 COMPONENTS network audio graphics window system REQUIRED)
 
 # add the executable target
 add_executable(angry_birds)
@@ -32,7 +33,7 @@ target_sources(angry_birds PUBLIC ${SOURCES})
 target_include_directories(angry_birds PUBLIC .)
 target_include_directories(angry_birds PUBLIC src)
 
-target_link_libraries(angry_birds box2d)
+target_link_libraries(angry_birds box2d sfml-network sfml-audio sfml-graphics sfml-window sfml-system)
 
 # get a lot of warnings
 if(MSVC)

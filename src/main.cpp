@@ -1,5 +1,6 @@
 #include <box2d/box2d.h>
 
+#include <SFML/Graphics.hpp>
 #include <iostream>
 
 int main(void) {
@@ -31,6 +32,20 @@ int main(void) {
     b2Vec2 position = body->GetPosition();
     float angle = body->GetAngle();
     printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
+  }
+
+  auto window = sf::RenderWindow({1920u, 1080u}, "CMake SFML Project");
+  window.setFramerateLimit(144);
+
+  while (window.isOpen()) {
+    for (auto event = sf::Event(); window.pollEvent(event);) {
+      if (event.type == sf::Event::Closed) {
+        window.close();
+      }
+    }
+
+    window.clear();
+    window.display();
   }
 
   return 0;
