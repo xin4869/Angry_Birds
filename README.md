@@ -9,7 +9,6 @@ You can use Markdown language to render it as formatted **HTML** file.
 - Jaakko Rautapää
 - Soma Zambelly
 - Xin Lin
-- Yalda Amini
 
 # Repository organization
 
