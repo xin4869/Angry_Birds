@@ -22,6 +22,11 @@ file(GLOB SOURCES_H "src/*.h")
 set(SOURCES ${SOURCES_C} ${SOURCES_CPP} ${SOURCES_H} ${SOURCES_HPP})
 message(STATUS "SRC directory source code files: \n\t-- HEADERS: ${SOURCES_H}${SOURCES_HPP}\n\t-- C SOURCES: ${SOURCES_C}\n\t-- CPP SOURCE:${SOURCES_CPP}\n\t-- ALL:${SOURCES}")
 
+
+link_directories(/opt/homebrew/Cellar/box2d/2.4.2/lib)
+#include_directories("/opt/homebrew/Cellar/box2d/2.4.1/include")
+link_directories(/opt/homebrew/Cellar/sfml/2.6.1/lib)
+
 # Add packages
 find_package(box2d 2.4 REQUIRED)
 find_package(SFML 2.5 COMPONENTS network audio graphics window system REQUIRED)
@@ -33,7 +38,10 @@ target_sources(angry_birds PUBLIC ${SOURCES})
 target_include_directories(angry_birds PUBLIC .)
 target_include_directories(angry_birds PUBLIC src)
 
+
+
 target_link_libraries(angry_birds box2d sfml-network sfml-audio sfml-graphics sfml-window sfml-system)
+
 
 # get a lot of warnings
 if(MSVC)
