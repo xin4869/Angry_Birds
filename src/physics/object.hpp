@@ -7,22 +7,6 @@
 #define _AB_OBJECT_
 
 /**
- * @brief Default values for simpler and consistent initialization.
- * @brief Meant to have instances for each subclass variant.
- * @brief Has both shape types to work for birds and blocks.
- * 
- */
-struct ObjectDefaults
-{
-    b2BodyDef bodyDef;
-    b2CircleShape circleShape;
-    b2PolygonShape boxShape;
-    float density;
-    float hp;
-    sf::Sprite sprite;
-};
-
-/**
  * @brief Represents a basic physics object. Might make this abstract later.
  * 
  */
@@ -33,18 +17,18 @@ public:
     b2Body* body;
     sf::Sprite sprite;
 
-/**
- * @brief Construct a new Object
- * 
- * @param world world to add in
- * @param bodyDef defines body (type, position, rotation)
- * @param shape defines shape (hitbox)
- * @param density 
- * @param x coordinate
- * @param y coordinate
- * @param sprite object sprite
- * @param hp hitpoints
- */
+    /**
+     * @brief Construct a new Object
+     * 
+     * @param world world to add in
+     * @param bodyDef defines body (type, position, rotation)
+     * @param shape defines shape (hitbox)
+     * @param density 
+     * @param x coordinate
+     * @param y coordinate
+     * @param sprite object sprite
+     * @param hp hitpoints
+     */
     Object(
         b2World* world,
         b2BodyDef* bodyDef,
