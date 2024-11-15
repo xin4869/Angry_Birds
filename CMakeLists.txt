@@ -30,6 +30,16 @@ link_directories(/opt/homebrew/Cellar/sfml/2.6.1/lib)
 # Add packages
 find_package(box2d 2.4 REQUIRED)
 find_package(SFML 2.5 COMPONENTS network audio graphics window system REQUIRED)
+find_package(TGUI REQUIRED)
+
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
 # add the executable target
 add_executable(angry_birds)
@@ -38,10 +48,14 @@ target_sources(angry_birds PUBLIC ${SOURCES})
 target_include_directories(angry_birds PUBLIC .)
 target_include_directories(angry_birds PUBLIC src)
 
+target_link_libraries(angry_birds box2d sfml-network sfml-audio sfml-graphics sfml-window sfml-system TGUI::TGUI)
 
+enable_testing()
+add_executable(tests "tests/tests.cpp")
+target_link_libraries(tests GTest::gtest_main box2d sfml-network sfml-audio sfml-graphics sfml-window sfml-system TGUI::TGUI)
 
-target_link_libraries(angry_birds box2d sfml-network sfml-audio sfml-graphics sfml-window sfml-system)
-
+include(GoogleTest)
+gtest_discover_tests(tests)
 
 # get a lot of warnings
 if(MSVC)
