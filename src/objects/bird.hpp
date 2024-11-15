@@ -3,8 +3,8 @@
 #include "object.hpp"
 #include "object_defs.hpp"
 
-#ifndef _AB_BIRD_
-#define _AB_BIRD_
+#ifndef OBJECT_BIRD_HPP
+#define OBJECT_BIRD_HPP
 
 /**
  * @brief Abstract physics bird class.

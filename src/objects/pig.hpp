@@ -1,8 +1,8 @@
 #include "object.hpp"
 #include "object_defs.hpp"
 
-#ifndef _AB_PIG_
-#define _AB_PIG_
+#ifndef OBJECT_PIG_HPP
+#define OBJECT_PIG_HPP
 
 namespace ObjectDefs
 {

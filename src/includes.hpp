@@ -9,9 +9,8 @@
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <iostream>
-#include "physics/object.hpp"
-#include "physics/object_defs.hpp"
-#include "physics/special_birds.hpp"
-#include "physics/block.hpp"
-#include "physics/pig.hpp"
-#include "UI/ui_elements.hpp"
+#include "objects/object.hpp"
+#include "objects/object_defs.hpp"
+#include "objects/special_birds.hpp"
+#include "objects/block.hpp"
+#include "objects/pig.hpp"

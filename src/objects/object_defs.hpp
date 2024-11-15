@@ -2,8 +2,8 @@
 #include <box2d/box2d.h>
 #include <iostream>
 
-#ifndef _AB_PHYSICS_DEF_
-#define _AB_PHYSICS_DEF_
+#ifndef OBJECT_PHYSICS_HPP
+#define OBJECT_PHYSICS_HPP
 
 /**
  * @brief Convenience definitions for simpler object initialisation.

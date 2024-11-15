@@ -3,8 +3,8 @@
 #include <iostream>
 #include "object_defs.hpp"
 
-#ifndef _AB_OBJECT_
-#define _AB_OBJECT_
+#ifndef OBJECT_HPP
+#define OBJECT_HPP
 
 /**
  * @brief Represents a basic physics object. Might make this abstract later.

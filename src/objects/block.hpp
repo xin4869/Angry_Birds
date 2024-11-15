@@ -1,8 +1,8 @@
 #include "object.hpp"
 #include "object_defs.hpp"
 
-#ifndef _AB_BLOCK_
-#define _AB_BLOCK_
+#ifndef OBJECT_BLOCK_HPP
+#define OBJECT_BLOCK_HPP
 
 namespace ObjectDefs
 {

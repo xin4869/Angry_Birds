@@ -2,8 +2,8 @@
 #include "object_defs.hpp"
 #include <iostream>
 
-#ifndef _AB_SPECIAL_BIRD_
-#define _AB_SPECIAL_BIRD_
+#ifndef OBJECT_SPECIAL_BIRD_HPP
+#define OBJECT_SPECIAL_BIRD_HPP
 
 namespace ObjectDefs
 {

@@ -7,6 +7,7 @@ enable_language(CXX)
 set(CMAKE_CXX_STANDARD 17)
 # produce non-optimized code with debug symbols
 set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 message(STATUS "BUILD directory is ${CMAKE_BINARY_DIR}")
 message(STATUS "SRC directory is ${CMAKE_SOURCE_DIR}")
@@ -24,8 +25,8 @@ message(STATUS "SRC directory source code files: \n\t-- HEADERS: ${SOURCES_H}${S
 
 
 link_directories(/opt/homebrew/Cellar/box2d/2.4.2/lib)
-#include_directories("/opt/homebrew/Cellar/box2d/2.4.1/include")
-link_directories(/opt/homebrew/Cellar/sfml/2.6.1/lib)
+include_directories(/opt/homebrew/Cellar/box2d/2.4.2/include)
+
 
 # Add packages
 find_package(box2d 2.4 REQUIRED)
@@ -40,6 +41,7 @@ FetchContent_Declare(
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+
 
 # add the executable target
 add_executable(angry_birds)
