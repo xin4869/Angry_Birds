@@ -5,14 +5,17 @@
 #ifndef _AB_SPECIAL_BIRD_
 #define _AB_SPECIAL_BIRD_
 
-ObjectDefaults normalBirdDefaults = {
-    ObjectDefs::GetBodyDef(b2BodyType::b2_dynamicBody),
-    ObjectDefs::GetCircleShape(1),
-    b2PolygonShape(),
-    1,
-    100,
-    ObjectDefs::GetCircleSprite(32, 32, sf::Color(255, 0, 0))
-};
+namespace ObjectDefs
+{
+    ObjectDefaults normalBirdDefaults = {
+        GetBodyDef(b2BodyType::b2_dynamicBody),
+        GetCircleShape(1),
+        b2PolygonShape(),
+        1,
+        100,
+        GetCircleSprite(32, 32, sf::Color(255, 0, 0))
+    };
+}
 
 /**
  * @brief Physics bird with a special attack (not this one)
@@ -64,12 +67,12 @@ NormalBird::NormalBird(
         float y
     ) : Bird(
         world,
-        &normalBirdDefaults.bodyDef,
-        &normalBirdDefaults.circleShape,
-        normalBirdDefaults.density,
+        &ObjectDefs::normalBirdDefaults.bodyDef,
+        &ObjectDefs::normalBirdDefaults.circleShape,
+        ObjectDefs::normalBirdDefaults.density,
         x, y,
-        normalBirdDefaults.sprite,
-        normalBirdDefaults.hp)
+        ObjectDefs::normalBirdDefaults.sprite,
+        ObjectDefs::normalBirdDefaults.hp)
 {
 
 }

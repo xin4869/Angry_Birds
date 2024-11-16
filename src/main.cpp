@@ -17,7 +17,6 @@ int main(void) {
   */
 
   std::cout << "Debug1" << std::endl;
-  //ObjectDefs::init();  // call to init textures
 
   b2Vec2 gravity(0.0f, -10.0f);
   b2World world(gravity);
@@ -62,17 +61,24 @@ int main(void) {
   auto window = sf::RenderWindow({1080u, 720u}, "CMake SFML Project");
   window.setPosition(sf::Vector2i(200, 200));
   window.setFramerateLimit(frameRate);
+	
+  tgui::Gui gui(window);
+	MainMenu mainMenu(2);
+  LevelUI levelUI(2);
+  gui.add(mainMenu.group);
+  gui.add(levelUI.group);
 
   while (window.isOpen()) {
     for (auto event = sf::Event(); window.pollEvent(event);) {
       if (event.type == sf::Event::Closed) {
         window.close();
       }
+      gui.handleEvent(event);
     }
     //for (int32 i = 0; i < 60; ++i) {
     world.Step(timeStep, velocityIterations, positionIterations);
     //printInfo(&ice);
-    printInfo(&bird);
+    //printInfo(&bird);
     //printInfo(&pig);
     //printInfo(&fixed);
     //}
@@ -81,8 +87,9 @@ int main(void) {
     b2Vec2 pos = 75.0 * bird.body->GetPosition();
     bird.sprite.setPosition(pos.x, 800 - pos.y);
 
-    window.clear();
-    window.draw(bird.sprite, sf::RenderStates(sf::BlendAlpha));
+    window.clear(sf::Color::White);
+    window.draw(bird.sprite);
+		gui.draw();
     window.display();
   }
 

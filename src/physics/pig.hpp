@@ -4,23 +4,26 @@
 #ifndef _AB_PIG_
 #define _AB_PIG_
 
-ObjectDefaults normalPigDefaults = {
-    ObjectDefs::GetBodyDef(b2BodyType::b2_dynamicBody),
-    ObjectDefs::GetCircleShape(1),
-    b2PolygonShape(),
-    1,
-    50,
-    ObjectDefs::GetRectSprite(32, 32, sf::Color::Green)
-};
+namespace ObjectDefs
+{
+    ObjectDefaults normalPigDefaults = {
+        GetBodyDef(b2BodyType::b2_dynamicBody),
+        GetCircleShape(1),
+        b2PolygonShape(),
+        1,
+        50,
+        GetRectSprite(32, 32, sf::Color::Green)
+    };
 
-ObjectDefaults ironPigDefaults = {
-    ObjectDefs::GetBodyDef(b2BodyType::b2_dynamicBody),
-    ObjectDefs::GetCircleShape(1),
-    b2PolygonShape(),
-    1,
-    150,
-    ObjectDefs::GetRectSprite(32, 32, sf::Color(50, 50, 50))
-};
+    ObjectDefaults ironPigDefaults = {
+        GetBodyDef(b2BodyType::b2_dynamicBody),
+        GetCircleShape(1),
+        b2PolygonShape(),
+        1,
+        150,
+        GetRectSprite(32, 32, sf::Color(50, 50, 50))
+    };
+}
 
 /**
  * @brief Pig class.
@@ -51,7 +54,7 @@ public:
         b2World* world,
         float x,
         float y,
-        ObjectDefaults* defaults
+        ObjectDefs::ObjectDefaults* defaults
     );
 
     static Pig GetNormalPig(b2World* world, float x, float y);
@@ -76,7 +79,7 @@ Pig::Pig(
     b2World* world,
     float x,
     float y,
-    ObjectDefaults* defaults
+    ObjectDefs::ObjectDefaults* defaults
 ) : Object (
     world,
     &defaults->bodyDef,
@@ -92,12 +95,12 @@ Pig::Pig(
 
 Pig Pig::GetNormalPig(b2World* world, float x, float y)
 {
-    return Pig(world, x, y, &normalPigDefaults);
+    return Pig(world, x, y, &ObjectDefs::normalPigDefaults);
 }
 
 Pig Pig::GetIronPig(b2World* world, float x, float y)
 {
-    return Pig(world, x, y, &ironPigDefaults);
+    return Pig(world, x, y, &ObjectDefs::ironPigDefaults);
 }
 
 #endif

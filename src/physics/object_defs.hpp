@@ -6,30 +6,53 @@
 #define _AB_PHYSICS_DEF_
 
 /**
- * @brief this is here to keep textures in memory.
- * @brief won't work otherwise.
- * 
- */
-class Textures
-{
-public:
-    sf::Texture circleTexture;
-    sf::Texture squareTexture;
-
-    Textures(std::string circlePath, std::string squarePath)
-    {
-        circleTexture.loadFromFile(circlePath);
-        squareTexture.loadFromFile(squarePath);
-    }
-};
-
-/**
  * @brief Convenience definitions for simpler object initialisation.
  * @brief Using not necessary.
  * 
  */
 namespace ObjectDefs
 {
+    /**
+     * @brief Default values for simpler and consistent initialization.
+     * @brief Meant to have instances for each subclass variant.
+     * @brief Has both shape types to work for birds and blocks.
+     * 
+     */
+    struct ObjectDefaults
+    {
+        b2BodyDef bodyDef;
+        b2CircleShape circleShape;
+        b2PolygonShape boxShape;
+        float density;
+        float hp;
+        sf::Sprite sprite;
+    };
+
+    /**
+     * @brief this is here to keep textures in memory.
+     * @brief won't work otherwise.
+     * 
+     */
+    class Textures
+    {
+    public:
+        sf::Texture circleTexture;
+        sf::Texture squareTexture;
+
+        Textures(std::string circlePath, std::string squarePath)
+        {
+            // files don't load / aren't added when running tests. fix?
+            if (!circleTexture.loadFromFile(circlePath))
+            {
+                circleTexture.create(64, 64);
+            }
+            if (!squareTexture.loadFromFile(squarePath))
+            {
+                squareTexture.create(64, 64);
+            }
+        }
+    };
+
     Textures textures("./assets/textures/circle.png", "./assets/textures/square.png");
 
     /**
