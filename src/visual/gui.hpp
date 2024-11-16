@@ -1,16 +1,16 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
+#include "visual/buttons.hpp"
 
 #ifndef GUI_HPP
 #define GUI_HPP
 
 class GUI {
 public:
-    GUI() {}
-    void initialize(){
-        loadFont();
-        setupTexts();
+    GUI(sf::RenderWindow& game_window): window(game_window) {}
+    void init(){
+        initFont();
         setupMenu();
     }
     void update(int score, int birdsLeft){
@@ -33,36 +33,36 @@ public:
     }
     
 private:
-    sf::Font regularFont;
-    sf::Font boldFont;
+    sf::RenderWindow& window;
+    sf::Font font;
 
     sf::Text scoreText;
-    sf::Text birdsLeftText;
     sf::Text startGameText;
 
     sf::RectangleShape menuBackground;
+
+    sf::Sprite background_sprite;
+    sf::Texture background_texture;
+    sf::Sprite pause_sprite;
+    sf::Texture pause_texture;
+    sf::Sprite help_sprite;
+    sf::Texture help_texture;
+
+    sf::Texture lvl1_texture;
+    sf::Texture lvl2_texture;
+    sf::Texture lvl3_texture;
+    sf::Texture  
     
 
-    void loadFont() {
-        if (!regularFont.loadFromFile("assets/font/arial-font/arial.ttf")) {
-            std::cout << "Error loading font" << std::endl;
+    void initFont(){
+        if (!font.loadFromFile("assets/font/angrybirds.ttf")) {
+            std::cout << "Font loading failed!" << std::endl;
         }
 
-        if (!boldFont.loadFromFile("assets/font/arial-font/G_ari_bd.TTF")) {
-            std::cout << "Error loading font" << std::endl;
-        }
-        
-    }
-    void setupTexts(){
-        scoreText.setFont(boldFont);
-        scoreText.setCharacterSize(24);
+        scoreText.setFont(font);
+        scoreText.setCharacterSize(35);
         scoreText.setFillColor(sf::Color::Black);
         scoreText.setPosition(10, 10);
-
-        birdsLeftText.setFont(regularFont);
-        birdsLeftText.setCharacterSize(24);
-        birdsLeftText.setFillColor(sf::Color::Black);
-        birdsLeftText.setPosition(20, 10);
 
     }
     void setupMenu(){

@@ -1,8 +1,12 @@
+#ifndef GAME_HPP
+#define GAME_HPP
+
 #include <SFML/Graphics.hpp>
 #include "objects/special_birds.hpp"
 #include "objects/pig.hpp"
 #include "objects/block.hpp"
-#include "visual/buttons.hpp"
+#include "visual/gui.hpp"
+#include "visual/game_render.hpp"
 
 
 enum GameState {
@@ -14,16 +18,21 @@ enum GameState {
 
 class Game {
 public:
-  Game(sf::RenderWindow& game_window): window(game_window){
+  Game(sf::RenderWindow& game_window): 
+    gui(game_window),renderer(game_window) {
     game_state = menu;
   }
-  void run();
+  ~Game() {}
+  
+  bool init(){};
+
   void update();
   void render();
-  
-    //game logic update
-    
 
+  
+  
+  //game logic update
+    
   b2Vec2 gravity(0.0f, -10.0f);
   b2World world(gravity);
   
@@ -54,10 +63,18 @@ public:
     
   
 private:
-  sf::RenderWindow& window;
+  
   GameState game_state;
-
+  
+  GUI gui;
+  GameRender renderer;
 
   
 
+  
+
+
 };
+
+
+#endif
