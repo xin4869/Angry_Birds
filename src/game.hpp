@@ -19,7 +19,7 @@ enum GameState {
 class Game {
 public:
   Game(sf::RenderWindow& game_window): 
-    gui(game_window),renderer(game_window) {
+    gui(game_window),renderer(game_window),gravity(0.0f, -10.0f),world(gravity)  {
     game_state = menu;
   }
   ~Game() {}
@@ -29,12 +29,6 @@ public:
   void update();
   void render();
 
-  
-  
-  //game logic update
-    
-  b2Vec2 gravity(0.0f, -10.0f);
-  b2World world(gravity);
   
   // creating Objects. these use defaults. can also give parameters
   NormalBird bird = NormalBird(&world, 3, 5);
@@ -65,13 +59,12 @@ public:
 private:
   
   GameState game_state;
-  
+
   GUI gui;
   GameRender renderer;
 
-  
-
-  
+  b2Vec2 gravity;
+  b2World world;
 
 
 };

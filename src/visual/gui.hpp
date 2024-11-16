@@ -13,14 +13,12 @@ public:
         initFont();
         setupMenu();
     }
-    void update(int score, int birdsLeft){
-        scoreText.setString("Score:" + std::to_string(score));
-        birdsLeftText.setString("Birds left:" + std::to_string(birdsLeft));
+    void update(){
+        score.setString("Score:" + std::to_string(player.getScore()));
     }
 
     void draw(sf::RenderWindow& window){
-        window.draw(scoreText);
-        window.draw(birdsLeftText);
+        window.draw(score);
     }
 
     void drawMenu(sf::RenderWindow& window){
@@ -36,7 +34,8 @@ private:
     sf::RenderWindow& window;
     sf::Font font;
 
-    sf::Text scoreText;
+    sf::Text score;
+    sf::Text final_score;
     sf::Text startGameText;
 
     sf::RectangleShape menuBackground;
