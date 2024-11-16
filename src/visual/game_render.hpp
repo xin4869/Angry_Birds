@@ -7,8 +7,9 @@
 class GameRender{
 public: 
     GameRender(sf::RenderWindow& game_window): window(game_window) {
-
     }
+
+    void init(){}
 private:
     sf::RenderWindow& window;
 };

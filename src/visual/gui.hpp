@@ -13,8 +13,26 @@ public:
         initFont();
         setupMenu();
     }
-    void update(){
-        score.setString("Score:" + std::to_string(player.getScore()));
+
+    void loadTexture (sf::Texture& texture, const std::string& path) {
+        if (!texture.loadFromFile(path)) {
+            std::cout << "Texture loading failed!\n";
+        }
+    }
+
+    void initTextures(){
+        loadTexture(background_texture, "assets/textures/background.png" );
+        background_sprite.setTexture(background_texture);
+
+    }
+
+    
+
+    
+
+    void updateText(int score){
+        current_score.setString("Score:" + std::to_string(score));
+        final_score.setString("Your score: " + std::to_string(score));
     }
 
     void draw(sf::RenderWindow& window){
@@ -34,7 +52,7 @@ private:
     sf::RenderWindow& window;
     sf::Font font;
 
-    sf::Text score;
+    sf::Text current_score;
     sf::Text final_score;
     sf::Text startGameText;
 

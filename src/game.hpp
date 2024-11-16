@@ -18,16 +18,24 @@ enum GameState {
 
 class Game {
 public:
-  Game(sf::RenderWindow& game_window): 
-    gui(game_window),renderer(game_window),gravity(0.0f, -10.0f),world(gravity)  {
+  Game(sf::RenderWindow& game_window)
+    :gui(game_window),
+    renderer(game_window),
+    gravity(0.0f, -10.0f),
+    world(gravity)  {
     game_state = menu;
   }
   ~Game() {}
   
-  bool init(){};
-
+  bool init(){
+    return gui.init() && renderer.init()
+  }
   void update();
   void render();
+
+  void loadLevel(int levelNumber){}
+  void launch(){}
+   
 
   
   // creating Objects. these use defaults. can also give parameters
@@ -65,6 +73,10 @@ private:
 
   b2Vec2 gravity;
   b2World world;
+
+
+
+
 
 
 };
