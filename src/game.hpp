@@ -91,7 +91,7 @@ private:
   
   
   void loadLevel(int level){
-    std::string path = "levels/level" + std::to_string(level) + ".txt";
+    std::string path = "levels/level" + std::to_string(level) + ".lvl";
     std::ifstream file(path);
 
     if(!file.is_open()) {
