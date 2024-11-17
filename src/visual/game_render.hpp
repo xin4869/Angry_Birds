@@ -1,7 +1,9 @@
 #ifndef VISUAL_GAME_RENDER_HPP
 #define VISUAL_GAME_RENDER_HPP
 
-#include "game.hpp"
+#include <fstream>
+#include <vector>
+
 
 
 class GameRender{
@@ -10,8 +12,14 @@ public:
     }
 
     void init(){}
+   
 private:
     sf::RenderWindow& window;
+    
+
+    void drawObjects(){}
+    void drawBirds(){}
+
 };
 
 #endif

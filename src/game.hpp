@@ -2,6 +2,9 @@
 #define GAME_HPP
 
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include <sstream>
+
 #include "objects/special_birds.hpp"
 #include "objects/pig.hpp"
 #include "objects/block.hpp"
@@ -27,13 +30,21 @@ public:
   }
   ~Game() {}
   
-  bool init(){
-    return gui.init() && renderer.init()
-  }
-  void update();
-  void render();
+  bool init(){}
 
-  void loadLevel(int levelNumber){}
+
+  void update(){
+    // Update physics world
+    world.Step(timeStep, velocityIterations, positionIterations);
+    // Update game objects' positions based on physics simulation
+  };
+
+  
+  void render(){
+    ;
+  };
+
+ 
   void launch(){}
    
 
@@ -74,6 +85,26 @@ private:
   b2Vec2 gravity;
   b2World world;
 
+  std::vector<Bird*>birds;
+  std::vector<Pig*>pigs;
+  std::vector<Block*> blocks;
+  
+  
+  void loadLevel(int level){
+    std::string path = "levels/level" + std::to_string(level) + ".txt";
+    std::ifstream file(path);
+
+    if(!file.is_open()) {
+      std::cerr << "Failed to open level file." << std::endl;
+      return;
+    }
+
+    birds.clear();
+    pigs.clear();
+    blocks.clear();
+
+  //TO DO: load data to birds, pigs, blocks
+  }
 
 
 

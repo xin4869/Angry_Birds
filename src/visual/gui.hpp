@@ -2,6 +2,8 @@
 #include <string>
 #include <iostream>
 #include "visual/buttons.hpp"
+#include "visual/game_render.hpp"
+
 
 #ifndef GUI_HPP
 #define GUI_HPP
@@ -9,26 +11,13 @@
 class GUI {
 public:
     GUI(sf::RenderWindow& game_window): window(game_window) {}
+
     void init(){
         initFont();
-        setupMenu();
+        initTextures();
+        initButtons();
+        initFont();
     }
-
-    void loadTexture (sf::Texture& texture, const std::string& path) {
-        if (!texture.loadFromFile(path)) {
-            std::cout << "Texture loading failed!\n";
-        }
-    }
-
-    void initTextures(){
-        loadTexture(background_texture, "assets/textures/background.png" );
-        background_sprite.setTexture(background_texture);
-
-    }
-
-    
-
-    
 
     void updateText(int score){
         current_score.setString("Score:" + std::to_string(score));
@@ -36,20 +25,14 @@ public:
     }
 
     void draw(sf::RenderWindow& window){
-        window.draw(score);
+        //window.draw(score);
     }
 
-    void drawMenu(sf::RenderWindow& window){
-        window.draw(menuBackground);
-        window.draw(startGameText);
-    }
 
-    bool isStartButtonClicked(float mouseX, float mouseY) {
-        return startGameText.getGlobalBounds().contains(mouseX, mouseY);
-    }
     
 private:
     sf::RenderWindow& window;
+
     sf::Font font;
 
     sf::Text current_score;
@@ -68,8 +51,31 @@ private:
     sf::Texture lvl1_texture;
     sf::Texture lvl2_texture;
     sf::Texture lvl3_texture;
-    sf::Texture  
     
+
+    Buttons play_bt;
+    Buttons lv1_bt;
+    Buttons lv2_bt;
+    Buttons lv3_bt;
+
+    Buttons help_bt;
+    Buttons setting_bt;
+    Buttons main_bt;
+
+    
+    void loadTexture (sf::Texture& texture, const std::string& path) {
+        if (!texture.loadFromFile(path)) {
+            std::cout << "Texture loading failed!\n";
+        }
+    }
+
+    void initTextures(){
+        loadTexture(background_texture, "assets/textures/background.png" );
+        background_sprite.setTexture(background_texture);
+    }
+
+    void initButtons(){}
+
 
     void initFont(){
         if (!font.loadFromFile("assets/font/angrybirds.ttf")) {
@@ -82,17 +88,23 @@ private:
         scoreText.setPosition(10, 10);
 
     }
-    void setupMenu(){
-        menuBackground.setSize(sf::Vector2f(200, 100));
-        menuBackground.setFillColor(sf::Color(200,200,200));
-        menuBackground.setPosition(10, 10);
 
-        startGameText.setFont(boldFont);
-        startGameText.setCharacterSize(30);
-        startGameText.setFillColor(sf::Color::Black);
-        startGameText.setString("Start Game");
-        startGameText.setPosition(450, 350);
+
+    void checkButtons() {
+        sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
+        play_bt.mouseHover(mouse_pos);
+        lv1_bt.mouseHover(mouse_pos);
+        lv2_bt.mouseHover(mouse_pos);
+        lv3_bt.mouseHover(mouse_pos);
+
+        help_bt.mouseHover(mouse_pos);
+        setting_bt.mouseHover(mouse_pos);
+        main_bt.mouseHover(mouse_pos);
     }
+
+   
+
+    
 };
 
 #endif // GUI_HPP
