@@ -44,11 +44,12 @@ public:
       float mouse_x = event.mouseButton.x;
       float mouse_y = event.mouseButton.y;
 
-      
+
 
     }
   }
-   
+  
+  void mouseReleased(sf::Event event) {}
 
   
   // creating Objects. these use defaults. can also give parameters

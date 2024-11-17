@@ -59,7 +59,6 @@ private:
     Buttons lv3_bt;
 
     Buttons help_bt;
-    Buttons setting_bt;
     Buttons main_bt;
 
     
@@ -74,7 +73,11 @@ private:
         background_sprite.setTexture(background_texture);
     }
 
-    void initButtons(){}
+    void initButtons(){
+        play_bt.setTexture("assets/textures/buttons/play.png")
+        
+
+    }
 
 
     void initFont(){
