@@ -31,21 +31,23 @@ public:
   ~Game() {}
   
   bool init(){}
-
-
   void update(){
     // Update physics world
     world.Step(timeStep, velocityIterations, positionIterations);
     // Update game objects' positions based on physics simulation
   };
-
-  
-  void render(){
-    ;
-  };
-
- 
+  void render(){}
   void launch(){}
+
+  void mouseClicked(sf::Event event) {
+    if (event.mouseButton.button == sf::Mouse::Left) {
+      float mouse_x = event.mouseButton.x;
+      float mouse_y = event.mouseButton.y;
+
+      
+
+    }
+  }
    
 
   

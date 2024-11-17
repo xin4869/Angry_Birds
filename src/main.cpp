@@ -24,7 +24,7 @@ int main(void) {
   window.setFramerateLimit(frameRate);
 
   Game game(window);
-  if (!game.init()) {return 0};
+  if (!game.init()) {return 0;}
 
   while (window.isOpen()) {
     //events handling
@@ -50,13 +50,9 @@ int main(void) {
 
     }
 
-
     game.update();
-
     window.clear();
-
     game.render();
-
     window.display();
   }
 
