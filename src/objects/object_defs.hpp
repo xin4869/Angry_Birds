@@ -93,9 +93,9 @@ namespace ObjectDefs
      */
     b2CircleShape GetCircleShape(float radius)
     {
-        b2CircleShape circleshape;
-        circleshape.m_radius = radius;
-        return circleshape;
+        b2CircleShape circleShape;
+        circleShape.m_radius = radius;
+        return circleShape;
     }
 
     /**
