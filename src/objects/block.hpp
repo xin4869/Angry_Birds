@@ -4,38 +4,47 @@
 #ifndef OBJECT_BLOCK_HPP
 #define OBJECT_BLOCK_HPP
 
-namespace ObjectDefs
+namespace BlockFactory
 {
-    ObjectDefaults iceDefaults = {
+ ///////////////////////////////////////////////////////////////////////////////////
+    /*ObjectDefs::ObjectDefaults iceDefaults = {
         GetBodyDef(b2BodyType::b2_dynamicBody),
-        b2CircleShape(),
-        GetBoxShape(2, 2),
         1,
         50,
-        GetRectSprite(64, 64, sf::Color::Blue)
+        GetRectSprite(64, 64, sf::Color::Blue),
+        b2CircleShape(),
+        GetBoxShape(2, 2)
     };
 
     ObjectDefaults woodDefaults = {
         GetBodyDef(b2BodyType::b2_dynamicBody),
-        b2CircleShape(),
-        GetBoxShape(2, 2),
         1,
-        150,
-        GetRectSprite(64, 64, sf::Color(142, 99, 23))
+        100,
+        GetRectSprite(64, 64, sf::Color(142, 99, 23)),
+        b2CircleShape(),
+        GetBoxShape(2, 2)
     };
 
-    /**
-     * @brief block that does not move and should not take damage
-     * 
-     */
-    ObjectDefaults fixedDefaults = {
-        GetBodyDef(b2BodyType::b2_staticBody),
+
+    ObjectDefaults stoneDefaults = {
+        GetBodyDef(b2BodyType::b2_dynamicBody),
+        1,
+        300,
+        GetRectSprite(320, 64),
         b2CircleShape(),
-        GetBoxShape(10, 2),
-        0,
-        -1,
-        GetRectSprite(320, 64)
-    };
+        GetBoxShape(10, 2)
+    };*/
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ObjectDefs::ObjectDefaults CreateIceDefaults(std::uniq* shape, float density = 0.8f, float hp = 50){
+            ObjectDefs::ObjectDefaults defaults;
+
+    }
+    ObjectDefs::ObjectDefaults CreateWoodDefaults(b2Shape* shape, float density = 1.2f, float hp = 150);
+    ObjectDefs::ObjectDefaults CreateStoneDefaults(b2Shape* shape, float density = 2.6f, float hp = 300);
+    
+   
+
 }
 
 /**

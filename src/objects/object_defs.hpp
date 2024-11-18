@@ -5,34 +5,102 @@
 #ifndef OBJECT_PHYSICS_HPP
 #define OBJECT_PHYSICS_HPP
 
-/**
- * @brief Convenience definitions for simpler object initialisation.
- * @brief Using not necessary.
- * 
- */
 namespace ObjectDefs
 {
-    /**
-     * @brief Default values for simpler and consistent initialization.
-     * @brief Meant to have instances for each subclass variant.
-     * @brief Has both shape types to work for birds and blocks.
-     * 
-     */
+
     struct ObjectDefaults
     {
-        b2BodyDef bodyDef;
-        b2CircleShape circleShape;
-        b2PolygonShape boxShape;
-        float density;
-        float hp;
+        b2BodyDef bodyDef;   
         sf::Sprite sprite;
+        std::unique_ptr<b2Shape> shape;
+        float density;
+        float base_hp;
     };
 
-    /**
-     * @brief this is here to keep textures in memory.
-     * @brief won't work otherwise.
-     * 
-     */
+    b2BodyDef GetBodyDef(b2BodyType type, float x=0, float y=0)
+    {
+        b2BodyDef bodyDef;
+        bodyDef.type = type;
+        bodyDef.position.Set(x, y);
+        return bodyDef;
+    }
+
+    std::unique_ptr<b2CircleShape> CreateShape (float radius) {
+        auto shape = std::unique_ptr<b2CircleShape>();
+        shape->m_radius = radius;
+        return shape;
+    }
+
+    std::unique_ptr<b2PolygonShape> CreateShape (float width, float height){
+        auto shape = std::unique_ptr<b2PolygonShape>();
+        shape->SetAsBox(width/2, height/2);
+    }
+
+    float CalculateHP(float baseHP, const std::unique_ptr<b2CircleShape>& shape) {
+        if (!shape) {
+            std::cerr << "Invalid shape pointer" << std::endl;
+            return baseHP;
+        }
+        float area = b2_pi * shape->m_radius * shape->m_radius;
+        return baseHP * area;
+    }
+
+    float CalculateHP(float baseHP, const std::unique_ptr<b2PolygonShape>& shape) {
+        if (!shape) {
+            std::cerr << "Invalid shape pointer" << std::endl;
+            return baseHP;
+        }
+
+        float area = 0.0f;
+        int32 vertexCount = shape->m_count;
+        for (int32 i = 0; i < vertexCount; ++i) {
+            const b2Vec2& v1 = shape->m_vertices[i];
+            const b2Vec2& v2 = shape->m_vertices[(i + 1) % vertexCount];
+            area += (v1.x * v2.y - v2.x * v1.y);
+        }
+        area = std::abs(area) / 2.0f;
+
+        return baseHP * area;
+    }
+
+     sf::Sprite CreateSprite(float width, float height, const sf::Texture& texture)
+    {
+        sf::Sprite sprite(texture);
+        float scale_w = width / texture.getSize().x;
+        float scale_h = height / texture.getSize().y;
+        sprite.setScale(scale_w, scale_h);
+        sprite.setOrigin(texture.getSize().x / 2.f, texture.getSize().y / 2.f);
+        return sprite;
+    }
+
+/////////////////// Texture class necessary?/////////////////////////
+/* 
+Birds:
+Density: 1.0
+No HP
+
+SpeedBirds: 
+Density:0.81
+
+BombBirds: 
+Density: 1.45
+---
+Pigs:
+Density: 1.0
+HP: 100 (easier to destroy than blocks)
+---
+Ice:
+Density: 0.8 (slightly less dense than water)
+HP: 50 (weakest material)
+---
+Wood:
+Density: 1.2 (wood typically floats on water)
+HP: 150 (medium strength)
+---
+Stone:
+Density: 2.6 (typical density of rock)
+HP: 300 (hardest to break)
+*/
     class Textures
     {
     public:
@@ -55,76 +123,7 @@ namespace ObjectDefs
 
     Textures textures("./assets/textures/circle.png", "./assets/textures/square.png");
 
-    /**
-     * @brief Get a Body Def object (used for physics objects)
-     * 
-     * @param type body type (static or dynamic)
-     * @param x coordinate
-     * @param y coordinate
-     * @return b2BodyDef
-     */
-    b2BodyDef GetBodyDef(b2BodyType type, float x=0, float y=0)
-    {
-        b2BodyDef bodyDef;
-        bodyDef.type = type;
-        bodyDef.position.Set(x, y);
-        return bodyDef;
-    }
 
-    /**
-     * @brief Get a Box Shape object (hitbox)
-     * 
-     * @param width
-     * @param height 
-     * @return b2PolygonShape 
-     */
-    b2PolygonShape GetBoxShape(float width, float height)
-    {
-        b2PolygonShape boxShape;
-        boxShape.SetAsBox(width / 2, height / 2);
-        return boxShape;
-    }
-
-    /**
-     * @brief Get a Circle Shape object (hitbox)
-     * 
-     * @param radius 
-     * @return b2CircleShape 
-     */
-    b2CircleShape GetCircleShape(float radius)
-    {
-        b2CircleShape circleShape;
-        circleShape.m_radius = radius;
-        return circleShape;
-    }
-
-    /**
-     * @brief Get the Circle Sprite object
-     * 
-     * @param width sprite width in px
-     * @param height sprite height in px
-     * @param color sprite color
-     * @return sf::Sprite 
-     */
-    sf::Sprite GetCircleSprite(float width, float height, sf::Color color=sf::Color::White)
-    {
-        auto size = textures.circleTexture.getSize();
-        sf::Sprite sprite;
-        sprite.setTexture(textures.circleTexture);
-        sprite.setColor(color);
-        sprite.setScale(width / size.x, height / size.y);
-        return sprite;
-    }
-
-    sf::Sprite GetRectSprite(float width, float height, sf::Color color=sf::Color::White)
-    {
-        auto size = textures.squareTexture.getSize();
-        sf::Sprite sprite;
-        sprite.setTexture(textures.squareTexture);
-        sprite.setColor(color);
-        sprite.setScale(width / size.x, height / size.y);
-        return sprite;
-    }
 }
 
 #endif
