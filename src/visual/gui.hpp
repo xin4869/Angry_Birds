@@ -13,101 +13,132 @@ public:
     GUI(sf::RenderWindow& game_window): window(game_window) {}
 
     void init(){
-        initFont();
-        initTextures();
+        initScore();
+        initBackground();
         initButtons();
-        initFont();
     }
 
-    void updateText(int score){
-        current_score.setString("Score:" + std::to_string(score));
-        final_score.setString("Your score: " + std::to_string(score));
+    void updateScore(int score, int total){
+        shot_score.setString("Score:" + std::to_string(score));
+        total_score.setString("Total Score: " + std::to_string(total));
+        final_score.setString("Your Score: " + std::to_string(total));
     }
 
-    void draw(sf::RenderWindow& window){
-        //window.draw(score);
+    void updateBackground () {
+        //lvl1, lvl2, lvl3, help, levels,win,lost
     }
 
+    void drawHome(){
+        window.draw(score);
+    }
+    void drawHelp(){}
+    void drawLevels(){}    
+    void drawGame(){}
+    void drawWin(){}
+    void drawLost(){}
 
+    Buttons play_bt;
+    Buttons help_bt;
+    Buttons music_bt;
+
+    Buttons ok_bt;
+
+    Buttons lv1_bt;
+    Buttons lv2_bt;
+    Buttons lv3_bt;
+    Buttons main_bt;
+
+    Buttons levels_bt;
+    Buttons replay_bt;
+    Buttons next_bt;
     
 private:
     sf::RenderWindow& window;
 
     sf::Font font;
 
-    sf::Text current_score;
+    sf::Text shot_score;
+    sf::Text total_score;
     sf::Text final_score;
-    sf::Text startGameText;
-
-    sf::RectangleShape menuBackground;
 
     sf::Sprite background_sprite;
-    sf::Texture background_texture;
-    sf::Sprite pause_sprite;
-    sf::Texture pause_texture;
-    sf::Sprite help_sprite;
-    sf::Texture help_texture;
+    sf::Texture home_texture;
 
+    sf::Texture help_texture;
+    sf::Texture levels_texture;
     sf::Texture lvl1_texture;
     sf::Texture lvl2_texture;
     sf::Texture lvl3_texture;
+    sf::Texture win_texture;
+    sf::Texture lost_texture;
+
+    sf::Sprite info_sprite;
+    sf::Texture info_texture;
+   
+
+    // ?????? animation, different kind of birds
     
 
-    Buttons play_bt;
-    Buttons lv1_bt;
-    Buttons lv2_bt;
-    Buttons lv3_bt;
-
-    Buttons help_bt;
-    Buttons main_bt;
-
-    
-    void loadTexture (sf::Texture& texture, const std::string& path) {
-        if (!texture.loadFromFile(path)) {
+    void initBackground(){
+        //try ??
+        if (!home_texture.loadFromFile("assets/textures/background.png")) {
             std::cout << "Texture loading failed!\n";
         }
-    }
-
-    void initTextures(){
-        loadTexture(background_texture, "assets/textures/background.png" );
-        background_sprite.setTexture(background_texture);
+        // load: all textures
+        // info_sprite.setTexture(info_texture)
+        background_sprite.setTexture(home_texture);
     }
 
     void initButtons(){
-        play_bt.setTexture("assets/textures/buttons/play.png")
-        
+        play_bt.setTexture("assets/textures/buttons/play.png");
+        help_bt.setTexture("assets/textures/buttons/help.png");
+        music_bt.setTexture("assets/textures/buttons/music.png",
+                            "assets/textures/buttons/no_music.png");
 
+        ok_bt.setTexture("assets/textures/buttons/ok.png");
+
+        lv1_bt.setTexture("assets/textures/buttons/lvl1.png");
+        lv2_bt.setTexture("assets/textures/buttons/lvl2.png");
+        lv3_bt.setTexture("assets/textures/buttons/lvl3.png");
+        main_bt.setTexture("assets/textures/buttons/home.png");
+
+        levels_bt.setTexture("assets/textures/buttons/level.png");
+        replay_bt.setTexture("assets/textures/buttons/replay.png");
+        next_bt.setTexture("assets/textures/buttons/next.png");
+        
     }
 
 
-    void initFont(){
+    void initScore(){
         if (!font.loadFromFile("assets/font/angrybirds.ttf")) {
             std::cout << "Font loading failed!" << std::endl;
         }
 
-        scoreText.setFont(font);
-        scoreText.setCharacterSize(35);
-        scoreText.setFillColor(sf::Color::Black);
-        scoreText.setPosition(10, 10);
-
+        shot_score.setFont(font);
+        shot_score.setCharacterSize(35);
+        shot_score.setFillColor(sf::Color::White);
+        shot_score.setOutlineColor(sf::Color::Black);
+        shot_score.setString("");
+        shot_score.setPosition(1200, 10);
+             
+        total_score.setFont(font);
+        total_score.setCharacterSize(45);
+        total_score.setFillColor(sf::Color::White);
+        total_score.setOutlineColor(sf::Color::Black); 
+        total_score.setString("");
+        total_score.setPosition(1200,20);
+           
+        final_score.setFont(font);
+        final_score.setCharacterSize(70);
+        final_score.setFillColor(sf::Color::White);
+        final_score.setOutlineColor(sf::Color::Black);
+        final_score.setString("");
+        final_score.setPosition(
+            window.getSize().x * 0.5 - final_score.getGlobalBounds().width * 0.5,
+            window.getSize().y * 0.55 - final_score.getGlobalBounds().height * 0.5);   
     }
 
 
-    void checkButtons() {
-        sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
-        play_bt.mouseHover(mouse_pos);
-        lv1_bt.mouseHover(mouse_pos);
-        lv2_bt.mouseHover(mouse_pos);
-        lv3_bt.mouseHover(mouse_pos);
-
-        help_bt.mouseHover(mouse_pos);
-        setting_bt.mouseHover(mouse_pos);
-        main_bt.mouseHover(mouse_pos);
-    }
-
-   
-
-    
 };
 
 #endif // GUI_HPP

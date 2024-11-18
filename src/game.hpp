@@ -13,10 +13,12 @@
 
 
 enum GameState {
-    menu = 0,
-    in_game = 1,
-    win = 2,
-    lost = 3
+    home = 0,
+    help = 1,
+    levels = 2,
+    in_game = 3,
+    win = 4,
+    lost = 5
   };
 
 class Game {
@@ -26,7 +28,7 @@ public:
     renderer(game_window),
     gravity(0.0f, -10.0f),
     world(gravity)  {
-    game_state = menu;
+    game_state = home;
   }
   ~Game() {}
   
@@ -43,6 +45,9 @@ public:
     if (event.mouseButton.button == sf::Mouse::Left) {
       float mouse_x = event.mouseButton.x;
       float mouse_y = event.mouseButton.y;
+
+      
+      
 
 
 
