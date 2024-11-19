@@ -10,6 +10,7 @@
 #include "objects/block.hpp"
 #include "visual/gui.hpp"
 #include "visual/game_render.hpp"
+#include "visual/texture_manager.hpp"
 
 
 enum GameState {
@@ -23,13 +24,12 @@ enum GameState {
 
 class Game {
 public:
-  Game(sf::RenderWindow& game_window)
-    :gui(game_window),
-    renderer(game_window),
-    gravity(0.0f, -10.0f),
-    world(gravity)  {
-    game_state = home;
-  }
+  Game(sf::RenderWindow& game_window):
+    gui(game_window),renderer(game_window),gravity(0.0f, -10.0f),world(gravity) {
+      game_state = home;
+      TextureManager::loadAllTextures();
+  } 
+
   ~Game() {}
   
   bool init(){}
@@ -46,7 +46,7 @@ public:
       float mouse_x = event.mouseButton.x;
       float mouse_y = event.mouseButton.y;
 
-      
+
       
 
 

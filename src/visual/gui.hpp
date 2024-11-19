@@ -20,8 +20,8 @@ public:
 
     void updateScore(int score, int total){
         shot_score.setString("Score:" + std::to_string(score));
-        total_score.setString("Total Score: " + std::to_string(total));
-        final_score.setString("Your Score: " + std::to_string(total));
+        total_score.setString("Total: " + std::to_string(total));
+        final_score.setString("Score: " + std::to_string(total));
     }
 
     void updateBackground () {

@@ -52,7 +52,7 @@ public:
     }
 
     void activate() {
-        if(!activate) {
+        if(!active) {
             active = true;
         }
     }
