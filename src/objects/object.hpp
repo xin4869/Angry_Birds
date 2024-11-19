@@ -48,7 +48,8 @@ public:
         updateTexture();
     } 
 
-    void Destroy(){};
+    void Destroy(){}; /// TO DO: delete object
+
     void updateTexture(){
         if (textures.size() > 1) {
             size_t idx = static_cast<size_t>((textures.size() - 1) * (1 - CurrentHP/MaxHP));
