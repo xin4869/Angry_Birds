@@ -1,21 +1,25 @@
 #include <SFML/Graphics.hpp>
 #include <box2d/box2d.h>
 #include <iostream>
+#include <vector>
+#include "visual/texture_manager.hpp"
 
 #ifndef OBJECT_PHYSICS_HPP
 #define OBJECT_PHYSICS_HPP
 
 namespace ObjectDefs
 {
+    constexpr const float pixel_per_meter = 40;
 
     struct ObjectDefaults
     {
         b2BodyDef bodyDef;   
-        sf::Sprite sprite;
         std::unique_ptr<b2Shape> shape;
         float density;
-        float hp;
-        float pixel_per_meter = 40.0f;
+        float maxHp;
+        float spriteWidth;
+        float spriteHeight;
+        std::vector<std::string> textureNames;
     };
 
     b2BodyDef GetBodyDef(b2BodyType type, float x=0, float y=0)
@@ -35,6 +39,7 @@ namespace ObjectDefs
     std::unique_ptr<b2PolygonShape> CreateShape (float width_m, float height_m){
         auto shape = std::unique_ptr<b2PolygonShape>();
         shape->SetAsBox(width_m/2, height_m/2);
+        return shape;
     }
 
     float CalculateHP(float baseHP, float radius_m) {     
@@ -47,7 +52,7 @@ namespace ObjectDefs
         return baseHP * area;
     }
 
-     sf::Sprite CreateSprite(float width_px, float height_px, const sf::Texture& texture)
+    sf::Sprite CreateSprite(float width_px, float height_px, const sf::Texture& texture)
     {
         sf::Sprite sprite(texture);
         float scale_w = width_px / texture.getSize().x;
@@ -56,11 +61,12 @@ namespace ObjectDefs
         sprite.setOrigin(texture.getSize().x / 2.f, texture.getSize().y / 2.f);
         return sprite;
     }
-}
+    
+};
 
 #endif
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 /* 
 Birds:
 Density: 1.0

@@ -5,136 +5,226 @@
 #ifndef OBJECT_BLOCK_HPP
 #define OBJECT_BLOCK_HPP
 
-namespace ObjectDefs
-{
- 
-    ObjectDefaults IceDefs() {
-        ObjectDefaults ice;
-        ice.bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody);
-        ice.sprite = sf::Sprite();
-        ice.shape = nullptr;
-        ice.density = 0.8f;
-        ice.hp = 50;
-        return ice;
-    }
 
-    ObjectDefaults WoodDefs() {
-        ObjectDefaults wood;
-        wood.bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody);
-        wood.sprite = sf::Sprite();
-        wood.shape = nullptr;
-        wood.density = 1.2f;
-        wood.hp = 150;
-        return wood;
-    }
-
-    ObjectDefaults StoneDefs() {
-        ObjectDefaults stone;
-        stone.bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody);
-        stone.sprite = sf::Sprite();
-        stone.shape = nullptr;
-        stone.density = 2.6f;
-        stone.hp = 300;
-    }
-
-
-    ObjectDefaults IceCircleDefs(float radius_m){
-        ObjectDefaults ice = IceDefs();
-        ice.shape = CreateShape(radius_m);
-        ice.hp = CalculateHP(ice.hp, radius_m);
-        float radius_pix = radius_m * ice.pixel_per_meter;
-        ice.sprite = CreateSprite(radius_pix, radius_pix, TextureManager::getTexture("IceCircle"));
-        return ice;
-    }
-
-    ObjectDefaults IceRectDefs(float width_m, float height_m) {
-        ObjectDefaults ice = IceDefs();
-        ice.shape = CreateShape(width_m, height_m);
-        ice.hp = CalculateHP(ice.hp, width_m, height_m);
-        float width_pix = width_m * ice.pixel_per_meter;
-        float height_pix = height_m * ice.pixel_per_meter;
-        ice.sprite = CreateSprite(width_pix, height_pix, TextureManager::getTexture("IceRect"));
-        return ice;
-    }
-
-    ObjectDefaults WoodCircleDefs(float radius_m);
-    ObjectDefaults WoodRectDefs(float width_m, float height_m);
-
-    ObjectDefaults StoneCircleDefs(float radius_m);
-    ObjectDefaults StoneRectDefs(float width_m, float height_m);
-
-}
-
-/**
- * @brief Physics block.
- * @brief No subclasses since blocks are functionally the same.
- * @brief Instead we have static variant getters.
- * 
- */
 using Defs = ObjectDefs::ObjectDefaults;
-class Block : public Object
-{
+
+class Block : public Object{
 public:
-    Block(b2World* world, b2BodyDef* bodyDef, b2Shape* shape, float density,
-          float x,float y, sf::Sprite sprite, float hp = 100);
+    Block(b2World* world, float x, float y, Defs* defs):
+        Object(world, &(defs->bodyDef), defs->shape.get(),defs->density,x, y, 
+        defs->spriteWidth, defs->spriteHeight, defs->textureNames, defs->maxHp) {}
+
+private:
+
+    Block(b2World* world, b2BodyDef* bodyDef, b2Shape* shape, float density,float x,
+         float y, float spriteWidth, float spriteHeight, std::vector<std::string> textures, float hp):
+        Object(world, bodyDef, shape, density, x, y, spriteWidth, spriteHeight, textures, hp) {}
 
     Block(){};
 
-    Block(b2World* world,float x,float y,Defs* defaults);
-
-    static Block GetIceCircle(b2World* world, float x, float y, float radius);
-    static Block GetIceRect(b2World* world, float x, float y, float width, float height);
-
-    static Block GetWoodCircle(b2World* world, float x, float y, float radius);
-    static Block GetWoodRect(b2World* world, float x, float y, float width, float height);
-
-    static Block GetStoneCircle(b2World* world, float x, float y, float radius);
-    static Block GetStoneRect(b2World* world, float x, float y, float width, float height);
 };
 
+namespace ObjectDefs{
 
-Block::Block(b2World* world, b2BodyDef* bodyDef, b2Shape* shape, float density,
-            float x, float y, sf::Sprite sprite, float hp):
-        Object(world, bodyDef, shape, density, x, y, sprite, hp){}
+    ObjectDefaults iceCircleS = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(0.53f),  
+        .density = 0.8f,
+        .maxHp = CalculateHP(50.0f, 0.53f),
+        .spriteWidth = 0.53f * 2 * pixel_per_meter,
+        .spriteHeight = 0.53f * 2 * pixel_per_meter,
+        .textureNames = {"IceCircleS","IceCircleSDamaged1", "IceCircleSDamaged2", "IceCircleSDamaged3"}
+    };
 
-Block::Block(b2World* world, float x, float y, Defs* defs){
-    defs->bodyDef.position.Set(x, y);
-    body = world->CreateBody(&(defs->bodyDef));
-    if (defs->shape){
-        body->CreateFixture(defs->shape.get(), defs->density);
-    }  
-    hp = defs->hp;
-    sprite = defs->sprite;
-}
+    ObjectDefaults iceCircleM = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(1.0f),  
+        .density = 0.8f,
+        .maxHp = CalculateHP(50.0f, 1.0f),
+        .spriteWidth = 1.0f * 2 * pixel_per_meter,
+        .spriteHeight = 1.0f * 2 * pixel_per_meter,
+        .textureNames = {"IceCircleM","IceCircleMDamaged1", "IceCircleMDamaged2", "IceCircleMDamaged3"}
+    };
 
-/////////////// Getter methods ///////////////////////////
-Block Block::GetIceCircle(b2World* world, float x, float y, float radius_m){
-    Defs iceDefs = ObjectDefs::IceCircleDefs(radius_m);
-    return Block(world, x, y, &iceDefs);
-}
+    ObjectDefaults iceSquare = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(1.05f, 1.05f),
+        .density = 0.8f,
+        .maxHp = CalculateHP(50.0f, 1.05f, 1.05f),
+        .spriteWidth = 1.05f * pixel_per_meter,
+        .spriteHeight = 1.05f * pixel_per_meter,
+        .textureNames = {"IceSquare", "IceSquareDamaged1", "IceSquareDamaged2", "IceSquareDamaged3"}
+    };
+  
+    ObjectDefaults iceRect = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(2.3f, 1.3f),
+        .density = 0.8f,
+        .maxHp = CalculateHP(50.0f, 2.3f, 1.3f),
+        .spriteWidth = 2.3f * pixel_per_meter,
+        .spriteHeight = 1.3f * pixel_per_meter,
+        .textureNames = {"IceRect", "IceRectDamaged1", "IceRectDamaged2", "IceRectDamaged3"}
+    };
 
-Block Block::GetIceRect(b2World* world, float x, float y, float width_m, float height_m){
-    Defs iceDefs = ObjectDefs::IceRectDefs(width_m, height_m);
-    return Block(world, x, y, & iceDefs);
-}
+    ObjectDefaults iceRectS = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(2.0f, 0.55f),
+        .density = 0.8f,
+        .maxHp = CalculateHP(50.0f, 2.0f, 0.55f),
+        .spriteWidth = 2.0f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .textureNames = {"IceRectS", "IceRectSDamaged1", "IceRectSDamaged2", "IceRectSDamaged3"}
+    };
 
-Block Block::GetWoodCircle(b2World* world, float x, float y, float radius_m){
-    Defs woodDefs = ObjectDefs::WoodCircleDefs(radius_m);
-    return Block(world, x, y, &woodDefs);
-}
-Block Block::GetWoodRect(b2World* world, float x, float y, float width_m, float height_m){
-    Defs woodDefs = ObjectDefs::IceRectDefs(width_m, height_m);
-    return Block(world, x, y, &woodDefs);
-}
+    ObjectDefaults iceRectM = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(4.25f, 0.55f),
+        .density = 0.8f,
+        .maxHp = CalculateHP(50.0f, 4.25f, 0.55f),
+        .spriteWidth = 4.25f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .textureNames = {"IceRectM", "IceRectMDamaged1", "IceRectMDamaged2", "IceRectMDamaged3"}
+    };
 
+    ObjectDefaults iceRectL = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(5.075f, 0.55f),
+        .density = 0.8f,
+        .maxHp = CalculateHP(50.0f, 5.075f, 0.55f),
+        .spriteWidth = 5.075f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .textureNames = {"IceRectL", "IceRectLDamaged1", "IceRectLDamaged2", "IceRectLDamaged3"}
+    };
+
+    ObjectDefaults woodCircleS = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(0.53f),
+        .density = 1.2f,
+        .maxHp = CalculateHP(150.0f, 0.53f),
+        .spriteWidth = 0.53f * 2 * pixel_per_meter,
+        .spriteHeight = 0.53f * 2 * pixel_per_meter,
+        .textureNames = {"WoodCircleS","WoodCircleSDamaged1", "WoodCircleSDamaged2", "WoodCircleSDamaged3"}
+    };
+
+    ObjectDefaults woodCircleM = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(1.0f),
+        .density = 1.2f,
+        .maxHp = CalculateHP(150.0f, 1.0f),
+        .spriteWidth = 1.0f * 2 * pixel_per_meter,
+        .spriteHeight = 1.0f * 2 *  pixel_per_meter,
+        .textureNames = {"WoodCircleM","WoodCircleMDamaged1", "WoodCircleMDamaged2", "WoodCircleMDamaged3"}
+    };
+
+    ObjectDefaults woodSquare = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(1.05f),
+        .density = 1.2f,
+        .maxHp = CalculateHP(150.0f, 1.05f),
+        .spriteWidth = 1.05f * 2 * pixel_per_meter,
+        .spriteHeight = 1.05f * 2 * pixel_per_meter,
+        .textureNames = {"WoodSquare","WoodSquareDamaged1", "WoodSquareDamaged2", "WoodSquareDamaged3"}
+    };
+
+    ObjectDefaults woodRect = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(2.3f, 1.3f),
+        .density = 1.2f,
+        .maxHp = CalculateHP(150.0f, 2.3f, 1.3f),
+        .spriteWidth = 2.3f * pixel_per_meter,
+        .spriteHeight = 1.3f * pixel_per_meter,
+        .textureNames = {"WoodRect","WoodRectDamaged1", "WoodRectDamaged2", "WoodRectDamaged3"}
+    };
+
+    ObjectDefaults woodRectS = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(2.0f, 0.55f),
+        .density = 1.2f,
+        .maxHp = CalculateHP(150.0f, 2.0f, 0.55f),
+        .spriteWidth = 2.0f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .textureNames = {"WoodRectS","WoodRectSDamaged1", "WoodRectSDamaged2", "WoodRectSDamaged3"}
+    };
+
+    ObjectDefaults woodRectM = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(4.25f, 0.55f),
+        .density = 1.2f,
+        .maxHp = CalculateHP(150.0f, 4.25f, 0.55f),
+        .spriteWidth = 4.25f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .textureNames = {"WoodRectM","WoodRectMDamaged1", "WoodRectMDamaged2", "WoodRectMDamaged3"}
+    };
+
+    ObjectDefaults woodRectL = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(5.075f, 0.55f),
+        .density = 1.2f,
+        .maxHp = CalculateHP(150.0f, 5.075f, 0.55f),
+        .spriteWidth = 5.075f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .textureNames = {"WoodRectL","WoodRectLDamaged1", "WoodRectLDamaged2", "WoodRectLDamaged3"}
+    };
+
+    ObjectDefaults stoneCircleS = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(0.53f),
+        .density = 2.6f,
+        .maxHp = CalculateHP(300.0f, 0.53f),
+        .spriteWidth = 0.53f * 2 * pixel_per_meter,
+        .spriteHeight = 0.53f * 2 * pixel_per_meter,
+        .textureNames = {"StoneCircleS","StoneCircleSDamaged1", "StoneCircleSDamaged2", "StoneCircleSDamaged3"}
+    };
+
+    ObjectDefaults stoneCircleM = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(1.0f),
+        .density = 2.6f,
+        .maxHp = CalculateHP(300.0f, 1.0f),
+        .spriteWidth = 1.0f * 2 * pixel_per_meter,
+        .spriteHeight = 1.0f * 2 * pixel_per_meter,
+        .textureNames = {"StoneCircleM","StoneCircleMDamaged1", "StoneCircleMDamaged2", "StoneCircleMDamaged3"}
+    };
+
+    ObjectDefaults stoneRect = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(2.3f, 1.3f),
+        .density = 2.6f,
+        .maxHp = CalculateHP(300.0f, 2.3f, 1.3f),
+        .spriteWidth = 2.3f * pixel_per_meter,
+        .spriteHeight = 1.3f * pixel_per_meter,
+        .textureNames = {"StoneRect","StoneRectDamaged1", "StoneRectDamaged2", "StoneRectDamaged3"}
+    };
+
+    ObjectDefaults stoneRectS = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(2.0f, 0.55f),
+        .density = 2.6f,
+        .maxHp = CalculateHP(300.0f, 2.0f, 0.55f),
+        .spriteWidth = 2.0f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .textureNames = {"StoneRectS","StoneRectSDamaged1", "StoneRectSDamaged2", "StoneRectSDamaged3"}
+    };
     
-Block Block::GetStoneCircle(b2World* world, float x, float y, float radius_m){
-    Defs stoneDefs = ObjectDefs::StoneCircleDefs(radius_m);
-    return Block(world, x, y, &stoneDefs);    
-}
-Block Block::GetStoneRect(b2World* world, float x, float y, float width_m, float height_m){
-    Defs stoneDefs = ObjectDefs::StoneRectDefs(width_m, height_m);
-    return Block(world, x, y, &stoneDefs);
+    ObjectDefaults stoneRectM = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(4.25f, 0.55f),
+        .density = 2.6f,
+        .maxHp = CalculateHP(300.0f, 4.25f, 0.55f),
+        .spriteWidth = 4.25f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .textureNames = {"StoneRectM","StoneRectMDamaged1", "StoneRectMDamaged2", "StoneRectMDamaged3"}
+    };
+    
+    ObjectDefaults stoneRectL = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(5.075f, 0.55f),
+        .density = 2.6f,
+        .maxHp = CalculateHP(300.0f, 5.075f, 0.55f),
+        .spriteWidth = 5.075f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .textureNames = {"StoneRectL","StoneRectLDamaged1", "StoneRectLDamaged2", "StoneRectLDamaged3"}
+    };
 }
 
 #endif

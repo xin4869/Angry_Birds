@@ -13,22 +13,9 @@
 class Object
 {
 public:
-    float hp;
-    b2Body* body;
-    sf::Sprite sprite;
+    Object(){};
+    ~Object(){};
 
-    /**
-     * @brief Construct a new Object
-     * 
-     * @param world world to add in
-     * @param bodyDef defines body (type, position, rotation)
-     * @param shape defines shape (hitbox)
-     * @param density 
-     * @param x coordinate
-     * @param y coordinate
-     * @param sprite object sprite
-     * @param hp hitpoints
-     */
     Object(
         b2World* world,
         b2BodyDef* bodyDef,
@@ -36,34 +23,47 @@ public:
         float density,
         float x,
         float y,
-        sf::Sprite sprite=ObjectDefs::GetRectSprite(32, 32),
-        float hp = 100
-    );
-    Object(){};
-    ~Object(){};
-    void TakeDamage(float dmg){ std::cout << "Took " << dmg << " dmg" << std::endl; };
+        float spriteWidth,
+        float spriteHeight,
+        std::vector<std::string> textureDefs, 
+        float hp
+    ): textures(textureDefs), MaxHP(hp), CurrentHP(hp) {
+        if (textureDefs.size() == 0) {
+            std::cout << "No textures for object" << std::endl;
+        }
+        sprite = ObjectDefs::CreateSprite(spriteWidth, spriteHeight, TextureManager::getTexture(textures[0]));      
+        bodyDef->position.Set(x, y);
+        body = world->CreateBody(bodyDef);
+        body->CreateFixture(shape, density);
+        body->SetTransform(b2Vec2(x,y), 0);
+    }
 
-    /**
-     * @brief Destroy when hp <= 0 (e.g.)
-     * 
-     */
+
+    virtual void TakeDamage(float dmg){
+        CurrentHP -= dmg;
+        if (CurrentHP <= 0) {
+            CurrentHP = 0;
+            /// TO DO: delete object after some time??
+        }
+        updateTexture();
+    } 
+
     void Destroy(){};
+    void updateTexture(){
+        if (textures.size() > 1) {
+            size_t idx = static_cast<size_t>((textures.size() - 1) * (1 - CurrentHP/MaxHP));
+            idx = std::min(idx, textures.size());
+            sprite.setTexture(TextureManager::getTexture(textures[idx]));
+        }
+    }
+
+protected :
+    b2Body* body;
+    sf::Sprite sprite;
+    std::vector<std::string> textures;
+    float MaxHP;
+    float CurrentHP;
 };
 
-Object::Object(
-        b2World* world,
-        b2BodyDef* bodyDef,
-        b2Shape* shape,
-        float density,
-        float x,
-        float y,
-        sf::Sprite sprite,
-        float hp
-    ) : hp(hp), sprite(sprite)
-{
-    bodyDef->position.Set(x, y);
-    body = world->CreateBody(bodyDef);
-    body->CreateFixture(shape, density);
-}
 
 #endif
