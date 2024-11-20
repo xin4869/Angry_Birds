@@ -57,6 +57,16 @@ public:
         loadTexture("IceSquareDamaged2", "assets/textures/ice/square_2.png");
         loadTexture("IceSquareDamaged3", "assets/textures/ice/square_3.png");
 
+        loadTexture("IceTriangleLeft","assets/textures/ice/triangleLeft.png");
+        loadTexture("IceTriangleLeftDamaged1","assets/textures/ice/triangleLeft_1.png");
+        loadTexture("IceTriangleLeftDamaged2","assets/textures/ice/triangleLeft_2.png");
+        loadTexture("IceTriangleLeftDamaged3","assets/textures/ice/triangleLeft_3.png");
+
+        loadTexture("IceTriangleRight","assets/textures/ice/triangleRight.png");
+        loadTexture("IceTriangleRightDamaged1","assets/textures/ice/triangleRight_1.png");
+        loadTexture("IceTriangleRightDamaged2","assets/textures/ice/triangleRight_2.png");
+        loadTexture("IceTriangleRightDamaged3","assets/textures/ice/triangleRight_3.png");
+
         loadTexture("IceRect","assets/textures/ice/rect.png");
         loadTexture("IceRectDamaged1","assets/textures/ice/rect_1.png");
         loadTexture("IceRectDamaged2","assets/textures/ice/rect_2.png");
@@ -93,6 +103,16 @@ public:
         loadTexture("WoodSquareDamaged2", "assets/textures/wood/square_2.png");
         loadTexture("WoodSquareDamaged3", "assets/textures/wood/square_3.png");
         
+        loadTexture("WoodTriangleLeft","assets/textures/wood/triangleLeft.png");
+        loadTexture("WoodTriangleLeftDamaged1","assets/textures/wood/triangleLeft_1.png");
+        loadTexture("WoodTriangleLeftDamaged2","assets/textures/wood/triangleLeft_2.png");
+        loadTexture("WoodTriangleLeftDamaged3","assets/textures/wood/triangleLeft_3.png");
+
+        loadTexture("WoodTriangleRight","assets/textures/wood/triangleRight.png");
+        loadTexture("WoodTriangleRightDamaged1","assets/textures/wood/triangleRight_1.png");
+        loadTexture("WoodTriangleRightDamaged2","assets/textures/wood/triangleRight_2.png");
+        loadTexture("WoodTriangleRightDamaged3","assets/textures/wood/triangleRight_3.png");
+
         loadTexture("WoodRect","assets/textures/wood/rect.png");
         loadTexture("WoodRectDamaged1","assets/textures/wood/rect_1.png");
         loadTexture("WoodRectDamaged2","assets/textures/wood/rect_2.png");
@@ -128,6 +148,16 @@ public:
         loadTexture("StoneSquareDamaged1", "assets/textures/stone/square_1.png");
         loadTexture("StoneSquareDamaged2", "assets/textures/stone/square_2.png");
         loadTexture("StoneSquareDamaged3", "assets/textures/stone/square_3.png");
+
+        loadTexture("StoneTriangleLeft","assets/textures/stone/triangleLeft.png");
+        loadTexture("StoneTriangleLeftDamaged1","assets/textures/stone/triangleLeft_1.png");
+        loadTexture("StoneTriangleLeftDamaged2","assets/textures/stone/triangleLeft_2.png");
+        loadTexture("StoneTriangleLeftDamaged3","assets/textures/stone/triangleLeft_3.png");
+
+        loadTexture("StoneTriangleRight","assets/textures/stone/triangleRight.png");
+        loadTexture("StoneTriangleRightDamaged1","assets/textures/stone/triangleRight_1.png");
+        loadTexture("StoneTriangleRightDamaged2","assets/textures/stone/triangleRight_2.png");
+        loadTexture("StoneTriangleRightDamaged3","assets/textures/stone/triangleRight_3.png");
 
         loadTexture("StoneRect","assets/textures/stone/rect.png");
         loadTexture("StoneRectDamaged1","assets/textures/stone/rect_1.png");

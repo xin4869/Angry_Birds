@@ -41,16 +41,39 @@ namespace ObjectDefs
         return shape;
     }
 
-    float CalculateHP(float baseHP, float radius_m) {     
+    std::unique_ptr<b2PolygonShape> CreateShapeTriangle(float base_m, float height_m, bool leftOriented) {
+        auto shape = std::make_unique<b2PolygonShape>();
+        b2Vec2 vertices[3];
+        
+        if (leftOriented) {
+            vertices[0] = b2Vec2(0, 0);
+            vertices[1] = b2Vec2(base_m, 0);
+            vertices[2] = b2Vec2(0, height_m);
+        } else {
+            vertices[0] = b2Vec2(0, 0);
+            vertices[1] = b2Vec2(-base_m, 0);
+            vertices[2] = b2Vec2(0, height_m);
+        }
+        shape->Set(vertices, 3);
+        return shape;
+    }
+
+    float CalculateHp(float baseHP, float radius_m) {     
         float area = b2_pi * radius_m * radius_m;
         return baseHP * area;
     }
 
-    float CalculateHP(float baseHP, float width_m, float height_m) {
+    float CalculateHp(float baseHP, float width_m, float height_m) {
         float area = width_m * height_m;
         return baseHP * area;
     }
 
+    float CalculateHpTriangle(float baseHP, float base_m, float height_m) {
+        float area = base_m * height_m / 2;
+        return baseHP * area;
+    }
+
+ 
     sf::Sprite CreateSprite(float width_px, float height_px, const sf::Texture& texture)
     {
         sf::Sprite sprite(texture);
