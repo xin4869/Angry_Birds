@@ -5,9 +5,7 @@ You can use Markdown language to render it as formatted **HTML** file.
 
 # Group
 
-- Doni Zharkynuly
 - Jaakko Rautapää
-- Soma Zambelly
 - Xin Lin
 
 # Repository organization
