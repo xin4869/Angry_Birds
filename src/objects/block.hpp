@@ -55,6 +55,26 @@ namespace ObjectDefs{
         .spriteHeight = 1.05f * pixel_per_meter,
         .textureNames = {"IceSquare", "IceSquareDamaged1", "IceSquareDamaged2", "IceSquareDamaged3"}
     };
+
+    ObjectDefaults iceTriangleLeft = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShapeTriangle(2.0f, 2.0f, true),  
+        .density = 0.8f,
+        .maxHp = CalculateHp(2.0f, 2.0f),
+        .spriteWidth = 2.0f * pixel_per_meter,
+        .spriteHeight = 2.0f * pixel_per_meter,
+        .textureNames = {"IceTriangleLeft", "IceTriangleLeftDamaged1", "IceTriangleLeftDamaged2", "IceTriangleLeftDamaged3"}
+    };
+
+    ObjectDefaults iceTriangleRight = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShapeTriangle(2.0f, 2.0f, false),  
+        .density = 0.8f,
+        .maxHp = CalculateHp(2.0f, 2.0f),
+        .spriteWidth = 2.0f * pixel_per_meter,
+        .spriteHeight = 2.0f * pixel_per_meter,
+        .textureNames = {"IceTriangleRight", "IceTriangleRightDamaged1", "IceTriangleRightDamaged2", "IceTriangleRightDamaged3"}
+    };
   
     ObjectDefaults iceRect = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
@@ -126,6 +146,27 @@ namespace ObjectDefs{
         .textureNames = {"WoodSquare","WoodSquareDamaged1", "WoodSquareDamaged2", "WoodSquareDamaged3"}
     };
 
+    ObjectDefaults woodTriangleLeft = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShapeTriangle(2.0f, 2.0f, true),
+        .density = 1.2f,
+        .maxHp = CalculateHp(150.0f, 2.0f, 2.0f),
+        .spriteWidth = 2.0f * 2 * pixel_per_meter,
+        .spriteHeight = 2.0f * 2 * pixel_per_meter,
+        .textureNames = {"WoodTriangleLeft","WoodTriangleLeftDamaged1", "WoodTriangleLeftDamaged2", "WoodTriangleLeftDamaged3"}
+    };
+
+    ObjectDefaults woodTriangleRight = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShapeTriangle(2.0f, 2.0f, false),
+        .density = 1.2f,
+        .maxHp = CalculateHp(150.0f, 2.0f, 2.0f),
+        .spriteWidth = 2.0f * 2 * pixel_per_meter,
+        .spriteHeight = 2.0f * 2 * pixel_per_meter,
+        .textureNames = {"WoodTriangleRight","WoodTriangleRightDamaged1", "WoodTriangleRightDamaged2", "WoodTriangleRightDamaged3"}
+    };
+
+
     ObjectDefaults woodRect = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(2.3f, 1.3f),
@@ -184,6 +225,36 @@ namespace ObjectDefs{
         .spriteWidth = 1.0f * 2 * pixel_per_meter,
         .spriteHeight = 1.0f * 2 * pixel_per_meter,
         .textureNames = {"StoneCircleM","StoneCircleMDamaged1", "StoneCircleMDamaged2", "StoneCircleMDamaged3"}
+    };
+
+    ObjectDefaults stoneSquare = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(1.05f),
+        .density = 2.6f,
+        .maxHp = CalculateHp(300.0f, 1.05f),
+        .spriteWidth = 1.05f * 2 * pixel_per_meter,
+        .spriteHeight = 1.05f * 2 * pixel_per_meter,
+        .textureNames = {"StoneSquare","StoneSquareDamaged1", "StoneSquareDamaged2", "StoneSquareDamaged3"}
+    };
+
+    ObjectDefaults stoneTriangleLeft = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShapeTriangle(2.0f, 2.0f, true),
+        .density = 2.6f,
+        .maxHp = CalculateHp(300.0f, 2.0f),
+        .spriteWidth = 2.0f  * pixel_per_meter,
+        .spriteHeight = 2.0f * pixel_per_meter,
+        .textureNames = {"StoneTriangleLeft","StoneTriangleLeftDamaged1", "StoneTriangleLeftDamaged2", "StoneTriangleLeftDamaged3"}
+    };
+
+    ObjectDefaults stoneTriangleRight = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShapeTriangle(2.0f, 2.0f, false),
+        .density = 2.6f,
+        .maxHp = CalculateHp(300.0f, 2.0f),
+        .spriteWidth = 2.0f  * pixel_per_meter,
+        .spriteHeight = 2.0f * pixel_per_meter,
+        .textureNames = {"StoneTriangleRight","StoneTriangleRightDamaged1", "StoneTriangleRightDamaged2", "StoneTriangleRightDamaged3"}
     };
 
     ObjectDefaults stoneRect = {

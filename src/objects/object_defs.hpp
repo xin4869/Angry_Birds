@@ -42,24 +42,18 @@ namespace ObjectDefs
         return shape;
     }
 
-    std::unique_ptr<b2PolygonShape> CreateShapeTriangle(float base_m, float height_m, bool isIsosceles = true, bool leftOriented = true) {
+    std::unique_ptr<b2PolygonShape> CreateShapeTriangle(float base_m, float height_m, bool leftOriented) {
         auto shape = std::make_unique<b2PolygonShape>();
         b2Vec2 vertices[3];
         
-        if (isIsosceles) {
-            vertices[0] = b2Vec2(-base_m/2, -height_m/2);
-            vertices[1] = b2Vec2(base_m/2, -height_m/2);
-            vertices[2] = b2Vec2(0, height_m/2);
+        if (leftOriented) {
+            vertices[0] = b2Vec2(0, 0);
+            vertices[1] = b2Vec2(base_m, 0);
+            vertices[2] = b2Vec2(0, height_m);
         } else {
-            if (leftOriented) {
-            vertices[0] = b2Vec2(-base_m/2, -height_m/2);
-            vertices[1] = b2Vec2(base_m/2, -height_m/2);
-            vertices[2] = b2Vec2(-base_m/2, height_m/2);
-            } else {
-            vertices[0] = b2Vec2(base_m/2, -height_m/2);
-            vertices[1] = b2Vec2(-base_m/2, -height_m/2);
-            vertices[2] = b2Vec2(base_m/2, height_m/2);
-            }
+            vertices[0] = b2Vec2(0, 0);
+            vertices[1] = b2Vec2(-base_m, 0);
+            vertices[2] = b2Vec2(0, height_m);
         }
         shape->Set(vertices, 3);
         return shape;
