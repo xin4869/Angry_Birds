@@ -38,7 +38,8 @@ public:
         body->SetTransform(b2Vec2(x,y), 0);
     }
 
-
+   // TO DO: make this pure virtual? birds should die after one hit, 
+   //          but texture can be updated according to the damage taken
     virtual void TakeDamage(float dmg){
         CurrentHP -= dmg;
         if (CurrentHP <= 0) {
@@ -50,7 +51,7 @@ public:
 
     void Destroy(){}; /// TO DO: delete object
 
-    void updateTexture(){
+    virtual void updateTexture(){
         if (textures.size() > 1) {
             size_t idx = static_cast<size_t>((textures.size() - 1) * (1 - CurrentHP/MaxHP));
             idx = std::min(idx, textures.size());

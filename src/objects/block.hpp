@@ -30,7 +30,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(0.53f),  
         .density = 0.8f,
-        .maxHp = CalculateHP(50.0f, 0.53f),
+        .maxHp = CalculateHp(50.0f, 0.53f),
         .spriteWidth = 0.53f * 2 * pixel_per_meter,
         .spriteHeight = 0.53f * 2 * pixel_per_meter,
         .textureNames = {"IceCircleS","IceCircleSDamaged1", "IceCircleSDamaged2", "IceCircleSDamaged3"}
@@ -40,7 +40,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(1.0f),  
         .density = 0.8f,
-        .maxHp = CalculateHP(50.0f, 1.0f),
+        .maxHp = CalculateHp(50.0f, 1.0f),
         .spriteWidth = 1.0f * 2 * pixel_per_meter,
         .spriteHeight = 1.0f * 2 * pixel_per_meter,
         .textureNames = {"IceCircleM","IceCircleMDamaged1", "IceCircleMDamaged2", "IceCircleMDamaged3"}
@@ -50,7 +50,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(1.05f, 1.05f),
         .density = 0.8f,
-        .maxHp = CalculateHP(50.0f, 1.05f, 1.05f),
+        .maxHp = CalculateHp(50.0f, 1.05f, 1.05f),
         .spriteWidth = 1.05f * pixel_per_meter,
         .spriteHeight = 1.05f * pixel_per_meter,
         .textureNames = {"IceSquare", "IceSquareDamaged1", "IceSquareDamaged2", "IceSquareDamaged3"}
@@ -60,7 +60,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(2.3f, 1.3f),
         .density = 0.8f,
-        .maxHp = CalculateHP(50.0f, 2.3f, 1.3f),
+        .maxHp = CalculateHp(50.0f, 2.3f, 1.3f),
         .spriteWidth = 2.3f * pixel_per_meter,
         .spriteHeight = 1.3f * pixel_per_meter,
         .textureNames = {"IceRect", "IceRectDamaged1", "IceRectDamaged2", "IceRectDamaged3"}
@@ -70,7 +70,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(2.0f, 0.55f),
         .density = 0.8f,
-        .maxHp = CalculateHP(50.0f, 2.0f, 0.55f),
+        .maxHp = CalculateHp(50.0f, 2.0f, 0.55f),
         .spriteWidth = 2.0f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
         .textureNames = {"IceRectS", "IceRectSDamaged1", "IceRectSDamaged2", "IceRectSDamaged3"}
@@ -80,7 +80,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(4.25f, 0.55f),
         .density = 0.8f,
-        .maxHp = CalculateHP(50.0f, 4.25f, 0.55f),
+        .maxHp = CalculateHp(50.0f, 4.25f, 0.55f),
         .spriteWidth = 4.25f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
         .textureNames = {"IceRectM", "IceRectMDamaged1", "IceRectMDamaged2", "IceRectMDamaged3"}
@@ -90,7 +90,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(5.075f, 0.55f),
         .density = 0.8f,
-        .maxHp = CalculateHP(50.0f, 5.075f, 0.55f),
+        .maxHp = CalculateHp(50.0f, 5.075f, 0.55f),
         .spriteWidth = 5.075f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
         .textureNames = {"IceRectL", "IceRectLDamaged1", "IceRectLDamaged2", "IceRectLDamaged3"}
@@ -100,7 +100,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(0.53f),
         .density = 1.2f,
-        .maxHp = CalculateHP(150.0f, 0.53f),
+        .maxHp = CalculateHp(150.0f, 0.53f),
         .spriteWidth = 0.53f * 2 * pixel_per_meter,
         .spriteHeight = 0.53f * 2 * pixel_per_meter,
         .textureNames = {"WoodCircleS","WoodCircleSDamaged1", "WoodCircleSDamaged2", "WoodCircleSDamaged3"}
@@ -110,7 +110,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(1.0f),
         .density = 1.2f,
-        .maxHp = CalculateHP(150.0f, 1.0f),
+        .maxHp = CalculateHp(150.0f, 1.0f),
         .spriteWidth = 1.0f * 2 * pixel_per_meter,
         .spriteHeight = 1.0f * 2 *  pixel_per_meter,
         .textureNames = {"WoodCircleM","WoodCircleMDamaged1", "WoodCircleMDamaged2", "WoodCircleMDamaged3"}
@@ -120,7 +120,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(1.05f),
         .density = 1.2f,
-        .maxHp = CalculateHP(150.0f, 1.05f),
+        .maxHp = CalculateHp(150.0f, 1.05f),
         .spriteWidth = 1.05f * 2 * pixel_per_meter,
         .spriteHeight = 1.05f * 2 * pixel_per_meter,
         .textureNames = {"WoodSquare","WoodSquareDamaged1", "WoodSquareDamaged2", "WoodSquareDamaged3"}
@@ -130,7 +130,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(2.3f, 1.3f),
         .density = 1.2f,
-        .maxHp = CalculateHP(150.0f, 2.3f, 1.3f),
+        .maxHp = CalculateHp(150.0f, 2.3f, 1.3f),
         .spriteWidth = 2.3f * pixel_per_meter,
         .spriteHeight = 1.3f * pixel_per_meter,
         .textureNames = {"WoodRect","WoodRectDamaged1", "WoodRectDamaged2", "WoodRectDamaged3"}
@@ -140,7 +140,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(2.0f, 0.55f),
         .density = 1.2f,
-        .maxHp = CalculateHP(150.0f, 2.0f, 0.55f),
+        .maxHp = CalculateHp(150.0f, 2.0f, 0.55f),
         .spriteWidth = 2.0f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
         .textureNames = {"WoodRectS","WoodRectSDamaged1", "WoodRectSDamaged2", "WoodRectSDamaged3"}
@@ -150,7 +150,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(4.25f, 0.55f),
         .density = 1.2f,
-        .maxHp = CalculateHP(150.0f, 4.25f, 0.55f),
+        .maxHp = CalculateHp(150.0f, 4.25f, 0.55f),
         .spriteWidth = 4.25f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
         .textureNames = {"WoodRectM","WoodRectMDamaged1", "WoodRectMDamaged2", "WoodRectMDamaged3"}
@@ -160,7 +160,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(5.075f, 0.55f),
         .density = 1.2f,
-        .maxHp = CalculateHP(150.0f, 5.075f, 0.55f),
+        .maxHp = CalculateHp(150.0f, 5.075f, 0.55f),
         .spriteWidth = 5.075f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
         .textureNames = {"WoodRectL","WoodRectLDamaged1", "WoodRectLDamaged2", "WoodRectLDamaged3"}
@@ -170,7 +170,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(0.53f),
         .density = 2.6f,
-        .maxHp = CalculateHP(300.0f, 0.53f),
+        .maxHp = CalculateHp(300.0f, 0.53f),
         .spriteWidth = 0.53f * 2 * pixel_per_meter,
         .spriteHeight = 0.53f * 2 * pixel_per_meter,
         .textureNames = {"StoneCircleS","StoneCircleSDamaged1", "StoneCircleSDamaged2", "StoneCircleSDamaged3"}
@@ -180,7 +180,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(1.0f),
         .density = 2.6f,
-        .maxHp = CalculateHP(300.0f, 1.0f),
+        .maxHp = CalculateHp(300.0f, 1.0f),
         .spriteWidth = 1.0f * 2 * pixel_per_meter,
         .spriteHeight = 1.0f * 2 * pixel_per_meter,
         .textureNames = {"StoneCircleM","StoneCircleMDamaged1", "StoneCircleMDamaged2", "StoneCircleMDamaged3"}
@@ -190,7 +190,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(2.3f, 1.3f),
         .density = 2.6f,
-        .maxHp = CalculateHP(300.0f, 2.3f, 1.3f),
+        .maxHp = CalculateHp(300.0f, 2.3f, 1.3f),
         .spriteWidth = 2.3f * pixel_per_meter,
         .spriteHeight = 1.3f * pixel_per_meter,
         .textureNames = {"StoneRect","StoneRectDamaged1", "StoneRectDamaged2", "StoneRectDamaged3"}
@@ -200,7 +200,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(2.0f, 0.55f),
         .density = 2.6f,
-        .maxHp = CalculateHP(300.0f, 2.0f, 0.55f),
+        .maxHp = CalculateHp(300.0f, 2.0f, 0.55f),
         .spriteWidth = 2.0f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
         .textureNames = {"StoneRectS","StoneRectSDamaged1", "StoneRectSDamaged2", "StoneRectSDamaged3"}
@@ -210,7 +210,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(4.25f, 0.55f),
         .density = 2.6f,
-        .maxHp = CalculateHP(300.0f, 4.25f, 0.55f),
+        .maxHp = CalculateHp(300.0f, 4.25f, 0.55f),
         .spriteWidth = 4.25f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
         .textureNames = {"StoneRectM","StoneRectMDamaged1", "StoneRectMDamaged2", "StoneRectMDamaged3"}
@@ -220,7 +220,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(5.075f, 0.55f),
         .density = 2.6f,
-        .maxHp = CalculateHP(300.0f, 5.075f, 0.55f),
+        .maxHp = CalculateHp(300.0f, 5.075f, 0.55f),
         .spriteWidth = 5.075f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
         .textureNames = {"StoneRectL","StoneRectLDamaged1", "StoneRectLDamaged2", "StoneRectLDamaged3"}
