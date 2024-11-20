@@ -149,7 +149,19 @@ public:
         loadTexture("StoneRectLDamaged2","assets/textures/stone/rectL_2.png");
         loadTexture("StoneRectLDamaged3","assets/textures/stone/rectL_3.png");
 
-       
+       /////////////// PIG ////////////////////
+       loadTexture("PigNormal", "assets/textures/pigs/normal.png");
+       loadTexture("PigSmile", "assets/textures/pigs/smile.png");
+
+       /////////////// NORMAL BIRD ////////////////////
+       loadTexture("NormalBird1", "assets/textures/normal_bird/1.png");
+       loadTexture("NormalBird2", "assets/textures/normal_bird/2.png");
+       loadTexture("NormalBird3", "assets/textures/normal_bird/3.png");
+       loadTexture("NormalBird4", "assets/textures/normal_bird/4.png");
+       loadTexture("NormalBird5", "assets/textures/normal_bird/5.png");
+       loadTexture("NormalBird6", "assets/textures/normal_bird/6.png");
+       loadTexture("NormalBird7", "assets/textures/normal_bird/7.png");
+
     }
 
     TextureManager() = delete;
@@ -157,5 +169,7 @@ public:
     TextureManager& operator=(const TextureManager&) = delete;
 
 };
+
+std::unordered_map<std::string, sf::Texture> TextureManager::textures;
 
 #endif

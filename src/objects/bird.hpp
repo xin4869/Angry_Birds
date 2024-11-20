@@ -13,32 +13,11 @@
 class Bird : public Object
 {
 public:
-    Bird(
-        b2World* world,
-        b2BodyDef* bodyDef,
-        b2Shape* shape,
-        float density,
-        float x,
-        float y,
-        sf::Sprite sprite,
-        float hp=100
-    );
+    Bird(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults) :
+        Object(world, x, y, defaults) {}
 
     virtual void Attack() = 0;
 };
 
-Bird::Bird(
-        b2World* world,
-        b2BodyDef* bodyDef,
-        b2Shape* shape,
-        float density,
-        float x,
-        float y,
-        sf::Sprite sprite,
-        float hp
-    ) : Object(world, bodyDef, shape, density, x, y, sprite, hp)
-{
-
-}
 
 #endif

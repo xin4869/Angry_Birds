@@ -2,29 +2,16 @@
 #include "visual/gui.hpp"
 
 
-// for debugging
-void printInfo(Object* obj)
-{
-  b2Vec2 position = obj->body->GetPosition();
-  float angle = obj->body->GetAngle();
-  printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
-}
- 
-
 int main(void) {
-
-  const float frameRate = 60.0f;
-  //calculate actual varying elapsed time between frames
-
-  //update physics with fixed time step
-  const float time_step = 1.0f / frameRate;
-  const int max_step = 5;
-
   auto window = sf::RenderWindow({1080u, 720u}, "Angry Birds");
-  window.setFramerateLimit(frameRate);
 
   Game game(window);
   if (!game.init()) {return 0;}
+  window.setFramerateLimit(game.getFrameRate());
+
+  NormalBird bird(game.getWorld(), 0, 0);
+  Pig pig(game.getWorld(), 0, 0, &ObjectDefs::normalPigDefaults);
+  Block block(game.getWorld(), 0, 0, &ObjectDefs::iceRectL);
 
   while (window.isOpen()) {
     //events handling

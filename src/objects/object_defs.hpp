@@ -2,7 +2,6 @@
 #include <box2d/box2d.h>
 #include <iostream>
 #include <vector>
-#include "visual/texture_manager.hpp"
 
 #ifndef OBJECT_PHYSICS_HPP
 #define OBJECT_PHYSICS_HPP
@@ -31,13 +30,13 @@ namespace ObjectDefs
     }
 
     std::unique_ptr<b2CircleShape> CreateShape (float radius_m) {
-        auto shape = std::unique_ptr<b2CircleShape>();
+        auto shape = std::make_unique<b2CircleShape>();
         shape->m_radius = radius_m;
         return shape;
     }
 
     std::unique_ptr<b2PolygonShape> CreateShape (float width_m, float height_m){
-        auto shape = std::unique_ptr<b2PolygonShape>();
+        auto shape = std::make_unique<b2PolygonShape>();
         shape->SetAsBox(width_m/2, height_m/2);
         return shape;
     }

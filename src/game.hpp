@@ -32,14 +32,16 @@ public:
 
   ~Game() {}
   
-  bool init(){}
+  bool init(){ return 1; }
   void update(){
     // Update physics world
     world.Step(timeStep, velocityIterations, positionIterations);
     // Update game objects' positions based on physics simulation
-  };
+  }
   void render(){}
   void launch(){}
+
+  int getFrameRate() { return frameRate; }
 
   void mouseClicked(sf::Event event) {
     if (event.mouseButton.button == sf::Mouse::Left) {
@@ -56,35 +58,10 @@ public:
   
   void mouseReleased(sf::Event event) {}
 
-  
-  // creating Objects. these use defaults. can also give parameters
-  NormalBird bird = NormalBird(&world, 3, 5);
-  Pig pig = Pig::GetNormalPig(&world, 4, 5);
-  Block ice = Block::GetIceBlock(&world, 5, 5, 1, 3);
-  Block fixed = Block::GetFixedBlock(&world, 4, 1, 10, 2);
-  
-  bird.Attack();
+  b2World* getWorld() { return &world; }
 
-  int32 velocityIterations = 6;
-  int32 positionIterations = 2;
-
-
-  world.Step(timeStep, velocityIterations, positionIterations);
-  printInfo(&bird);
-  b2Vec2 pos = 75.0 * bird.body->GetPosition();
-  bird.sprite.setPosition(pos.x, 800 - pos.y);
-
-
-
-    // game render
- 
-    // game objects drawing  
-  window.draw(bird.sprite, sf::RenderStates(sf::BlendAlpha));
-
-    
   
 private:
-  
   GameState game_state;
 
   GUI gui;
@@ -96,6 +73,13 @@ private:
   std::vector<Bird*>birds;
   std::vector<Pig*>pigs;
   std::vector<Block*> blocks;
+
+  const float frameRate = 60.0f;
+  const float timeStep = 1.0f / frameRate;
+  //const int max_step = 5;
+
+  int32 velocityIterations = 6;
+  int32 positionIterations = 2;
   
   
   void loadLevel(int level){

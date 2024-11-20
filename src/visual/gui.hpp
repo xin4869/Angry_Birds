@@ -1,8 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
-#include "visual/buttons.hpp"
-#include "visual/game_render.hpp"
+#include "buttons.hpp"
+#include "game_render.hpp"
 
 
 #ifndef GUI_HPP
@@ -29,7 +29,7 @@ public:
     }
 
     void drawHome(){
-        window.draw(score);
+        //window.draw(score);
     }
     void drawHelp(){}
     void drawLevels(){}    

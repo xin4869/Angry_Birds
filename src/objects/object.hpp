@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "object_defs.hpp"
+#include "../visual/texture_manager.hpp"
 
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
@@ -37,6 +38,10 @@ public:
         body->CreateFixture(shape, density);
         body->SetTransform(b2Vec2(x,y), 0);
     }
+
+    Object(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults) :
+        Object(world, &defaults->bodyDef, defaults->shape.get(), defaults->density, x, y,
+            defaults->spriteWidth, defaults->spriteHeight, defaults->textureNames, defaults->maxHp) {}
 
 
     virtual void TakeDamage(float dmg){

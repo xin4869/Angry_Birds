@@ -1,6 +1,6 @@
 #include "object.hpp"
 #include "object_defs.hpp"
-#include "visual/texture_manager.hpp"
+#include "../visual/texture_manager.hpp"
 
 #ifndef OBJECT_BLOCK_HPP
 #define OBJECT_BLOCK_HPP
@@ -10,18 +10,10 @@ using Defs = ObjectDefs::ObjectDefaults;
 
 class Block : public Object{
 public:
-    Block(b2World* world, float x, float y, Defs* defs):
-        Object(world, &(defs->bodyDef), defs->shape.get(),defs->density,x, y, 
-        defs->spriteWidth, defs->spriteHeight, defs->textureNames, defs->maxHp) {}
-
-private:
-
-    Block(b2World* world, b2BodyDef* bodyDef, b2Shape* shape, float density,float x,
-         float y, float spriteWidth, float spriteHeight, std::vector<std::string> textures, float hp):
-        Object(world, bodyDef, shape, density, x, y, spriteWidth, spriteHeight, textures, hp) {}
-
-    Block(){};
-
+    Block(b2World* world, float x, float y, Defs* defaults) :
+        Object(world, x, y, defaults) {}
+    
+    Block(){}  // for testing
 };
 
 namespace ObjectDefs{
