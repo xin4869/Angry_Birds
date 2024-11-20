@@ -9,7 +9,7 @@ void printInfo(Object* obj)
   float angle = obj->body->GetAngle();
   printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
 }
-
+ 
 
 int main(void) {
 
