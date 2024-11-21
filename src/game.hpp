@@ -11,6 +11,7 @@
 #include "visual/gui.hpp"
 #include "visual/game_render.hpp"
 #include "visual/texture_manager.hpp"
+#include "sound_manager.hpp"
 
 
 enum GameState {
@@ -28,6 +29,7 @@ public:
     gui(game_window),renderer(game_window),gravity(0.0f, -10.0f),world(gravity) {
       game_state = home;
       TextureManager::loadAllTextures();
+      SoundManager::loadAllSounds();
   } 
 
   ~Game() {}

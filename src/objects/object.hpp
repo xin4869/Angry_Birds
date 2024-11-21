@@ -1,8 +1,10 @@
 #include <box2d/box2d.h>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include "object_defs.hpp"
 #include "../visual/texture_manager.hpp"
+#include "../sound_manager.hpp"
 
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
@@ -27,11 +29,19 @@ public:
         float spriteWidth,
         float spriteHeight,
         std::vector<std::string> textureDefs, 
+        std::vector<std::string> soundNames,
         float hp
     ): textures(textureDefs), MaxHP(hp), CurrentHP(hp) {
         if (textureDefs.size() == 0) {
             std::cout << "No textures for object" << std::endl;
         }
+
+        for (auto i: soundNames)
+        {
+            sounds.emplace(std::make_pair(i, sf::Sound()));
+            sounds[i].setBuffer(*SoundManager::getSound(i));
+        }
+
         sprite = ObjectDefs::CreateSprite(spriteWidth, spriteHeight, TextureManager::getTexture(textures[0]));      
         bodyDef->position.Set(x, y);
         body = world->CreateBody(bodyDef);
@@ -40,8 +50,9 @@ public:
     }
 
     Object(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults) :
-        Object(world, &defaults->bodyDef, defaults->shape.get(), defaults->density, x, y,
-            defaults->spriteWidth, defaults->spriteHeight, defaults->textureNames, defaults->maxHp) {}
+        Object(world, &defaults->bodyDef, defaults->shape.get(), defaults->density,
+            x, y, defaults->spriteWidth, defaults->spriteHeight, defaults->textureNames,
+            defaults->soundNames, defaults->maxHp) {}
 
    // TO DO: make this pure virtual? birds should die after one hit, 
    //          but texture can be updated according to the damage taken
@@ -64,10 +75,16 @@ public:
         }
     }
 
+    bool playSound(const std::string& name)
+    {
+        sounds[name].play();
+    }
+
 protected :
     b2Body* body;
     sf::Sprite sprite;
     std::vector<std::string> textures;
+    std::unordered_map<std::string, sf::Sound> sounds;  // <name, sound>
     float MaxHP;
     float CurrentHP;
 };

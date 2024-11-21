@@ -19,6 +19,7 @@ namespace ObjectDefs
         float spriteWidth;
         float spriteHeight;
         std::vector<std::string> textureNames;
+        std::vector<std::string> soundNames;
     };
 
     b2BodyDef GetBodyDef(b2BodyType type, float x=0, float y=0)

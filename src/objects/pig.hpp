@@ -6,6 +6,8 @@
 
 namespace ObjectDefs
 {
+    std::vector<std::string> pigSoundNames = { "piglette damage a4", "piglette damage a7", "piglette destroyed" };
+
     ObjectDefaults normalPigDefaults = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(1.0f),
@@ -13,7 +15,8 @@ namespace ObjectDefs
         .maxHp = 100.0f,
         .spriteWidth = pixel_per_meter * 1.0f,
         .spriteHeight = pixel_per_meter * 1.0f,
-        .textureNames = { "PigNormal", "PigSmile" }
+        .textureNames = { "PigNormal", "PigSmile" },
+        .soundNames = pigSoundNames
     };
 
     ObjectDefaults ironPigDefaults = {
@@ -23,7 +26,8 @@ namespace ObjectDefs
         .maxHp = 300.0f,
         .spriteWidth = pixel_per_meter * 1.0f,
         .spriteHeight = pixel_per_meter * 1.0f,
-        .textureNames = { "PigNormal", "PigSmile" } // add textures?
+        .textureNames = { "PigNormal", "PigSmile" },
+        .soundNames = pigSoundNames
     };
 }
 

@@ -14,7 +14,8 @@ namespace ObjectDefs
         .maxHp = 100.0f,
         .spriteWidth = pixel_per_meter * 1.0f,
         .spriteHeight = pixel_per_meter * 1.0f,
-        .textureNames = { "NormalBird1", "NormalBird2", "NormalBird3", "NormalBird4", "NormalBird5", "NormalBird6", "NormalBird7" }
+        .textureNames = { "NormalBird1", "NormalBird2", "NormalBird3", "NormalBird4", "NormalBird5", "NormalBird6", "NormalBird7" },
+        .soundNames = { "bird 01 collision a1", "bird 01 collision a2", "bird 01 collision a3", "bird 01 collision a4", "bird 01 flying", "bird 01 select", "bird destroyed" }
     };
 }
 
