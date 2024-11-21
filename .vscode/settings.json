@@ -75,6 +75,15 @@
         "map": "cpp",
         "numbers": "cpp",
         "semaphore": "cpp"
-    }
+    },
+    "cSpell.words": [
+        "ctest",
+        "gmock",
+        "GOOGLETEST",
+        "gtest",
+        "MSVC",
+        "pthreads",
+        "STREQUAL"
+    ]
     
 }

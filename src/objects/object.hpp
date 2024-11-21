@@ -13,6 +13,7 @@
  * @brief Represents a basic physics object. Might make this abstract later.
  * 
  */
+
 class Object
 {
 public:
@@ -29,10 +30,13 @@ public:
         float spriteWidth,
         float spriteHeight,
         std::vector<std::string> textureDefs, 
+        std::vector<std::string> damageTextureDefs,
         std::vector<std::string> soundNames,
         float hp
-    ): textures(textureDefs), MaxHP(hp), CurrentHP(hp) {
-        if (textureDefs.size() == 0) {
+    ): normalTextures(textureDefs), damageTextures(damageTextureDefs), 
+        MaxHP(hp), CurrentHP(hp) {
+
+        if (normalTextures.size() == 0) {
             std::cout << "No textures for object" << std::endl;
         }
 
@@ -42,7 +46,7 @@ public:
             sounds[i].setBuffer(*SoundManager::getSound(i));
         }
 
-        sprite = ObjectDefs::CreateSprite(spriteWidth, spriteHeight, TextureManager::getTexture(textures[0]));      
+        sprite = ObjectDefs::CreateSprite(spriteWidth, spriteHeight, TextureManager::getTexture(normalTextures[0]));      
         bodyDef->position.Set(x, y);
         body = world->CreateBody(bodyDef);
         body->CreateFixture(shape, density);
@@ -51,42 +55,64 @@ public:
 
     Object(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults) :
         Object(world, &defaults->bodyDef, defaults->shape.get(), defaults->density,
-            x, y, defaults->spriteWidth, defaults->spriteHeight, defaults->textureNames,
-            defaults->soundNames, defaults->maxHp) {}
+            x, y, defaults->spriteWidth, defaults->spriteHeight, defaults->normalTextures,
+            defaults->damageTextures, defaults->soundNames, defaults->maxHp) {}
 
-   // TO DO: make this pure virtual? birds should die after one hit, 
+   // TODO: make this pure virtual? birds should die after one hit, 
    //          but texture can be updated according to the damage taken
     virtual void TakeDamage(float dmg){
-        CurrentHP -= dmg;
-        if (CurrentHP <= 0) {
-            CurrentHP = 0;
-            /// TO DO: delete object after some time??
+        CurrentHP = std::max(0.0f, CurrentHP - dmg);
+
+        if (!isDamaged) {
+            isDamaged = true;
+            if (isAnimated) {
+                currentTextureIdx = 0;
+            }
         }
-        updateTexture();
     } 
 
-    void Destroy(){}; /// TO DO: delete object
+    void Destroy(){}; /// TODO: delete object after some time?
 
-    virtual void updateTexture(){
-        if (textures.size() > 1) {
-            size_t idx = static_cast<size_t>((textures.size() - 1) * (1 - CurrentHP/MaxHP));
-            idx = std::min(idx, textures.size());
-            sprite.setTexture(TextureManager::getTexture(textures[idx]));
-        }
+    virtual void updateTexture(float deltaTime){
+        const auto& textures = isDamaged? damageTextures:normalTextures;
+        if (isAnimated) {
+            animationTimer += deltaTime;
+            if (animationTimer >= 0.1f) {
+                animationTimer = 0.0f;               
+                currentTextureIdx = (currentTextureIdx + 1) % textures.size();
+                sprite.setTexture(TextureManager::getTexture(textures[currentTextureIdx]));
+            }
+        } else {
+            if (!textures.empty()) {        
+                size_t idx = isDamaged? 
+                static_cast<size_t>((textures.size() - 1) * (1 - CurrentHP/MaxHP)) : 0;              
+                idx = std::min(idx, textures.size() - 1);
+                sprite.setTexture(TextureManager::getTexture(textures[idx]));
+            } 
+        }       
     }
 
     bool playSound(const std::string& name)
     {
+        if (sounds.find(name) == sounds.end()) return false;
         sounds[name].play();
+        return true;
     }
 
 protected :
     b2Body* body;
     sf::Sprite sprite;
-    std::vector<std::string> textures;
+    std::vector<std::string> normalTextures;
+    std::vector<std::string> damageTextures;
+
     std::unordered_map<std::string, sf::Sound> sounds;  // <name, sound>
     float MaxHP;
     float CurrentHP;
+
+    bool isAnimated = true;
+    bool isDamaged = false;
+    size_t currentTextureIdx = 0;
+    float animationTimer = 0.0f;
 };
 
 

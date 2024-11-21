@@ -18,7 +18,8 @@ namespace ObjectDefs
         float maxHp;
         float spriteWidth;
         float spriteHeight;
-        std::vector<std::string> textureNames;
+        std::vector<std::string> normalTextures;
+        std::vector<std::string> damageTextures;
         std::vector<std::string> soundNames;
     };
 

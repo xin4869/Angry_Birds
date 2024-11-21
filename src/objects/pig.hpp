@@ -15,7 +15,8 @@ namespace ObjectDefs
         .maxHp = 100.0f,
         .spriteWidth = pixel_per_meter * 1.0f,
         .spriteHeight = pixel_per_meter * 1.0f,
-        .textureNames = { "PigNormal", "PigSmile" },
+        .normalTextures = { "Pig1", "Pig2", "Pig3"},
+        .damageTextures = { "PigDamage1", "PigDamage2"},
         .soundNames = pigSoundNames
     };
 
@@ -26,7 +27,8 @@ namespace ObjectDefs
         .maxHp = 300.0f,
         .spriteWidth = pixel_per_meter * 1.0f,
         .spriteHeight = pixel_per_meter * 1.0f,
-        .textureNames = { "PigNormal", "PigSmile" },
+        .normalTextures = { "IronPig1", "IronPig2", "IronPig3"},
+        .damageTextures = { "IronPigDamage1", "IronPigDamage2"},
         .soundNames = pigSoundNames
     };
 }

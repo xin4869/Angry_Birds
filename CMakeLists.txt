@@ -33,6 +33,7 @@ find_package(box2d 2.4 REQUIRED)
 find_package(SFML 2.5 COMPONENTS network audio graphics window system REQUIRED)
 find_package(TGUI REQUIRED)
 
+cmake_policy(SET CMP0135 NEW)
 include(FetchContent)
 FetchContent_Declare(
   googletest
