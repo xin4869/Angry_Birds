@@ -180,18 +180,37 @@ public:
         loadTexture("StoneRectLDamaged3","assets/textures/stone/rectL_3.png");
 
        /////////////// PIG ////////////////////
-       loadTexture("PigNormal", "assets/textures/pigs/normal.png");
-       loadTexture("PigSmile", "assets/textures/pigs/smile.png");
+       loadTexture("Pig1", "assets/textures/pig/normal/1.png");
+       loadTexture("Pig2", "assets/textures/pig/normal/2.png");
+       loadTexture("Pig3", "assets/textures/pig/normal/3.png");
+       loadTexture("PigDamage1", "assets/textures/pig/damage/1.png");
+       loadTexture("PigDamage2", "assets/textures/pig/damage/2.png");
+
+       //////////////IRON PIG ////////////////////
+       loadTexture("IronPig1", "assets/textures/iron_pig/normal/1.png");
+       loadTexture("IronPig2", "assets/textures/iron_pig/normal/2.png");
+       loadTexture("IronPig3", "assets/textures/iron_pig/normal/3.png");
+       loadTexture("IronPigDamage1", "assets/textures/iron_pig/damage/1.png");
+       loadTexture("IronPigDamage2", "assets/textures/iron_pig/damage/2.png");
 
        /////////////// NORMAL BIRD ////////////////////
-       loadTexture("NormalBird1", "assets/textures/normal_bird/1.png");
-       loadTexture("NormalBird2", "assets/textures/normal_bird/2.png");
-       loadTexture("NormalBird3", "assets/textures/normal_bird/3.png");
-       loadTexture("NormalBird4", "assets/textures/normal_bird/4.png");
-       loadTexture("NormalBird5", "assets/textures/normal_bird/5.png");
-       loadTexture("NormalBird6", "assets/textures/normal_bird/6.png");
-       loadTexture("NormalBird7", "assets/textures/normal_bird/7.png");
+       loadTexture("NormalBird1", "assets/textures/normal_bird/normal/1.png");
+       loadTexture("NormalBird2", "assets/textures/normal_bird/normal/2.png");
+       loadTexture("NormalBirdDead", "assets/textures/normal_bird/damage/1.png");
 
+       ////////////////SPEED BIRD ////////////////////
+       loadTexture("SpeedBird1", "assets/textures/speed_bird/normal/1.png");
+       loadTexture("SpeedBird2", "assets/textures/speed_bird/normal/2.png");
+       loadTexture("SpeedBird3", "assets/textures/speed_bird/normal/3.png");
+       loadTexture("SpeedBird4", "assets/textures/speed_bird/normal/4.png");
+       loadTexture("SpeedBirdDead", "assets/textures/speed_bird/damage/1.png");
+
+       //////////////EXPLODE BIRD ////////////////////
+       loadTexture("ExplodeBird1", "assets/textures/explode_bird/normal/1.png");
+       loadTexture("ExplodeBird2", "assets/textures/explode_bird/normal/2.png");
+       loadTexture("ExplodeBird3", "assets/textures/explode_bird/normal/3.png");
+       loadTexture("ExplodeBird4", "assets/textures/explode_bird/normal/4.png");
+       loadTexture("ExplodeBirdDead", "assets/textures/explode_bird/damage/1.png");
     }
 
     TextureManager() = delete;

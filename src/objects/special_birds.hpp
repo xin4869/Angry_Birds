@@ -14,10 +14,32 @@ namespace ObjectDefs
         .maxHp = 100.0f,
         .spriteWidth = pixel_per_meter * 1.0f,
         .spriteHeight = pixel_per_meter * 1.0f,
-        .textureNames = { "NormalBird1", "NormalBird2", "NormalBird3", "NormalBird4", "NormalBird5", "NormalBird6", "NormalBird7" }
+        .normalTextures = { "NormalBird1", "NormalBird2"},
+        .damageTextures = { "NormalBirdDead"}
+    };
+
+    ObjectDefaults speedBirdDefaults = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(1.0f),
+        .density = 1.0f,
+        .maxHp = 100.0f,
+        .spriteWidth = pixel_per_meter * 1.0f,
+        .spriteHeight = pixel_per_meter * 1.0f,
+        .normalTextures = { "SpeedBird1", "SpeedBird2", "SpeedBird3", "SpeedBird4"},
+        .damageTextures = { "SpeedBirdDead"}
+    };
+
+    ObjectDefaults explodeBirdDefaults = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
+        .shape = CreateShape(1.0f),
+        .density = 1.0f,
+        .maxHp = 100.0f,
+        .spriteWidth = pixel_per_meter * 1.0f,
+        .spriteHeight = pixel_per_meter * 1.0f,
+        .normalTextures = { "ExplodeBird1", "ExplodeBird2", "ExplodeBird3", "ExplodeBird4"},
+        .damageTextures = { "ExplodeBirdDead"}
     };
 }
-
 /**
  * @brief Physics bird with a special attack (not this one)
  * 

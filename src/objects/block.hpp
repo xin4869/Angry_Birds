@@ -11,9 +11,12 @@ using Defs = ObjectDefs::ObjectDefaults;
 class Block : public Object{
 public:
     Block(b2World* world, float x, float y, Defs* defaults) :
-        Object(world, x, y, defaults) {}
+        Object(world, x, y, defaults) {
+            isAnimated = false;
+        }
     
     Block(){}  // for testing
+
 };
 
 namespace ObjectDefs{
@@ -25,7 +28,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(50.0f, 0.53f),
         .spriteWidth = 0.53f * 2 * pixel_per_meter,
         .spriteHeight = 0.53f * 2 * pixel_per_meter,
-        .textureNames = {"IceCircleS","IceCircleSDamaged1", "IceCircleSDamaged2", "IceCircleSDamaged3"}
+        .normalTextures = {"IceCircleS"},
+        .damageTextures = {"IceCircleSDamaged1", "IceCircleSDamaged2", "IceCircleSDamaged3"}
     };
 
     ObjectDefaults iceCircleM = {
@@ -35,7 +39,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(50.0f, 1.0f),
         .spriteWidth = 1.0f * 2 * pixel_per_meter,
         .spriteHeight = 1.0f * 2 * pixel_per_meter,
-        .textureNames = {"IceCircleM","IceCircleMDamaged1", "IceCircleMDamaged2", "IceCircleMDamaged3"}
+        .normalTextures = {"IceCircleM"},
+        .damageTextures = {"IceCircleMDamaged1", "IceCircleMDamaged2", "IceCircleMDamaged3"}
     };
 
     ObjectDefaults iceSquare = {
@@ -45,7 +50,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(50.0f, 1.05f, 1.05f),
         .spriteWidth = 1.05f * pixel_per_meter,
         .spriteHeight = 1.05f * pixel_per_meter,
-        .textureNames = {"IceSquare", "IceSquareDamaged1", "IceSquareDamaged2", "IceSquareDamaged3"}
+        .normalTextures = {"IceSquare"},
+        .damageTextures = {"IceSquareDamaged1", "IceSquareDamaged2", "IceSquareDamaged3"}
     };
 
     ObjectDefaults iceTriangleLeft = {
@@ -55,7 +61,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(2.0f, 2.0f),
         .spriteWidth = 2.0f * pixel_per_meter,
         .spriteHeight = 2.0f * pixel_per_meter,
-        .textureNames = {"IceTriangleLeft", "IceTriangleLeftDamaged1", "IceTriangleLeftDamaged2", "IceTriangleLeftDamaged3"}
+        .normalTextures = {"IceTriangleLeft"},
+        .damageTextures = {"IceTriangleLeftDamaged1", "IceTriangleLeftDamaged2", "IceTriangleLeftDamaged3"}
     };
 
     ObjectDefaults iceTriangleRight = {
@@ -65,7 +72,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(2.0f, 2.0f),
         .spriteWidth = 2.0f * pixel_per_meter,
         .spriteHeight = 2.0f * pixel_per_meter,
-        .textureNames = {"IceTriangleRight", "IceTriangleRightDamaged1", "IceTriangleRightDamaged2", "IceTriangleRightDamaged3"}
+        .normalTextures = {"IceTriangleRight"},
+        .damageTextures = {"IceTriangleRightDamaged1", "IceTriangleRightDamaged2", "IceTriangleRightDamaged3"}
     };
   
     ObjectDefaults iceRect = {
@@ -75,7 +83,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(50.0f, 2.3f, 1.3f),
         .spriteWidth = 2.3f * pixel_per_meter,
         .spriteHeight = 1.3f * pixel_per_meter,
-        .textureNames = {"IceRect", "IceRectDamaged1", "IceRectDamaged2", "IceRectDamaged3"}
+        .normalTextures = {"IceRect"},
+        .damageTextures = {"IceRectDamaged1", "IceRectDamaged2", "IceRectDamaged3"}
     };
 
     ObjectDefaults iceRectS = {
@@ -85,7 +94,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(50.0f, 2.0f, 0.55f),
         .spriteWidth = 2.0f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
-        .textureNames = {"IceRectS", "IceRectSDamaged1", "IceRectSDamaged2", "IceRectSDamaged3"}
+        .normalTextures = {"IceRectS"},
+        .damageTextures = {"IceRectSDamaged1", "IceRectSDamaged2", "IceRectSDamaged3"}
     };
 
     ObjectDefaults iceRectM = {
@@ -95,7 +105,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(50.0f, 4.25f, 0.55f),
         .spriteWidth = 4.25f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
-        .textureNames = {"IceRectM", "IceRectMDamaged1", "IceRectMDamaged2", "IceRectMDamaged3"}
+        .normalTextures = {"IceRectM"},
+        .damageTextures = {"IceRectMDamaged1", "IceRectMDamaged2", "IceRectMDamaged3"}
     };
 
     ObjectDefaults iceRectL = {
@@ -105,7 +116,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(50.0f, 5.075f, 0.55f),
         .spriteWidth = 5.075f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
-        .textureNames = {"IceRectL", "IceRectLDamaged1", "IceRectLDamaged2", "IceRectLDamaged3"}
+        .normalTextures = {"IceRectL"},
+        .damageTextures = {"IceRectLDamaged1", "IceRectLDamaged2", "IceRectLDamaged3"}
     };
 
     ObjectDefaults woodCircleS = {
@@ -115,7 +127,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(150.0f, 0.53f),
         .spriteWidth = 0.53f * 2 * pixel_per_meter,
         .spriteHeight = 0.53f * 2 * pixel_per_meter,
-        .textureNames = {"WoodCircleS","WoodCircleSDamaged1", "WoodCircleSDamaged2", "WoodCircleSDamaged3"}
+        .normalTextures = {"WoodCircleS"},
+        .damageTextures = {"WoodCircleSDamaged1", "WoodCircleSDamaged2", "WoodCircleSDamaged3"}
     };
 
     ObjectDefaults woodCircleM = {
@@ -125,7 +138,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(150.0f, 1.0f),
         .spriteWidth = 1.0f * 2 * pixel_per_meter,
         .spriteHeight = 1.0f * 2 *  pixel_per_meter,
-        .textureNames = {"WoodCircleM","WoodCircleMDamaged1", "WoodCircleMDamaged2", "WoodCircleMDamaged3"}
+        .normalTextures = {"WoodCircleM"},
+        .damageTextures = {"WoodCircleMDamaged1", "WoodCircleMDamaged2", "WoodCircleMDamaged3"}
     };
 
     ObjectDefaults woodSquare = {
@@ -135,7 +149,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(150.0f, 1.05f),
         .spriteWidth = 1.05f * 2 * pixel_per_meter,
         .spriteHeight = 1.05f * 2 * pixel_per_meter,
-        .textureNames = {"WoodSquare","WoodSquareDamaged1", "WoodSquareDamaged2", "WoodSquareDamaged3"}
+        .normalTextures = {"WoodSquare"},
+        .damageTextures = {"WoodSquareDamaged1", "WoodSquareDamaged2", "WoodSquareDamaged3"}
     };
 
     ObjectDefaults woodTriangleLeft = {
@@ -145,7 +160,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(150.0f, 2.0f, 2.0f),
         .spriteWidth = 2.0f * 2 * pixel_per_meter,
         .spriteHeight = 2.0f * 2 * pixel_per_meter,
-        .textureNames = {"WoodTriangleLeft","WoodTriangleLeftDamaged1", "WoodTriangleLeftDamaged2", "WoodTriangleLeftDamaged3"}
+        .normalTextures = {"WoodTriangleLeft"},
+        .damageTextures = {"WoodTriangleLeftDamaged1", "WoodTriangleLeftDamaged2", "WoodTriangleLeftDamaged3"}
     };
 
     ObjectDefaults woodTriangleRight = {
@@ -155,7 +171,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(150.0f, 2.0f, 2.0f),
         .spriteWidth = 2.0f * 2 * pixel_per_meter,
         .spriteHeight = 2.0f * 2 * pixel_per_meter,
-        .textureNames = {"WoodTriangleRight","WoodTriangleRightDamaged1", "WoodTriangleRightDamaged2", "WoodTriangleRightDamaged3"}
+        .normalTextures = {"WoodTriangleRight"},
+        .damageTextures = {"WoodTriangleRightDamaged1", "WoodTriangleRightDamaged2", "WoodTriangleRightDamaged3"}
     };
 
 
@@ -166,7 +183,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(150.0f, 2.3f, 1.3f),
         .spriteWidth = 2.3f * pixel_per_meter,
         .spriteHeight = 1.3f * pixel_per_meter,
-        .textureNames = {"WoodRect","WoodRectDamaged1", "WoodRectDamaged2", "WoodRectDamaged3"}
+        .normalTextures = {"WoodRect"},
+        .damageTextures = {"WoodRectDamaged1", "WoodRectDamaged2", "WoodRectDamaged3"}
     };
 
     ObjectDefaults woodRectS = {
@@ -176,7 +194,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(150.0f, 2.0f, 0.55f),
         .spriteWidth = 2.0f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
-        .textureNames = {"WoodRectS","WoodRectSDamaged1", "WoodRectSDamaged2", "WoodRectSDamaged3"}
+        .normalTextures = {"WoodRectS"},
+        .damageTextures = {"WoodRectSDamaged1", "WoodRectSDamaged2", "WoodRectSDamaged3"}
     };
 
     ObjectDefaults woodRectM = {
@@ -186,7 +205,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(150.0f, 4.25f, 0.55f),
         .spriteWidth = 4.25f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
-        .textureNames = {"WoodRectM","WoodRectMDamaged1", "WoodRectMDamaged2", "WoodRectMDamaged3"}
+        .normalTextures = {"WoodRectM"},
+        .damageTextures = {"WoodRectMDamaged1", "WoodRectMDamaged2", "WoodRectMDamaged3"}
     };
 
     ObjectDefaults woodRectL = {
@@ -196,7 +216,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(150.0f, 5.075f, 0.55f),
         .spriteWidth = 5.075f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
-        .textureNames = {"WoodRectL","WoodRectLDamaged1", "WoodRectLDamaged2", "WoodRectLDamaged3"}
+        .normalTextures = {"WoodRectL"},
+        .damageTextures = {"WoodRectLDamaged1", "WoodRectLDamaged2", "WoodRectLDamaged3"}
     };
 
     ObjectDefaults stoneCircleS = {
@@ -206,7 +227,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(300.0f, 0.53f),
         .spriteWidth = 0.53f * 2 * pixel_per_meter,
         .spriteHeight = 0.53f * 2 * pixel_per_meter,
-        .textureNames = {"StoneCircleS","StoneCircleSDamaged1", "StoneCircleSDamaged2", "StoneCircleSDamaged3"}
+        .normalTextures = {"StoneCircleS"},
+        .damageTextures = {"StoneCircleSDamaged1", "StoneCircleSDamaged2", "StoneCircleSDamaged3"}
     };
 
     ObjectDefaults stoneCircleM = {
@@ -216,7 +238,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(300.0f, 1.0f),
         .spriteWidth = 1.0f * 2 * pixel_per_meter,
         .spriteHeight = 1.0f * 2 * pixel_per_meter,
-        .textureNames = {"StoneCircleM","StoneCircleMDamaged1", "StoneCircleMDamaged2", "StoneCircleMDamaged3"}
+        .normalTextures = {"StoneCircleM"},
+        .damageTextures = {"StoneCircleMDamaged1", "StoneCircleMDamaged2", "StoneCircleMDamaged3"}
     };
 
     ObjectDefaults stoneSquare = {
@@ -226,7 +249,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(300.0f, 1.05f),
         .spriteWidth = 1.05f * 2 * pixel_per_meter,
         .spriteHeight = 1.05f * 2 * pixel_per_meter,
-        .textureNames = {"StoneSquare","StoneSquareDamaged1", "StoneSquareDamaged2", "StoneSquareDamaged3"}
+        .normalTextures = {"StoneSquare"},
+        .damageTextures = {"StoneSquareDamaged1", "StoneSquareDamaged2", "StoneSquareDamaged3"}
     };
 
     ObjectDefaults stoneTriangleLeft = {
@@ -236,7 +260,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(300.0f, 2.0f),
         .spriteWidth = 2.0f  * pixel_per_meter,
         .spriteHeight = 2.0f * pixel_per_meter,
-        .textureNames = {"StoneTriangleLeft","StoneTriangleLeftDamaged1", "StoneTriangleLeftDamaged2", "StoneTriangleLeftDamaged3"}
+        .normalTextures = {"StoneTriangleLeft"},
+        .damageTextures = {"StoneTriangleLeftDamaged1", "StoneTriangleLeftDamaged2", "StoneTriangleLeftDamaged3"}
     };
 
     ObjectDefaults stoneTriangleRight = {
@@ -246,7 +271,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(300.0f, 2.0f),
         .spriteWidth = 2.0f  * pixel_per_meter,
         .spriteHeight = 2.0f * pixel_per_meter,
-        .textureNames = {"StoneTriangleRight","StoneTriangleRightDamaged1", "StoneTriangleRightDamaged2", "StoneTriangleRightDamaged3"}
+        .normalTextures = {"StoneTriangleRight"},
+        .damageTextures = {"StoneTriangleRightDamaged1", "StoneTriangleRightDamaged2", "StoneTriangleRightDamaged3"}
     };
 
     ObjectDefaults stoneRect = {
@@ -256,7 +282,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(300.0f, 2.3f, 1.3f),
         .spriteWidth = 2.3f * pixel_per_meter,
         .spriteHeight = 1.3f * pixel_per_meter,
-        .textureNames = {"StoneRect","StoneRectDamaged1", "StoneRectDamaged2", "StoneRectDamaged3"}
+        .normalTextures = {"StoneRect"},
+        .damageTextures = {"StoneRectDamaged1", "StoneRectDamaged2", "StoneRectDamaged3"}
     };
 
     ObjectDefaults stoneRectS = {
@@ -266,7 +293,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(300.0f, 2.0f, 0.55f),
         .spriteWidth = 2.0f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
-        .textureNames = {"StoneRectS","StoneRectSDamaged1", "StoneRectSDamaged2", "StoneRectSDamaged3"}
+        .normalTextures = {"StoneRectS"},
+        .damageTextures = {"StoneRectSDamaged1", "StoneRectSDamaged2", "StoneRectSDamaged3"}
     };
     
     ObjectDefaults stoneRectM = {
@@ -276,7 +304,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(300.0f, 4.25f, 0.55f),
         .spriteWidth = 4.25f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
-        .textureNames = {"StoneRectM","StoneRectMDamaged1", "StoneRectMDamaged2", "StoneRectMDamaged3"}
+        .normalTextures = {"StoneRectM"},
+        .damageTextures = {"StoneRectMDamaged1", "StoneRectMDamaged2", "StoneRectMDamaged3"}
     };
     
     ObjectDefaults stoneRectL = {
@@ -286,7 +315,8 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(300.0f, 5.075f, 0.55f),
         .spriteWidth = 5.075f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
-        .textureNames = {"StoneRectL","StoneRectLDamaged1", "StoneRectLDamaged2", "StoneRectLDamaged3"}
+        .normalTextures = {"StoneRectL"},
+        .damageTextures = {"StoneRectLDamaged1", "StoneRectLDamaged2", "StoneRectLDamaged3"}
     };
 }
 

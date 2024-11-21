@@ -18,7 +18,8 @@ namespace ObjectDefs
         float maxHp;
         float spriteWidth;
         float spriteHeight;
-        std::vector<std::string> textureNames;
+        std::vector<std::string> normalTextures;
+        std::vector<std::string> damageTextures;
     };
 
     b2BodyDef GetBodyDef(b2BodyType type, float x=0, float y=0)
