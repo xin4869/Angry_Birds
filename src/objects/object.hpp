@@ -99,6 +99,8 @@ public:
         return true;
     }
 
+    b2Body* getBody() { return body; }
+
 protected :
     b2Body* body;
     sf::Sprite sprite;

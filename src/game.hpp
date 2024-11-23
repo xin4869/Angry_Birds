@@ -12,6 +12,7 @@
 #include "visual/game_render.hpp"
 #include "visual/texture_manager.hpp"
 #include "sound_manager.hpp"
+#include "level.hpp"
 
 
 enum GameState {
@@ -26,7 +27,7 @@ enum GameState {
 class Game {
 public:
   Game(sf::RenderWindow& game_window):
-    gui(game_window),renderer(game_window),gravity(0.0f, -10.0f),world(gravity) {
+    gui(game_window),renderer(game_window) {
       game_state = home;
       TextureManager::loadAllTextures();
       SoundManager::loadAllSounds();
@@ -37,7 +38,7 @@ public:
   bool init(){ return 1; }
   void update(){
     // Update physics world
-    world.Step(timeStep, velocityIterations, positionIterations);
+    level.update();
     // Update game objects' positions based on physics simulation
   }
   void render(){}
@@ -60,7 +61,7 @@ public:
   
   void mouseReleased(sf::Event event) {}
 
-  b2World* getWorld() { return &world; }
+  b2World& getWorld() { return level.getWorld(); }
 
   
 private:
@@ -69,12 +70,7 @@ private:
   GUI gui;
   GameRender renderer;
 
-  b2Vec2 gravity;
-  b2World world;
-
-  std::vector<Bird*>birds;
-  std::vector<Pig*>pigs;
-  std::vector<Block*> blocks;
+  Level level;
 
   const float frameRate = 60.0f;
   const float timeStep = 1.0f / frameRate;
@@ -82,23 +78,6 @@ private:
 
   int32 velocityIterations = 6;
   int32 positionIterations = 2;
-  
-  
-  void loadLevel(int level){
-    std::string path = "levels/level" + std::to_string(level) + ".lvl";
-    std::ifstream file(path);
-
-    if(!file.is_open()) {
-      std::cerr << "Failed to open level file." << std::endl;
-      return;
-    }
-
-    birds.clear();
-    pigs.clear();
-    blocks.clear();
-
-  //TO DO: load data to birds, pigs, blocks
-  }
 
 
 

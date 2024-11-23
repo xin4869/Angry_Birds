@@ -9,9 +9,9 @@ int main(void) {
   if (!game.init()) {return 0;}
   window.setFramerateLimit(game.getFrameRate());
 
-  NormalBird bird(game.getWorld(), 0, 0);
-  Pig pig(game.getWorld(), 0, 0, &ObjectDefs::normalPigDefaults);
-  Block block(game.getWorld(), 0, 0, &ObjectDefs::iceRectL);
+  NormalBird bird(&game.getWorld(), 0, 0);
+  Pig pig(&game.getWorld(), 0, 0, &ObjectDefs::normalPigDefaults);
+  Block block(&game.getWorld(), 0, 0, &ObjectDefs::iceRectL);
 
   while (window.isOpen()) {
     //events handling

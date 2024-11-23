@@ -1,2 +1,9 @@
-example level file
-change name or file type if necessary
+# See instructions for format
+
+NormalBird
+iceRectL, 10, 3
+normalPig, 13, 0
+
+gravity, 0, -10
+slingshot, -5, 3
+scoreLimits, 1000, 2000, 3000

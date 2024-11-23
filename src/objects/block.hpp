@@ -31,6 +31,7 @@ namespace ObjectDefs{
             "rock collision a5", "rock damage a1", "rock damage a2", "rock damage a3",
             "rock destroyed a1", "rock destroyed a2", "rock destroyed a3", "rock rolling" };
 
+    // ICE
     ObjectDefaults iceCircleS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(0.53f),  
@@ -139,6 +140,7 @@ namespace ObjectDefs{
         .soundNames = iceSoundNames
     };
 
+    // WOOD
     ObjectDefaults woodCircleS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(0.53f),
@@ -199,7 +201,6 @@ namespace ObjectDefs{
         .soundNames = woodSoundNames
     };
 
-
     ObjectDefaults woodRect = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(2.3f, 1.3f),
@@ -248,6 +249,7 @@ namespace ObjectDefs{
         .soundNames = woodSoundNames
     };
 
+    // STONE
     ObjectDefaults stoneCircleS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(0.53f),
@@ -354,6 +356,97 @@ namespace ObjectDefs{
         .normalTextures = {"StoneRectL"},
         .damageTextures = {"StoneRectLDamaged1", "StoneRectLDamaged2", "StoneRectLDamaged3"},
         .soundNames = rockSoundNames
+    };
+
+    // FIXED
+    ObjectDefaults fixedCircleS = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
+        .shape = CreateShape(0.53f),
+        .density = 0.0f,
+        .maxHp = FLT_MAX,
+        .spriteWidth = 0.53f * 2 * pixel_per_meter,
+        .spriteHeight = 0.53f * 2 * pixel_per_meter,
+        .normalTextures = {"StoneCircleS"}
+    };
+
+    ObjectDefaults fixedCircleM = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
+        .shape = CreateShape(1.0f),
+        .density = 0.0f,
+        .maxHp = FLT_MAX,
+        .spriteWidth = 1.0f * 2 * pixel_per_meter,
+        .spriteHeight = 1.0f * 2 * pixel_per_meter,
+        .normalTextures = {"StoneCircleM"}
+    };
+
+    ObjectDefaults fixedSquare = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
+        .shape = CreateShape(1.05f),
+        .density = 0.0f,
+        .maxHp = FLT_MAX,
+        .spriteWidth = 1.05f * 2 * pixel_per_meter,
+        .spriteHeight = 1.05f * 2 * pixel_per_meter,
+        .normalTextures = {"StoneSquare"}
+    };
+
+    ObjectDefaults fixedTriangleLeft = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
+        .shape = CreateShapeTriangle(2.0f, 2.0f, true),
+        .density = 0.0f,
+        .maxHp = FLT_MAX,
+        .spriteWidth = 2.0f  * pixel_per_meter,
+        .spriteHeight = 2.0f * pixel_per_meter,
+        .normalTextures = {"StoneTriangleLeft"}
+    };
+
+    ObjectDefaults fixedTriangleRight = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
+        .shape = CreateShapeTriangle(2.0f, 2.0f, false),
+        .density = 0.0f,
+        .maxHp = FLT_MAX,
+        .spriteWidth = 2.0f  * pixel_per_meter,
+        .spriteHeight = 2.0f * pixel_per_meter,
+        .normalTextures = {"StoneTriangleRight"}
+    };
+
+    ObjectDefaults fixedRect = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
+        .shape = CreateShape(2.3f, 1.3f),
+        .density = 0.0f,
+        .maxHp = FLT_MAX,
+        .spriteWidth = 2.3f * pixel_per_meter,
+        .spriteHeight = 1.3f * pixel_per_meter,
+        .normalTextures = {"StoneRect"}
+    };
+
+    ObjectDefaults fixedRectS = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
+        .shape = CreateShape(2.0f, 0.55f),
+        .density = 0.0f,
+        .maxHp = FLT_MAX,
+        .spriteWidth = 2.0f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .normalTextures = {"StoneRectS"}
+    };
+    
+    ObjectDefaults fixedRectM = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
+        .shape = CreateShape(4.25f, 0.55f),
+        .density = 0.0f,
+        .maxHp = FLT_MAX,
+        .spriteWidth = 4.25f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .normalTextures = {"StoneRectM"}
+    };
+    
+    ObjectDefaults fixedRectL = {
+        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
+        .shape = CreateShape(5.075f, 0.55f),
+        .density = 0.0f,
+        .maxHp = FLT_MAX,
+        .spriteWidth = 5.075f * pixel_per_meter,
+        .spriteHeight = 0.55f * pixel_per_meter,
+        .normalTextures = {"StoneRectL"}
     };
 }
 
