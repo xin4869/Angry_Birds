@@ -74,7 +74,8 @@
         "condition_variable": "cpp",
         "map": "cpp",
         "numbers": "cpp",
-        "semaphore": "cpp"
+        "semaphore": "cpp",
+        "numeric": "cpp"
     },
     "cSpell.words": [
         "ctest",
