@@ -8,6 +8,12 @@ namespace ObjectDefs
 {
     std::vector<std::string> pigSoundNames = { "piglette damage a4", "piglette damage a7", "piglette destroyed" };
 
+    ObjectDefaults* getPigDefaults(const std::string& pigName) {
+        if (pigName == "normalPig") return &normalPigDefaults;
+        if (pigName == "ironPig") return &ironPigDefaults;
+        return nullptr;
+    }
+
     ObjectDefaults normalPigDefaults = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(1.0f),

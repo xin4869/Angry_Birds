@@ -7,6 +7,13 @@
 
 namespace ObjectDefs
 {
+    ObjectDefaults* getBirdDefaults(const std::string& birdName) {
+        if (birdName == "normalBird") return &normalBirdDefaults;
+        if (birdName == "speedBird") return &speedBirdDefaults;
+        if (birdName == "explodeBird") return &explodeBirdDefaults;
+        return nullptr;
+    }
+
     ObjectDefaults normalBirdDefaults = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(1.0f),

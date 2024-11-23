@@ -31,6 +31,46 @@ namespace ObjectDefs{
             "rock collision a5", "rock damage a1", "rock damage a2", "rock damage a3",
             "rock destroyed a1", "rock destroyed a2", "rock destroyed a3", "rock rolling" };
 
+    ObjectDefaults* GetBlockDefaults(const std::string& name){
+        if (name == "iceCircleS") return &iceCircleS;
+        if (name == "iceCircleM") return &iceCircleM;
+        if (name == "iceSquare") return &iceSquare;
+        if (name == "iceTriangleLeft") return &iceTriangleLeft;
+        if (name == "iceTriangleRight") return &iceTriangleRight;
+        if (name == "iceRect") return &iceRect;
+        if (name == "iceRectS") return &iceRectS;
+        if (name == "iceRectM") return &iceRectM;
+        if (name == "iceRectL") return &iceRectL;
+        if (name == "woodCircleS") return &woodCircleS;
+        if (name == "woodCircleM") return &woodCircleM;
+        if (name == "woodSquare") return &woodSquare;
+        if (name == "woodTriangleLeft") return &woodTriangleLeft;
+        if (name == "woodTriangleRight") return &woodTriangleRight;
+        if (name == "woodRect") return &woodRect;
+        if (name == "woodRectS") return &woodRectS;
+        if (name == "woodRectM") return &woodRectM;
+        if (name == "woodRectL") return &woodRectL;
+        if (name == "stoneCircleS") return &stoneCircleS;
+        if (name == "stoneCircleM") return &stoneCircleM;
+        if (name == "stoneSquare") return &stoneSquare;
+        if (name == "stoneTriangleLeft") return &stoneTriangleLeft;
+        if (name == "stoneTriangleRight") return &stoneTriangleRight;
+        if (name == "stoneRect") return &stoneRect;
+        if (name == "stoneRectS") return &stoneRectS;
+        if (name == "stoneRectM") return &stoneRectM;
+        if (name == "stoneRectL") return &stoneRectL;
+        if (name == "fixedCircleS") return &fixedCircleS;
+        if (name == "fixedCircleM") return &fixedCircleM;
+        if (name == "fixedSquare") return &fixedSquare;
+        if (name == "fixedTriangleLeft") return &fixedTriangleLeft;
+        if (name == "fixedTriangleRight") return &fixedTriangleRight;
+        if (name == "fixedRect") return &fixedRect;
+        if (name == "fixedRectS") return &fixedRectS;
+        if (name == "fixedRectM") return &fixedRectM;
+        if (name == "fixedRectL") return &fixedRectL;
+        return nullptr;
+    }
+
     // ICE
     ObjectDefaults iceCircleS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
