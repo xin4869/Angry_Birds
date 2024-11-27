@@ -10,8 +10,11 @@
  * @brief Functions to get default values with a string. Used in level loading.
  * @brief The implementation here is poor. May or may not fix that later.
  */
+/*
 namespace ObjectDefs
 {
+    //replace with a class and a map?
+
     ObjectDefaults* getBirdDefaults(const std::string& name) {
         if (name == "normalbird") return &normalBirdDefaults;
         if (name == "speedbird") return &speedBirdDefaults;
@@ -65,5 +68,6 @@ namespace ObjectDefs
         return nullptr;
     }
 }
+*/
 
 #endif

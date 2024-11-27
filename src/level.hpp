@@ -5,6 +5,7 @@
 #include <queue>
 #include "objects/get_object_defaults.hpp"
 #include "slingshot.hpp"
+#include "objects/object.hpp"
 
 class Level
 {
@@ -13,16 +14,20 @@ public:
 			frameRate(frameRate), timeStep(1.0f / frameRate), gravity(0, -10), world(gravity)
 	{
 		world.SetGravity(gravity);
+		world.SetContactListener(&collisionHandler);
 		loadLevel(levelPath);
 	}
 	Level(int level, float frameRate = 60.0f) : Level(getFilePath(level), frameRate) {}
-	Level() : world(b2Vec2(0, -10)), frameRate(60.0f), timeStep(1.0f / 60.0f) {}
+	Level() : world(b2Vec2(0, -10)), gravity(0, -10), frameRate(60.0f), timeStep(1.0f / 60.0f) {
+		world.SetContactListener(&collisionHandler);
+	}
 	~Level() { clearLevel(); }
 
 	void loadLevel(const std::string path) {
 		clearLevel();
 		gravity.Set(0, -10);
 		slingshot.setPos(0, 2);
+		scoreLimits = { 1000, 2000, 3000 };
 		
 		std::ifstream file(path);
 
@@ -43,10 +48,19 @@ public:
 	void update() {
 		if (!isActive) return;
 		world.Step(timeStep, velocityIterations, positionIterations);
+
+		for (auto i = Object::destroyList.begin(); i != Object::destroyList.end(); i++) {
+			(*i).first -= timeStep;
+			if ((*i).first <= 0) {
+				i = Object::destroyList.erase(i);
+				i--;
+			}
+			if ((*i).second != nullptr) (*i).second->getBody()->SetEnabled(false);
+		}
 	}
 
 	int getStars() {
-		for (int stars=0; stars<scoreLimits.size(); stars++) {
+		for (size_t stars=0; stars<scoreLimits.size(); stars++) {
 			if (score < scoreLimits[stars]) return stars;
 		}
 		return scoreLimits.size();
@@ -165,7 +179,7 @@ protected:
 	}
 
 	void toLower(std::string& string) {
-		for (int i=0; i<string.size(); i++) {
+		for (size_t i=0; i<string.size(); i++) {
 			string[i] = asciitolower(string[i]);
 		}
 	}
@@ -185,8 +199,8 @@ protected:
 	b2Vec2 gravity;
 	b2World world;
 
-	const float frameRate;
-	const float timeStep;
+	float frameRate;
+	float timeStep;
 	bool isActive = false;
 
 	int32 velocityIterations = 6;
@@ -200,6 +214,7 @@ protected:
 	std::vector<Pig*>pigs;
 	std::vector<Block*> blocks;
 	Slingshot slingshot;
+	ObjectCollisions collisionHandler;
 };
 
 #endif // LEVEL_HPP

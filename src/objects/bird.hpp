@@ -8,7 +8,6 @@
 
 /**
  * @brief Abstract physics bird class.
- * 
  */
 class Bird : public Object
 {
@@ -17,6 +16,9 @@ public:
         Object(world, x, y, defaults) {}
 
     virtual void Attack() = 0;
+
+protected:
+    bool canAttack = true;
 };
 
 

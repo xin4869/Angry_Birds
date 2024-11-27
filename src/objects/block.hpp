@@ -17,6 +17,24 @@ public:
     
     Block(){}  // for testing
 
+    void TakeDamage(float dmg) {
+        // Better way: sound lists for collision, damage, destroy
+        bool isDead = CurrentHP <= 0;
+        CurrentHP = std::max(0.0f, CurrentHP - dmg);
+        bool isIce = sounds.size() == 8;
+
+        if (CurrentHP <= 0) {
+            if (isIce) playSound(rand() % 8);
+            else playSound(8 + rand() % 3);
+            if (!isDead) Destroy(2.0f);
+        } else if (dmg > 10.0f) {
+            if (isIce) playSound(rand() % 8);
+            else playSound(5 + rand() % 3);
+        } else if (dmg > 1.0f) {
+            if (isIce) playSound(rand() % 8);
+            else playSound(rand() % 5);
+        }
+    }
 };
 
 namespace ObjectDefs{
@@ -24,52 +42,12 @@ namespace ObjectDefs{
             "ice light collision a5", "ice light collision a6", "ice light collision a7", "ice light collision a8" };
     
     std::vector<std::string> woodSoundNames = { "wood collision a1", "wood collision a2", "wood collision a3", "wood collision a4",
-            "wood collision a5", "wood collision a6", "wood damage a1", "wood damage a2", "wood damage a3",
+            "wood collision a5", "wood damage a1", "wood damage a2", "wood damage a3",
             "wood destroyed a1", "wood destroyed a2", "wood destroyed a3", "wood rolling" };
     
     std::vector<std::string> rockSoundNames = { "rock collision a1", "rock collision a2", "rock collision a3", "rock collision a4",
             "rock collision a5", "rock damage a1", "rock damage a2", "rock damage a3",
             "rock destroyed a1", "rock destroyed a2", "rock destroyed a3", "rock rolling" };
-
-    ObjectDefaults* GetBlockDefaults(const std::string& name){
-        if (name == "iceCircleS") return &iceCircleS;
-        if (name == "iceCircleM") return &iceCircleM;
-        if (name == "iceSquare") return &iceSquare;
-        if (name == "iceTriangleLeft") return &iceTriangleLeft;
-        if (name == "iceTriangleRight") return &iceTriangleRight;
-        if (name == "iceRect") return &iceRect;
-        if (name == "iceRectS") return &iceRectS;
-        if (name == "iceRectM") return &iceRectM;
-        if (name == "iceRectL") return &iceRectL;
-        if (name == "woodCircleS") return &woodCircleS;
-        if (name == "woodCircleM") return &woodCircleM;
-        if (name == "woodSquare") return &woodSquare;
-        if (name == "woodTriangleLeft") return &woodTriangleLeft;
-        if (name == "woodTriangleRight") return &woodTriangleRight;
-        if (name == "woodRect") return &woodRect;
-        if (name == "woodRectS") return &woodRectS;
-        if (name == "woodRectM") return &woodRectM;
-        if (name == "woodRectL") return &woodRectL;
-        if (name == "stoneCircleS") return &stoneCircleS;
-        if (name == "stoneCircleM") return &stoneCircleM;
-        if (name == "stoneSquare") return &stoneSquare;
-        if (name == "stoneTriangleLeft") return &stoneTriangleLeft;
-        if (name == "stoneTriangleRight") return &stoneTriangleRight;
-        if (name == "stoneRect") return &stoneRect;
-        if (name == "stoneRectS") return &stoneRectS;
-        if (name == "stoneRectM") return &stoneRectM;
-        if (name == "stoneRectL") return &stoneRectL;
-        if (name == "fixedCircleS") return &fixedCircleS;
-        if (name == "fixedCircleM") return &fixedCircleM;
-        if (name == "fixedSquare") return &fixedSquare;
-        if (name == "fixedTriangleLeft") return &fixedTriangleLeft;
-        if (name == "fixedTriangleRight") return &fixedTriangleRight;
-        if (name == "fixedRect") return &fixedRect;
-        if (name == "fixedRectS") return &fixedRectS;
-        if (name == "fixedRectM") return &fixedRectM;
-        if (name == "fixedRectL") return &fixedRectL;
-        return nullptr;
-    }
 
     // ICE
     ObjectDefaults iceCircleS = {
@@ -488,6 +466,46 @@ namespace ObjectDefs{
         .spriteHeight = 0.55f * pixel_per_meter,
         .normalTextures = {"StoneRectL"}
     };
+
+    ObjectDefaults* getBlockDefaults(const std::string& name){
+        if (name == "iceCircleS") return &iceCircleS;
+        if (name == "iceCircleM") return &iceCircleM;
+        if (name == "iceSquare") return &iceSquare;
+        if (name == "iceTriangleLeft") return &iceTriangleLeft;
+        if (name == "iceTriangleRight") return &iceTriangleRight;
+        if (name == "iceRect") return &iceRect;
+        if (name == "iceRectS") return &iceRectS;
+        if (name == "iceRectM") return &iceRectM;
+        if (name == "iceRectL") return &iceRectL;
+        if (name == "woodCircleS") return &woodCircleS;
+        if (name == "woodCircleM") return &woodCircleM;
+        if (name == "woodSquare") return &woodSquare;
+        if (name == "woodTriangleLeft") return &woodTriangleLeft;
+        if (name == "woodTriangleRight") return &woodTriangleRight;
+        if (name == "woodRect") return &woodRect;
+        if (name == "woodRectS") return &woodRectS;
+        if (name == "woodRectM") return &woodRectM;
+        if (name == "woodRectL") return &woodRectL;
+        if (name == "stoneCircleS") return &stoneCircleS;
+        if (name == "stoneCircleM") return &stoneCircleM;
+        if (name == "stoneSquare") return &stoneSquare;
+        if (name == "stoneTriangleLeft") return &stoneTriangleLeft;
+        if (name == "stoneTriangleRight") return &stoneTriangleRight;
+        if (name == "stoneRect") return &stoneRect;
+        if (name == "stoneRectS") return &stoneRectS;
+        if (name == "stoneRectM") return &stoneRectM;
+        if (name == "stoneRectL") return &stoneRectL;
+        if (name == "fixedCircleS") return &fixedCircleS;
+        if (name == "fixedCircleM") return &fixedCircleM;
+        if (name == "fixedSquare") return &fixedSquare;
+        if (name == "fixedTriangleLeft") return &fixedTriangleLeft;
+        if (name == "fixedTriangleRight") return &fixedTriangleRight;
+        if (name == "fixedRect") return &fixedRect;
+        if (name == "fixedRectS") return &fixedRectS;
+        if (name == "fixedRectM") return &fixedRectM;
+        if (name == "fixedRectL") return &fixedRectL;
+        return nullptr;
+    }
 }
 
 #endif

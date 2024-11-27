@@ -7,13 +7,6 @@
 
 namespace ObjectDefs
 {
-    ObjectDefaults* getBirdDefaults(const std::string& birdName) {
-        if (birdName == "normalBird") return &normalBirdDefaults;
-        if (birdName == "speedBird") return &speedBirdDefaults;
-        if (birdName == "explodeBird") return &explodeBirdDefaults;
-        return nullptr;
-    }
-
     ObjectDefaults normalBirdDefaults = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(1.0f),
@@ -22,7 +15,9 @@ namespace ObjectDefs
         .spriteWidth = pixel_per_meter * 1.0f,
         .spriteHeight = pixel_per_meter * 1.0f,
         .normalTextures = { "NormalBird1", "NormalBird2"},
-        .damageTextures = { "NormalBirdDead"}
+        .damageTextures = { "NormalBirdDead"},
+        .soundNames = { "bird 01 collision a1", "bird 01 collision a2", "bird 01 collision a3", "bird 01 collision a4",
+                "bird 01 flying", "bird 01 select", "bird destroyed" }
     };
 
     ObjectDefaults speedBirdDefaults = {
@@ -33,7 +28,9 @@ namespace ObjectDefs
         .spriteWidth = pixel_per_meter * 1.0f,
         .spriteHeight = pixel_per_meter * 1.0f,
         .normalTextures = { "SpeedBird1", "SpeedBird2", "SpeedBird3", "SpeedBird4"},
-        .damageTextures = { "SpeedBirdDead"}
+        .damageTextures = { "SpeedBirdDead"},
+        .soundNames = { "bird 03 collision a1", "bird 03 collision a2", "bird 03 collision a3", "bird 03 collision a4",
+                "bird 03 flying", "bird 03 select", "bird destroyed", "special boost" }
     };
 
     ObjectDefaults explodeBirdDefaults = {
@@ -44,26 +41,130 @@ namespace ObjectDefs
         .spriteWidth = pixel_per_meter * 1.0f,
         .spriteHeight = pixel_per_meter * 1.0f,
         .normalTextures = { "ExplodeBird1", "ExplodeBird2", "ExplodeBird3", "ExplodeBird4"},
-        .damageTextures = { "ExplodeBirdDead"}
+        .damageTextures = { "ExplodeBirdDead"},
+        .soundNames = { "bird 05 collision a1", "bird 05 collision a2", "bird 05 collision a3", "bird 05 collision a4",
+                "bird 05 flying", "bird 05 select", "bird destroyed", "tnt box explodes" }
     };
+    
+    ObjectDefaults* getBirdDefaults(const std::string& birdName) {
+        if (birdName == "normalBird") return &normalBirdDefaults;
+        if (birdName == "speedBird") return &speedBirdDefaults;
+        if (birdName == "explodeBird") return &explodeBirdDefaults;
+        return nullptr;
+    }
 }
+
 /**
  * @brief Physics bird with a special attack (not this one)
- * 
  */
 class NormalBird : public Bird
 {
 public:
-    /**
-     * @brief Construct a new Normal Bird. Uses default values.
-     */
     NormalBird(b2World* world, float x, float y) :
         Bird(world, x, y, &ObjectDefs::normalBirdDefaults) {}
 
-    void Attack()
-    {
-        std::cout << "Bird Attacked" << std::endl;
+    void Attack() {
+        if (!canAttack) return;
+        canAttack = false;
+        playSound("bird 01 select");
     }
+
+    void TakeDamage(float dmg) {
+        // Textures?
+        bool isDead = CurrentHP <= 0;
+        CurrentHP = std::max(0.0f, CurrentHP - dmg);
+        
+        if (CurrentHP <= 0) {
+            playSound("bird destroyed");
+            if (!isDead) Destroy(2.0f);
+        } else if (dmg > 10.0f) {
+            playSound(rand() % 4);
+        }
+    }
+};
+
+class SpeedBird : public Bird
+{
+public:
+    SpeedBird(b2World* world, float x, float y) :
+        Bird(world, x, y, &ObjectDefs::speedBirdDefaults) {}
+
+    void Attack() {
+        if (!canAttack) return;
+        canAttack = false;
+        b2Vec2 vel = body->GetLinearVelocity();
+        float length = vel.Length();
+        if (length > 0) vel *= (length + abilitySpeedGain) / length;  // add constant velocity
+        body->SetLinearVelocity(vel);
+        playSound("special boost");
+    }
+
+    void TakeDamage(float dmg) {
+        // Textures?
+        bool isDead = CurrentHP <= 0;
+        CurrentHP = std::max(0.0f, CurrentHP - dmg);
+        
+        if (CurrentHP <= 0) {
+            playSound("bird destroyed");
+            if (!isDead) Destroy(2.0f);
+        } else if (dmg > 10.0f) {
+            playSound(rand() % 4);
+        }
+    }
+
+protected:
+    const float abilitySpeedGain = 5.0f;  // tune this value
+};
+
+class ExplodeBird : public Bird
+{
+public:
+    ExplodeBird(b2World* world, float x, float y) :
+        Bird(world, x, y, &ObjectDefs::explodeBirdDefaults) {}
+
+    void Attack() {
+        if (!canAttack) return;
+        canAttack = false;
+        
+        // raycast blast
+        RayCastHitFirst raycast;
+        for (float i = 0; i < blastRays; i++) {
+            float angle = i / blastRays * 2.0f * M_PI;
+            b2Vec2 dir(cosf(angle), sinf(angle));
+            dir *= blastRadius;
+            body->GetWorld()->RayCast(&raycast, body->GetPosition(), body->GetPosition() + dir);
+            
+            if (raycast.hitLatest) {
+                // apply impulse to body
+                b2Vec2 impulse = raycast.hitPoint - body->GetPosition();
+                float dist = impulse.Normalize();
+                impulse *= blastPower / (dist * dist * (float)blastRays);
+                raycast.hitLatest->GetBody()->ApplyLinearImpulse(impulse, raycast.hitPoint, true);
+                raycast.hitLatest = nullptr;
+            }
+        }
+        playSound("tnt box explodes");
+        Destroy(2.0f);
+    }
+
+    void TakeDamage(float dmg) {
+        // Textures?
+        bool isDead = CurrentHP <= 0;
+        CurrentHP = std::max(0.0f, CurrentHP - dmg);
+        
+        if (CurrentHP <= 0) {
+            playSound("bird destroyed");
+            if (!isDead && canAttack) Destroy(2.0f);
+        } else if (dmg > 10.0f) {
+            playSound(rand() % 4);
+        }
+    }
+
+protected:
+    // tune these values
+    int blastRays = 32;
+    float blastRadius = 5.0f;
+    float blastPower = 500.0f;
 };
 
 

@@ -8,12 +8,6 @@ namespace ObjectDefs
 {
     std::vector<std::string> pigSoundNames = { "piglette damage a4", "piglette damage a7", "piglette destroyed" };
 
-    ObjectDefaults* getPigDefaults(const std::string& pigName) {
-        if (pigName == "normalPig") return &normalPigDefaults;
-        if (pigName == "ironPig") return &ironPigDefaults;
-        return nullptr;
-    }
-
     ObjectDefaults normalPigDefaults = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShape(1.0f),
@@ -37,13 +31,17 @@ namespace ObjectDefs
         .damageTextures = { "IronPigDamage1", "IronPigDamage2"},
         .soundNames = pigSoundNames
     };
+
+    ObjectDefaults* getPigDefaults(const std::string& pigName) {
+        if (pigName == "normalPig") return &normalPigDefaults;
+        if (pigName == "ironPig") return &ironPigDefaults;
+        return nullptr;
+    }
 }
 
 /**
  * @brief Pig class.
  * @brief No subclasses since pigs are functionally the same.
- * @brief Instead we have static variant getters.
- * 
  */
 class Pig : public Object
 {
@@ -55,6 +53,19 @@ public:
      */
     Pig(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults):
         Object(world, x, y, defaults) {}
+
+    void TakeDamage(float dmg) {
+        // TODO: Textures?
+        bool isDead = CurrentHP <= 0;
+        CurrentHP = std::max(0.0f, CurrentHP - dmg);
+        
+        if (CurrentHP <= 0) {
+            playSound("piglette destroyed");
+            if (!isDead) Destroy(2.0f);
+        } else if (dmg > 10.0f) {
+            playSound(rand() % 2);
+        }
+    }
 };
 
 #endif
