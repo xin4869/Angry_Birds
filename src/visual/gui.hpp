@@ -243,7 +243,7 @@ private:
         buttons["replay_btn"].setScale(sf::Vector2f(112.f,114.f));
     }
     void initButtonPosition() {
-        buttons["play_btn"].setDefaultPosition(750.f, 452.f);  
+        buttons["play_btn"].setDefaultPosition(730.f, 452.f);  
         buttons["help_btn"].setDefaultPosition(1800.0f, 980.f);     
         buttons["music_btn"].setDefaultPosition(100.f, 980.f);     
         buttons["no_music_btn"].setDefaultPosition(100.f, 980.f);   
