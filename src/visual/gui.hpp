@@ -60,8 +60,20 @@ public:
     void drawHome(){
         setBackground("home_bg");
         window.draw(background_sprite);
+
         buttons["play_btn"].draw(window);
         buttons["help_btn"].draw(window);
+        buttons["music_btn"].draw(window);
+          
+        /*if (buttons.find("play_btn") != buttons.end()) {
+            std::cout << "Drawing play button at position: " 
+                    << buttons["play_btn"].getPosition().x << ", " 
+                    << buttons["play_btn"].getPosition().y << std::endl;
+            buttons["play_btn"].draw(window);
+        } else {
+            std::cout << "Play button not found in buttons map" << std::endl;
+        }*/
+
     }
 
     void drawHelp(){

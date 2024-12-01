@@ -7,40 +7,40 @@
 
 class Button {
 public:
-    Button(const sf::Texture& texture): sprite(std::make_unique<sf::Sprite>()) {
-        sprite->setTexture(texture);
+    Button(const sf::Texture& texture) {
+        sprite.setTexture(texture);     
     }
+
+    Button() = default;
 
     void setScale(sf::Vector2f targetSize) {
         float scale_x = targetSize.x / getSize().x;
         float scale_y = targetSize.y / getSize().y;
-        sprite->setScale(scale_x, scale_y);
+        sprite.setScale(scale_x, scale_y);
     }
 
     sf::Vector2f getSize() const {
-        sf::FloatRect bound = sprite->getGlobalBounds();
+        sf::FloatRect bound = sprite.getGlobalBounds();
         return sf::Vector2f(bound.width, bound.height);
     }
 
     void setPosition(float x, float y) {
-        sprite->setPosition(x,y);
+        sprite.setPosition(x,y);
     }
 
     sf::Vector2f getPosition() const {
-        return sprite->getPosition();
+        return sprite.getPosition();
     }
 
 
     void draw(sf::RenderWindow& window) {
-        if (sprite) {
-            window.draw(*sprite);
-        }
+        window.draw(sprite);
     }
 
    //check if cursor is on this button
     
     bool isClicked(const sf::Vector2f& mousePos) const {
-        return sprite->getGlobalBounds().contains(mousePos);
+        return sprite.getGlobalBounds().contains(mousePos);
     }
 
     void activate() {
@@ -56,7 +56,7 @@ public:
     }
 
 protected:
-    std::unique_ptr<sf::Sprite> sprite;
+    sf::Sprite sprite;
     bool active = false;
 };
 

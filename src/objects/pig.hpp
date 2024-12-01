@@ -54,9 +54,9 @@ public:
     Pig(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults):
         Object(world, x, y, defaults) {}
     
-    ~Pig(){}
+    virtual ~Pig(){}
 
-    void TakeDamage(float dmg) {
+    virtual void TakeDamage(float dmg) {
         // TODO: Textures?
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);

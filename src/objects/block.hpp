@@ -16,8 +16,8 @@ public:
         }
     
     Block(){}  // for testing
-
-    void TakeDamage(float dmg) {
+    virtual ~Block() {}
+    virtual void TakeDamage(float dmg) {
         // Better way: sound lists for collision, damage, destroy
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);

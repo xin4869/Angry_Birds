@@ -29,10 +29,14 @@ public:
   Game() {
     window.create(sf::VideoMode(2000, 1250), "Angry Birds");
     window.setFramerateLimit(frameRate);
-    gui = std::make_unique<GUI>(window);
-    renderer = std::make_unique<GameRender>(window);
+
     TextureManager::loadAllTextures();
     SoundManager::loadAllSounds();
+
+    gui = std::make_unique<GUI>(window);
+    gui->init();
+
+    renderer = std::make_unique<GameRender>(window);
   } 
 
   ~Game() {}
@@ -123,9 +127,11 @@ public:
   }
     //TODO music button -> off, on music implementation
   void handleButtonClicks(const std::string& button_name){
+    std::cout << "Button clicked: " << button_name << std::endl;
     switch (currentState){
       case GameState::home: 
         if(button_name == "play_btn") {
+          std::cout << "Changing state to level" << std::endl;
           currentState = GameState::level;
         } else if (button_name == "help_btn") {
           currentState = GameState::help;

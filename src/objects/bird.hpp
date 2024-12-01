@@ -15,7 +15,7 @@ public:
     Bird(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults) :
         Object(world, x, y, defaults) {}
 
-    ~Bird() {}
+    virtual ~Bird() {}
     virtual void Attack() = 0;
 
 protected:
