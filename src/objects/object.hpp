@@ -59,7 +59,7 @@ public:
         Object(world, &defaults->bodyDef, defaults->shape.get(), defaults->density,
             x, y, defaults->spriteWidth, defaults->spriteHeight, defaults->normalTextures,
             defaults->damageTextures, defaults->soundNames, defaults->maxHp) {}
-
+    
    /**
     * @brief Overridden in subclasses. Set functionality there.
     * @param dmg damage taken
@@ -111,10 +111,10 @@ public:
         return true;
     }
 
-    bool playSound(int index) {
+    bool playSound(size_t index) {
         if (index >= sounds.size() || index < 0) return false;
         auto start = sounds.begin();
-        for (int i = 0; i < index; i++) start++;
+        for (size_t i = 0; i < index; i++) start++;
         (*start).second.play();
         return true;
     }

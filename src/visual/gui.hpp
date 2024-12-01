@@ -1,141 +1,257 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
-#include "buttons.hpp"
-#include "game_render.hpp"
-
+#include <unordered_map>
+#include "texture_manager.hpp"
+#include "button.hpp"
+#include "game_text.hpp"
 
 #ifndef GUI_HPP
 #define GUI_HPP
+
+
 
 class GUI {
 public:
     GUI(sf::RenderWindow& game_window): window(game_window) {}
 
     void init(){
-        initScore();
-        initBackground();
+        initText();
         initButtons();
+        initStars();
+        setBackground("home_bg");
     }
 
-    void updateScore(int score, int total){
-        shot_score.setString("Score:" + std::to_string(score));
-        total_score.setString("Total: " + std::to_string(total));
-        final_score.setString("Score: " + std::to_string(total));
+    std::optional<std::string> getClickedButton(const sf::Vector2f& mousePos) {
+        for (const auto& [name, button] : buttons) {
+            if (button.isClicked(mousePos)) {
+                return name;
+            }
+        }
+        return std::nullopt;
     }
 
-    void updateBackground () {
-        //lvl1, lvl2, lvl3, help, levels,win,lost
+    void updateScale(){
+        sf::Vector2f windowSize = static_cast<sf::Vector2f>(window.getSize());
+        sf::Vector2f textureSize = static_cast<sf::Vector2f>(background_sprite.getTexture()->getSize());
+        scaleX = windowSize.x / textureSize.x;
+        scaleY = windowSize.y / textureSize.y;   
+
+        background_sprite.setScale(scaleX, scaleY);  
+        if (isOverlayActive) {
+            overlay_sprite.setScale(scaleX, scaleY);
+        }
+        
+        updateAllPositions();
+    } 
+
+    void updateAllPositions(){
+        updateButtonPosition();
+        updateTextPosition();
+        updateStarPosition();
     }
+
+    void updateScore(int score) {
+        texts["score"].setString("Score: " + std::to_string(score));
+        texts["final_score"].setString(std::to_string(score));
+    }
+
 
     void drawHome(){
-        //window.draw(score);
+        setBackground("home_bg");
+        window.draw(background_sprite);
+        buttons["play_btn"].draw(window);
+        buttons["help_btn"].draw(window);
     }
-    void drawHelp(){}
-    void drawLevels(){}    
-    void drawGame(){}
-    void drawWin(){}
-    void drawLost(){}
 
-    Buttons play_bt;
-    Buttons help_bt;
-    Buttons music_bt;
+    void drawHelp(){
+        setBackground("help_bg");
+        window.draw(background_sprite);
+        buttons["no_btn"].draw(window);
+        texts["help_title"].draw(window);
+        texts["help_body"].draw(window);
+    }
 
-    Buttons ok_bt;
+    void drawLevel(){
+        setBackground("level_bg");
+        window.draw(background_sprite);
+        buttons["home_btn"].draw(window);
+        texts["level1"].draw(window);
+        texts["level2"].draw(window);
+        texts["level3"].draw(window);
+    }    
 
-    Buttons lv1_bt;
-    Buttons lv2_bt;
-    Buttons lv3_bt;
-    Buttons main_bt;
+    void drawGame(int level){
+        currentLevel = level;
+        switch (currentLevel) {
+            case 1: setBackground("lvl1_bg"); break;
+            case 2: setBackground("lvl2_bg"); break;
+            case 3: setBackground("lvl3_bg"); break;
+        }
+        window.draw(background_sprite);
+        buttons["back_btn"].draw(window);
+        texts["score"].draw(window);
+    }
 
-    Buttons levels_bt;
-    Buttons replay_bt;
-    Buttons next_bt;
+    void drawWin(int starCount){
+        switch (currentLevel) {
+            case 1: setBackground("lvl1_bg"); break;
+            case 2: setBackground("lvl2_bg"); break;
+            case 3: setBackground("lvl3_bg"); break;
+        }
+        setOverlay("win_bg");
+        window.draw(background_sprite);
+        window.draw(overlay_sprite);
+        buttons["level_btn"].draw(window);
+        buttons["next_btn"].draw(window);
+        texts["final_score"].draw(window);
+
+        for (int i = 0; i < starCount; i++) {
+            window.draw(stars[i].sprite);
+        }
+    }
+
+    void drawLost(){
+        switch (currentLevel)
+        {
+        case 1: setBackground("lvl1_bg"); break;
+        case 2: setBackground("lvl2_bg"); break;
+        case 3: setBackground("lvl3_bg"); break;
+        }
+        setOverlay("lost_bg");
+        window.draw(background_sprite);
+        window.draw(overlay_sprite);
+        buttons["level_btn"].draw(window);
+        buttons["replay_btn"].draw(window);
+    }
     
 private:
     sf::RenderWindow& window;
-
-    sf::Font font;
-
-    sf::Text shot_score;
-    sf::Text total_score;
-    sf::Text final_score;
-
+    std::unordered_map<std::string, Button> buttons;
+    std::unordered_map<std::string, GameText> texts;
     sf::Sprite background_sprite;
-    sf::Texture home_texture;
+    sf::Sprite overlay_sprite;
+    bool isOverlayActive = false;
+    float scaleX = 1.f;
+    float scaleY = 1.f;
+    int currentLevel;
 
-    sf::Texture help_texture;
-    sf::Texture levels_texture;
-    sf::Texture lvl1_texture;
-    sf::Texture lvl2_texture;
-    sf::Texture lvl3_texture;
-    sf::Texture win_texture;
-    sf::Texture lost_texture;
+    struct Star {
+        sf::Sprite sprite;
+        Star(const sf::Texture& texture, const sf::Vector2f& position): 
+            sprite(texture){
+            sprite.setPosition(position);
+        }
+    };
+    std::vector<Star> stars;
 
-    sf::Sprite info_sprite;
-    sf::Texture info_texture;
-   
+    void setBackground (const std::string& texture_name) {
+        background_sprite.setTexture(TextureManager::getTexture(texture_name));
+        updateScale();
+    }
 
-    // ?????? animation, different kind of birds
+    // set overlay for dimming effect  (double layer)
+    void setOverlay (const std::string& texture_name) {
+        overlay_sprite.setTexture(TextureManager::getTexture(texture_name));
+        overlay_sprite.setScale(scaleX, scaleY);
+        isOverlayActive = true;
+    }
+
+    void updateButtonPosition() {
+       for (auto& [name, button] : buttons) {
+        sf::Vector2f currentPos = button.getPosition();
+        float newX = currentPos.x * scaleX;
+        float newY = currentPos.y * scaleY;
+        button.setPosition(newX, newY);
+       }
+   }
+
+   void updateTextPosition() {
+       for (auto& [name, text] : texts) {
+        sf::Vector2f currentPos = text.getPosition();
+        float newX = currentPos.x * scaleX;
+        float newY = currentPos.y * scaleY;
+        text.setPosition(sf::Vector2f(newX, newY));
+       }
+   }
+
+   void updateStarPosition() {
+       for (Star& star : stars) {
+        sf::Vector2f currentPos = star.sprite.getPosition();
+        float newX = currentPos.x * scaleX;
+        float newY = currentPos.y * scaleY;
+        star.sprite.setPosition(newX, newY);
+       }
+   }
     
-
-    void initBackground(){
-        //try ??
-        if (!home_texture.loadFromFile("assets/textures/background.png")) {
-            std::cout << "Texture loading failed!\n";
-        }
-        // load: all textures
-        // info_sprite.setTexture(info_texture)
-        background_sprite.setTexture(home_texture);
-    }
-
     void initButtons(){
-        play_bt.setTexture("assets/textures/buttons/play.png");
-        help_bt.setTexture("assets/textures/buttons/help.png");
-        music_bt.setTexture("assets/textures/buttons/music.png",
-                            "assets/textures/buttons/no_music.png");
+        buttons["play_btn"] = Button(TextureManager::getTexture("play_btn"));
+        buttons["help_btn"] = Button(TextureManager::getTexture("help_btn"));
+        buttons["music_btn"] = Button(TextureManager::getTexture("music_btn"));
+        buttons["no_music_btn"] = Button(TextureManager::getTexture("no_music_btn"));
+        buttons["no_btn"] = Button(TextureManager::getTexture("no_btn"));
+        buttons["home_btn"] = Button(TextureManager::getTexture("home_btn"));
+        buttons["lvl1_btn"] = Button(TextureManager::getTexture("lvl1_btn"));
+        buttons["lvl2_btn"] = Button(TextureManager::getTexture("lvl2_btn"));
+        buttons["lvl3_btn"] = Button(TextureManager::getTexture("lvl3_btn"));
+        buttons["back_btn"] = Button(TextureManager::getTexture("back_btn"));
+        buttons["level_btn"] = Button(TextureManager::getTexture("level_btn"));
+        buttons["replay_btn"] = Button(TextureManager::getTexture("replay_btn"));
+        buttons["next_btn"] = Button(TextureManager::getTexture("next_btn"));
+        scaleButtons();
+        initButtonPosition();
+    }
 
-        ok_bt.setTexture("assets/textures/buttons/ok.png");
+    void scaleButtons() {
+        buttons["help_btn"].setScale(sf::Vector2f(112.f,114.f));
+        buttons["music_btn"].setScale(sf::Vector2f(112.f,114.f));  
+        buttons["no_music_btn"].setScale(sf::Vector2f(112.f,114.f));
+        buttons["home_btn"].setScale(sf::Vector2f(112.f,114.f));
+        buttons["lvl1_btn"].setScale(sf::Vector2f(336.f,653.f));
+        buttons["lvl2_btn"].setScale(sf::Vector2f(336.f,653.f));
+        buttons["lvl3_btn"].setScale(sf::Vector2f(336.f,653.f));
+        buttons["back_btn"].setScale(sf::Vector2f(112.f,114.f));
+        buttons["replay_btn"].setScale(sf::Vector2f(112.f,114.f));
+    }
+    void initButtonPosition() {
+        buttons["play_btn"].setPosition(750.f, 452.f);  
+        buttons["help_btn"].setPosition(1800.0f, 980.f);     
+        buttons["music_btn"].setPosition(100.f, 980.f);     
+        buttons["no_music_btn"].setPosition(100.f, 980.f);   
+        buttons["no_btn"].setPosition(290.3f, 798.1f);
+        buttons["home_btn"].setPosition(53.6f, 1105.3f);
+        buttons["lvl1_btn"].setPosition(368.6f, 337.f);  
+        buttons["lvl2_btn"].setPosition(829.4f, 96.f); 
+        buttons["lvl3_btn"].setPosition(1300.5f, 348.f);     
+        buttons["back_btn"].setPosition(15.4f, 10.8f);
+        buttons["level_btn"].setPosition(854.6f, 959.6f); 
+        buttons["replay_btn"].setPosition(1017.f, 961.f);
+        buttons["next_btn"].setPosition(1017.f, 961.f); 
 
-        lv1_bt.setTexture("assets/textures/buttons/lvl1.png");
-        lv2_bt.setTexture("assets/textures/buttons/lvl2.png");
-        lv3_bt.setTexture("assets/textures/buttons/lvl3.png");
-        main_bt.setTexture("assets/textures/buttons/home.png");
+        updateButtonPosition(); //apply scale
+   }
 
-        levels_bt.setTexture("assets/textures/buttons/level.png");
-        replay_bt.setTexture("assets/textures/buttons/replay.png");
-        next_bt.setTexture("assets/textures/buttons/next.png");
-        
+    void initText() {
+        texts["score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "");
+        texts["final_score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "");
+        texts["help_title"] = GameText(223, sf::Vector2f(769.f, 140.8f), "Help");
+        texts["help_body"] = GameText(75, sf::Vector2f(542.8f, 372.8f), "Use the left and right arrow keys to move the bird and space to jump. :D");
+        texts["level1"] = GameText(117, sf::Vector2f(519.8f, 215.8f), "1");
+        texts["level2"] = GameText(117, sf::Vector2f(971.8f, 760.8f), "2");
+        texts["level3"] = GameText(117, sf::Vector2f(1450.8f, 231.8f), "3");
+
+        updateTextPosition();
     }
 
 
-    void initScore(){
-        if (!font.loadFromFile("assets/font/angrybirds.ttf")) {
-            std::cout << "Font loading failed!" << std::endl;
-        }
+    void initStars() {
+        stars = {
+            Star(TextureManager::getTexture("star1"), sf::Vector2f(616.4f, 345.4f)),
+            Star(TextureManager::getTexture("star2"), sf::Vector2f(863.5f, 324.4f)),
+            Star(TextureManager::getTexture("star3"), sf::Vector2f(1129.5f, 342.8f))
+        };    
 
-        shot_score.setFont(font);
-        shot_score.setCharacterSize(35);
-        shot_score.setFillColor(sf::Color::White);
-        shot_score.setOutlineColor(sf::Color::Black);
-        shot_score.setString("");
-        shot_score.setPosition(1200, 10);
-             
-        total_score.setFont(font);
-        total_score.setCharacterSize(45);
-        total_score.setFillColor(sf::Color::White);
-        total_score.setOutlineColor(sf::Color::Black); 
-        total_score.setString("");
-        total_score.setPosition(1200,20);
-           
-        final_score.setFont(font);
-        final_score.setCharacterSize(70);
-        final_score.setFillColor(sf::Color::White);
-        final_score.setOutlineColor(sf::Color::Black);
-        final_score.setString("");
-        final_score.setPosition(
-            window.getSize().x * 0.5 - final_score.getGlobalBounds().width * 0.5,
-            window.getSize().y * 0.55 - final_score.getGlobalBounds().height * 0.5);   
+        updateStarPosition();
     }
 
 

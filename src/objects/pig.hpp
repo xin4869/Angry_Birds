@@ -53,6 +53,8 @@ public:
      */
     Pig(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults):
         Object(world, x, y, defaults) {}
+    
+    ~Pig(){}
 
     void TakeDamage(float dmg) {
         // TODO: Textures?

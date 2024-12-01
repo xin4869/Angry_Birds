@@ -12,14 +12,14 @@ private:
     static std::unordered_map<std::string, sf::Texture> textures;
 
 public:
-    static void loadTexture(const std::string& name, const std::string& filename)
+    static void loadTexture(const std::string& name, const std::string& filePath)
     {
         sf::Texture texture;
-        if (!texture.loadFromFile(filename))
+        if (!texture.loadFromFile(filePath))
         {
             // If loading fails, create a default texture
+            std::cerr << "Failed to load texture: " << filePath << std::endl;
             texture.create(64, 64);
-            // Optionally, fill with a color or pattern to indicate missing texture
         }
         textures[name] = std::move(texture);
     }
@@ -211,6 +211,36 @@ public:
        loadTexture("ExplodeBird3", "assets/textures/explode_bird/normal/3.png");
        loadTexture("ExplodeBird4", "assets/textures/explode_bird/normal/4.png");
        loadTexture("ExplodeBirdDead", "assets/textures/explode_bird/damage/1.png");
+
+       //////////////BUTTONS//////////////////////////
+       loadTexture("play_btn", "assets/textures/buttons/play.png");
+       loadTexture("help_btn", "assets/textures/buttons/help.png");
+       loadTexture("music_btn", "assets/textures/buttons/music.png");
+       loadTexture("no_music_btn", "assets/textures/buttons/no_music.png");
+       loadTexture("no_btn", "assets/textures/buttons/no.png");
+       loadTexture("lvl1_btn", "assets/textures/buttons/lvl1.png");
+       loadTexture("lvl2_btn", "assets/textures/buttons/lvl2.png");
+       loadTexture("lvl3_btn", "assets/textures/buttons/lvl3.png");
+       loadTexture("home_btn", "assets/textures/buttons/home.png");
+       loadTexture("back_btn", "assets/textures/buttons/back.png");
+       loadTexture("level_btn", "assets/textures/buttons/level.png");
+       loadTexture("replay_btn", "assets/textures/buttons/replay.png");
+       loadTexture("next_btn", "assets/textures/buttons/next.png");
+
+       /////////////BACKGROUNDS////////////////////////
+       loadTexture("home_bg", "assets/textures/backgrounds/background.png");
+       loadTexture("help_bg", "assets/textures/backgrounds/help.png");
+       loadTexture("level_bg", "assets/textures/backgrounds/level.png");
+       loadTexture("level1_bg", "assets/textures/backgrounds/level1.png");
+       loadTexture("level2_bg", "assets/textures/backgrounds/level2.png");
+       loadTexture("level3_bg", "assets/textures/backgrounds/level3.png");
+       loadTexture("win_bg", "assets/textures/backgrounds/win.png");
+       loadTexture("lost_bg", "assets/textures/backgrounds/lost.png");
+
+       //////////////ELEMENTS//////////////////////////
+       loadTexture("star1", "assets/textures/elements/star1.png");
+       loadTexture("star2", "assets/textures/elements/star2.png");
+       loadTexture("star3", "assets/textures/elements/star3.png");
     }
 
     TextureManager() = delete;

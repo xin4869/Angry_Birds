@@ -12,6 +12,8 @@ public:
     }
 
     void init(){}
+
+    void drawGameObjects(int level){}
    
 private:
     sf::RenderWindow& window;

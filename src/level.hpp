@@ -18,7 +18,7 @@ public:
 		loadLevel(levelPath);
 	}
 	Level(int level, float frameRate = 60.0f) : Level(getFilePath(level), frameRate) {}
-	Level() : world(b2Vec2(0, -10)), gravity(0, -10), frameRate(60.0f), timeStep(1.0f / 60.0f) {
+	Level() :frameRate(60.0f), timeStep(1.0f / 60.0f), gravity(0, -10), world(gravity) {
 		world.SetContactListener(&collisionHandler);
 	}
 	~Level() { clearLevel(); }
@@ -38,24 +38,30 @@ public:
 
 		parseLevelFile(file);
 		addGround();
-		isActive = true;
-  	}
+		isActive = true;  	
+	}
 
 	void loadLevel(int level) {
 		loadLevel(getFilePath(level));
 	}
 
-	void update() {
+	void update(float deltaTime) {
 		if (!isActive) return;
-		world.Step(timeStep, velocityIterations, positionIterations);
+		accumulator += deltaTime;
 
-		for (auto i = Object::destroyList.begin(); i != Object::destroyList.end(); i++) {
-			(*i).first -= timeStep;
-			if ((*i).first <= 0) {
-				i = Object::destroyList.erase(i);
-				i--;
+		while (accumulator >= timeStep) {
+			world.Step(timeStep, velocityIterations, positionIterations);
+
+			for (auto i = Object::destroyList.begin(); i != Object::destroyList.end(); i++) {
+				i->first -= timeStep;
+				if (i->first <= 0) {
+					i = Object::destroyList.erase(i);
+					i--;
+				}
+				if (i->second != nullptr) i->second->getBody()->SetEnabled(false);
 			}
-			if ((*i).second != nullptr) (*i).second->getBody()->SetEnabled(false);
+
+			accumulator -= timeStep;
 		}
 	}
 
@@ -196,12 +202,14 @@ protected:
 		return val;
 	}
 
-	b2Vec2 gravity;
-	b2World world;
+	float accumulator = 0;
 
 	float frameRate;
 	float timeStep;
 	bool isActive = false;
+
+	b2Vec2 gravity;
+	b2World world;
 
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
