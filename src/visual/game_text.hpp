@@ -5,32 +5,32 @@
 #include <string>
 
 
-
 class GameText {
 public: 
-    GameText(const std::string& fontPath, int size, const sf::Color& color, 
-        const sf::Color& outlineColor, const sf::Vector2f& position, const std::string& text) {
-            if (!font.loadFromFile(fontPath)) {
-                throw std::runtime_error("Failed to load font");
-            }
+    GameText(sf::Font font, int size, const sf::Color& color, const sf::Color& outlineColor, const sf::Vector2f& position, const std::string& text):
+        defaultPosition(position) {
             textObject.setFont(font);
             textObject.setCharacterSize(size);
             textObject.setFillColor(color);
             textObject.setOutlineColor(outlineColor);
-            textObject.setPosition(position);
+            textObject.setOutlineThickness(2);
+            textObject.setPosition(defaultPosition);
             textObject.setString(text);
         }
+
     GameText() {}
 
-    GameText(int size, const sf::Vector2f& position, const std::string& text) {
-            if (!font.loadFromFile("assets/font/angrybirds.ttf")) {
-                throw std::runtime_error("Failed to load font");
+    GameText(int size, const sf::Vector2f& position, const std::string& text, const sf::Color& fillColor, const sf::Color& outlineColor): 
+            defaultPosition(position) {
+            if (defaultFont == nullptr) {
+                throw std::runtime_error("Default font is not set");
             }
-            textObject.setFont(font);
-            textObject.setFillColor(sf::Color::White);
-            textObject.setOutlineColor(sf::Color::Black);
+            textObject.setFont(*defaultFont);
+            textObject.setFillColor(fillColor);
+            textObject.setOutlineColor(outlineColor);
+            textObject.setOutlineThickness(2);
             textObject.setCharacterSize(size);
-            textObject.setPosition(position);
+            textObject.setPosition(defaultPosition);
             textObject.setString(text);
     }
     void setScale(float x, float y) {
@@ -41,12 +41,19 @@ public:
         textObject.setString(text);
     }
 
-    void setPosition(const sf::Vector2f& position) {
-        textObject.setPosition(position);
+    static void setDefaultFont(sf::Font* font){
+        defaultFont = font;
     }
 
-    sf::Vector2f getPosition() const {
-        return textObject.getPosition();
+    void setDefaultPosition(float x, float y) {
+        defaultPosition = sf::Vector2f(x,y);
+        textObject.setPosition(x,y);
+    }
+
+    void updatePosition(float scaleX, float scaleY) {
+        float newX = defaultPosition.x * scaleX;
+        float newY = defaultPosition.y * scaleY;
+        textObject.setPosition(newX, newY);
     }
 
     void setColor(const sf::Color& color) {
@@ -56,11 +63,19 @@ public:
         textObject.setCharacterSize(size);
     }
     void draw(sf::RenderWindow& window) {
+        if (textObject.getFont() == nullptr) {
+            throw std::runtime_error("Font is not set");
+        }
+        std::cout << "Drawing text: " << textObject.getString().toAnsiString() << std::endl;
+        std::cout << "Position: " << textObject.getPosition().x << ", " << textObject.getPosition().y << std::endl;
+        std::cout << "Character size: " << textObject.getCharacterSize() << std::endl;
         window.draw(textObject);
     }
+
 private:
     sf::Text textObject;
-    sf::Font font;
+    static inline sf::Font* defaultFont = nullptr;
+    sf::Vector2f defaultPosition;
 };
 
 #endif

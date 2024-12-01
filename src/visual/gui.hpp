@@ -16,6 +16,10 @@ public:
     GUI(sf::RenderWindow& game_window): window(game_window) {}
 
     void init(){
+        if (!font.loadFromFile("assets/font/angrybirds.ttf")) {
+                throw std::runtime_error("Failed to load font");
+        }
+        GameText::setDefaultFont(&font);
         initText();
         initButtons();
         initStars();
@@ -46,21 +50,27 @@ public:
     } 
 
     void updateAllPositions(){
-        updateButtonPosition();
-        updateTextPosition();
-        updateStarPosition();
-    }
+        for (auto& [name, button] : buttons) {
+            button.updatePosition(scaleX, scaleY);
+        }  
+        for (auto& [name, text] : texts) {
+            text.updatePosition(scaleX, scaleY);
+        }
+        for (Star& star : stars) {
+            star.updatePosition(scaleX, scaleY);
+        }
+   } 
 
     void updateScore(int score) {
         texts["score"].setString("Score: " + std::to_string(score));
         texts["final_score"].setString(std::to_string(score));
     }
 
-
     void drawHome(){
         setBackground("home_bg");
         window.draw(background_sprite);
 
+        activateButtons({"play_btn", "help_btn", "music_btn"});
         buttons["play_btn"].draw(window);
         buttons["help_btn"].draw(window);
         buttons["music_btn"].draw(window);
@@ -79,6 +89,8 @@ public:
     void drawHelp(){
         setBackground("help_bg");
         window.draw(background_sprite);
+   
+        activateButtons({"no_btn"});
         buttons["no_btn"].draw(window);
         texts["help_title"].draw(window);
         texts["help_body"].draw(window);
@@ -87,7 +99,13 @@ public:
     void drawLevel(){
         setBackground("level_bg");
         window.draw(background_sprite);
+
+        activateButtons({"home_btn", "lvl1_btn", "lvl2_btn", "lvl3_btn"});
         buttons["home_btn"].draw(window);
+        buttons["lvl1_btn"].draw(window);
+        buttons["lvl2_btn"].draw(window);
+        buttons["lvl3_btn"].draw(window);
+        
         texts["level1"].draw(window);
         texts["level2"].draw(window);
         texts["level3"].draw(window);
@@ -101,6 +119,8 @@ public:
             case 3: setBackground("lvl3_bg"); break;
         }
         window.draw(background_sprite);
+
+        activateButtons({"back_btn"});
         buttons["back_btn"].draw(window);
         texts["score"].draw(window);
     }
@@ -114,6 +134,8 @@ public:
         setOverlay("win_bg");
         window.draw(background_sprite);
         window.draw(overlay_sprite);
+        
+        activateButtons({"level_btn", "next_btn"});
         buttons["level_btn"].draw(window);
         buttons["next_btn"].draw(window);
         texts["final_score"].draw(window);
@@ -133,6 +155,8 @@ public:
         setOverlay("lost_bg");
         window.draw(background_sprite);
         window.draw(overlay_sprite);
+
+        activateButtons({"level_btn", "replay_btn"});
         buttons["level_btn"].draw(window);
         buttons["replay_btn"].draw(window);
     }
@@ -141,6 +165,7 @@ private:
     sf::RenderWindow& window;
     std::unordered_map<std::string, Button> buttons;
     std::unordered_map<std::string, GameText> texts;
+    sf::Font font;
     sf::Sprite background_sprite;
     sf::Sprite overlay_sprite;
     bool isOverlayActive = false;
@@ -150,9 +175,15 @@ private:
 
     struct Star {
         sf::Sprite sprite;
-        Star(const sf::Texture& texture, const sf::Vector2f& position): 
-            sprite(texture){
+        sf::Vector2f defaultPosition;
+        Star(const sf::Texture& texture, const sf::Vector2f& position): sprite(texture), defaultPosition(position) {
             sprite.setPosition(position);
+        }
+
+        void updatePosition(float scaleX, float scaleY) {
+            float newX = defaultPosition.x * scaleX;
+            float newY = defaultPosition.y * scaleY;
+            sprite.setPosition(newX, newY);
         }
     };
     std::vector<Star> stars;
@@ -169,34 +200,20 @@ private:
         isOverlayActive = true;
     }
 
-    void updateButtonPosition() {
-       for (auto& [name, button] : buttons) {
-        sf::Vector2f currentPos = button.getPosition();
-        float newX = currentPos.x * scaleX;
-        float newY = currentPos.y * scaleY;
-        button.setPosition(newX, newY);
-       }
-   }
+    void activateButtons(const std::vector<std::string>& buttonNames) {
+        for (auto& [name, button] : buttons) {
+            button.deactivate();
+        }
 
-   void updateTextPosition() {
-       for (auto& [name, text] : texts) {
-        sf::Vector2f currentPos = text.getPosition();
-        float newX = currentPos.x * scaleX;
-        float newY = currentPos.y * scaleY;
-        text.setPosition(sf::Vector2f(newX, newY));
-       }
-   }
-
-   void updateStarPosition() {
-       for (Star& star : stars) {
-        sf::Vector2f currentPos = star.sprite.getPosition();
-        float newX = currentPos.x * scaleX;
-        float newY = currentPos.y * scaleY;
-        star.sprite.setPosition(newX, newY);
-       }
-   }
+        for (const auto& name : buttonNames) {
+            auto it = buttons.find(name);
+            if (it != buttons.end()) {
+                it->second.activate();
+            } 
+        }
+    }
     
-    void initButtons(){
+    void initButtons(){ 
         buttons["play_btn"] = Button(TextureManager::getTexture("play_btn"));
         buttons["help_btn"] = Button(TextureManager::getTexture("help_btn"));
         buttons["music_btn"] = Button(TextureManager::getTexture("music_btn"));
@@ -226,33 +243,29 @@ private:
         buttons["replay_btn"].setScale(sf::Vector2f(112.f,114.f));
     }
     void initButtonPosition() {
-        buttons["play_btn"].setPosition(750.f, 452.f);  
-        buttons["help_btn"].setPosition(1800.0f, 980.f);     
-        buttons["music_btn"].setPosition(100.f, 980.f);     
-        buttons["no_music_btn"].setPosition(100.f, 980.f);   
-        buttons["no_btn"].setPosition(290.3f, 798.1f);
-        buttons["home_btn"].setPosition(53.6f, 1105.3f);
-        buttons["lvl1_btn"].setPosition(368.6f, 337.f);  
-        buttons["lvl2_btn"].setPosition(829.4f, 96.f); 
-        buttons["lvl3_btn"].setPosition(1300.5f, 348.f);     
-        buttons["back_btn"].setPosition(15.4f, 10.8f);
-        buttons["level_btn"].setPosition(854.6f, 959.6f); 
-        buttons["replay_btn"].setPosition(1017.f, 961.f);
-        buttons["next_btn"].setPosition(1017.f, 961.f); 
-
-        updateButtonPosition(); //apply scale
+        buttons["play_btn"].setDefaultPosition(750.f, 452.f);  
+        buttons["help_btn"].setDefaultPosition(1800.0f, 980.f);     
+        buttons["music_btn"].setDefaultPosition(100.f, 980.f);     
+        buttons["no_music_btn"].setDefaultPosition(100.f, 980.f);   
+        buttons["no_btn"].setDefaultPosition(290.3f, 798.1f);
+        buttons["home_btn"].setDefaultPosition(53.6f, 1105.3f);
+        buttons["lvl1_btn"].setDefaultPosition(368.6f, 337.f);  
+        buttons["lvl2_btn"].setDefaultPosition(829.4f, 96.f); 
+        buttons["lvl3_btn"].setDefaultPosition(1300.5f, 348.f);     
+        buttons["back_btn"].setDefaultPosition(15.4f, 10.8f);
+        buttons["level_btn"].setDefaultPosition(854.6f, 959.6f); 
+        buttons["replay_btn"].setDefaultPosition(1017.f, 961.f);
+        buttons["next_btn"].setDefaultPosition(1017.f, 961.f); 
    }
 
     void initText() {
-        texts["score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "");
-        texts["final_score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "");
-        texts["help_title"] = GameText(223, sf::Vector2f(769.f, 140.8f), "Help");
-        texts["help_body"] = GameText(75, sf::Vector2f(542.8f, 372.8f), "Use the left and right arrow keys to move the bird and space to jump. :D");
-        texts["level1"] = GameText(117, sf::Vector2f(519.8f, 215.8f), "1");
-        texts["level2"] = GameText(117, sf::Vector2f(971.8f, 760.8f), "2");
-        texts["level3"] = GameText(117, sf::Vector2f(1450.8f, 231.8f), "3");
-
-        updateTextPosition();
+        texts["score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "", sf::Color::White, sf::Color::Black);
+        texts["final_score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "", sf::Color::White, sf::Color::Black);
+        texts["help_title"] = GameText(223, sf::Vector2f(795.f, 118.8f), "Help", sf::Color::Black, sf::Color::White);
+        texts["help_body"] = GameText(75, sf::Vector2f(632.8f, 472.8f), "Drag the bird and shot!\n          That's it! :D", sf::Color::Black, sf::Color::White);
+        texts["level1"] = GameText(117, sf::Vector2f(519.8f, 205.8f), "1", sf::Color::White, sf::Color::Black);
+        texts["level2"] = GameText(117, sf::Vector2f(971.8f, 740.8f), "2", sf::Color::White, sf::Color::Black);
+        texts["level3"] = GameText(117, sf::Vector2f(1450.8f, 221.8f), "3", sf::Color::White, sf::Color::Black);
     }
 
 
@@ -262,8 +275,6 @@ private:
             Star(TextureManager::getTexture("star2"), sf::Vector2f(863.5f, 324.4f)),
             Star(TextureManager::getTexture("star3"), sf::Vector2f(1129.5f, 342.8f))
         };    
-
-        updateStarPosition();
     }
 
 

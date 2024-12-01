@@ -7,7 +7,7 @@ int main(void) {
   Game game;
   game.run();
 
-
+  return 0;
 
   /*NormalBird bird(&game.getWorld(), 0, 0);
   Pig pig(&game.getWorld(), 0, 0, &ObjectDefs::normalPigDefaults);

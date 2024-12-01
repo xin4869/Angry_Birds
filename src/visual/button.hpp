@@ -10,8 +10,8 @@ public:
     Button(const sf::Texture& texture) {
         sprite.setTexture(texture);     
     }
-
-    Button() = default;
+    
+    Button() {}
 
     void setScale(sf::Vector2f targetSize) {
         float scale_x = targetSize.x / getSize().x;
@@ -24,23 +24,27 @@ public:
         return sf::Vector2f(bound.width, bound.height);
     }
 
-    void setPosition(float x, float y) {
+    void setDefaultPosition(float x, float y) {
+        defaultPosition = sf::Vector2f(x,y);
         sprite.setPosition(x,y);
     }
 
-    sf::Vector2f getPosition() const {
-        return sprite.getPosition();
+    void updatePosition(float scaleX, float scaleY) {
+        float newX = defaultPosition.x * scaleX;
+        float newY = defaultPosition.y * scaleY;
+        sprite.setPosition(newX, newY);
     }
 
-
     void draw(sf::RenderWindow& window) {
-        window.draw(sprite);
+        if (active) {
+            window.draw(sprite);
+        }
     }
 
    //check if cursor is on this button
     
     bool isClicked(const sf::Vector2f& mousePos) const {
-        return sprite.getGlobalBounds().contains(mousePos);
+        return active && sprite.getGlobalBounds().contains(mousePos);
     }
 
     void activate() {
@@ -55,9 +59,14 @@ public:
         }
     }
 
-protected:
+    bool isActive() const {
+        return active;
+    }
+
+private:
     sf::Sprite sprite;
     bool active = false;
+    sf::Vector2f defaultPosition;
 };
 
 
