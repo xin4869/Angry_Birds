@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <unordered_map>
+#include <optional>
 #include "texture_manager.hpp"
 #include "button.hpp"
 #include "game_text.hpp"

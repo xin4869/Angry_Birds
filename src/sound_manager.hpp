@@ -10,8 +10,40 @@ class SoundManager
 {
 private:
     static std::unordered_map<std::string, sf::SoundBuffer*> sounds;
+    static std::unordered_map<std::string, std::string> musicMap;  // <name, filePath>
+    static sf::Music music;
 
 public:
+    /**
+     * @brief Play music file. Stops current music.
+     * @param name Name of music file. See initialization.
+     * @return true if success
+     */
+    static bool playMusic(const std::string& name) {
+        music.stop();
+        if (musicMap.find(name) == musicMap.end()) return false;
+        bool res = music.openFromFile(musicMap[name]);
+        music.setLoop(true);
+        music.play();
+        return res;
+    }
+
+    static bool stopMusic() {
+        music.stop();
+    }
+
+    /**
+     * @brief Set Music Volume
+     * @param volume volume 0-100
+     */
+    static void setMusicVolume(float volume) {
+        music.setVolume(volume);
+    }
+
+    static float getMusicVolume() {
+        return music.getVolume();
+    }
+
     static void loadSound(const std::string& name, const std::string& filePath)
     {
         sf::SoundBuffer* sound = new sf::SoundBuffer;
@@ -147,5 +179,10 @@ public:
 };
 
 std::unordered_map<std::string, sf::SoundBuffer*> SoundManager::sounds;
+sf::Music SoundManager::music;
+std::unordered_map<std::string, std::string> SoundManager::musicMap = {
+    { "Theme song", "assets/audio/Angry Birds Theme.flac" },
+    { "Forest ambient", "assets/audio/Ambient White Dryforest.ogg" }
+};
 
 #endif

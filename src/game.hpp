@@ -37,6 +37,7 @@ public:
     gui->init();
 
     renderer = std::make_unique<GameRender>(window);
+    SoundManager::playMusic("Theme song");
   } 
 
   ~Game() {}
@@ -135,6 +136,8 @@ public:
           currentState = GameState::level;
         } else if (button_name == "help_btn") {
           currentState = GameState::help;
+        } else if (button_name == "music_btn") {
+          SoundManager::setMusicVolume(SoundManager::getMusicVolume() ? 0 : 100);
         } break; 
       
       case GameState::help: 
@@ -180,6 +183,7 @@ public:
   b2World& getWorld() { return level->getWorld(); }
   
 private:
+  sf::Music music;
   sf::RenderWindow window;
   std::unique_ptr<GUI> gui;
   std::unique_ptr<GameRender> renderer;
