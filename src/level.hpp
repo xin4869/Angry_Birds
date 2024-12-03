@@ -28,6 +28,7 @@ public:
 		gravity.Set(0, -10);
 		slingshot.setPos(0, 2);
 		scoreLimits = { 1000, 2000, 3000 };
+		setScore(0);
 		
 		std::ifstream file(path);
 

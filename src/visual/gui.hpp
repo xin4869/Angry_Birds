@@ -268,9 +268,9 @@ private:
    }
 
     void initText() {
-        texts["score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "");
-        texts["final_score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "");
-        texts["help_title"] = GameText(223, sf::Vector2f(795.f, 118.8f), "Help", sf::Color::Black, sf::Color::White);
+        texts["score"] = GameText(56, sf::Vector2f(1686.2f, 10.4f), "");
+        texts["final_score"] = GameText(56, sf::Vector2f(1686.2f, 10.4f), "");
+        texts["help_title"] = GameText(203, sf::Vector2f(795.f, 128.8f), "Help", sf::Color::Black, sf::Color::White);
         texts["help_body"] = GameText(75, sf::Vector2f(632.8f, 472.8f), "Drag the bird and shot!\n          That's it! :D", sf::Color::Black, sf::Color::White);
         texts["level1"] = GameText(117, sf::Vector2f(519.8f, 205.8f), "1");
         texts["level2"] = GameText(117, sf::Vector2f(971.8f, 740.8f), "2");

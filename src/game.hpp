@@ -57,6 +57,8 @@ public:
   void update(float deltaTime){
     if (level) {
       level->update(deltaTime);
+      int currentScore = static_cast<int>(level->getScore());
+      gui->updateScore(currentScore);
     }
   }
 
@@ -118,7 +120,7 @@ public:
   }
 
   void handleMousePress() {
-    sf::Vector2f mousePos(sf::Mouse::getPosition(window));  // Get mouse position as sf::Vector2f
+    sf::Vector2f mousePos(sf::Mouse::getPosition(window));
     auto clicked_button = gui->getClickedButton(mousePos);
     if (clicked_button) {
       handleButtonClicks(*clicked_button);}
@@ -136,7 +138,7 @@ public:
 
   void handleMouseMove() {
     if (currentState == GameState::in_game && level) {
-      sf::Vector2i mousePos = sf::Mouse::getPosition(window);  // Get mouse position as sf::Vector2f
+      sf::Vector2i mousePos = sf::Mouse::getPosition(window);
       b2Vec2 b2WorldPos = screenToWorldPos(mousePos);
       level->updateDragging(b2WorldPos);
     }
