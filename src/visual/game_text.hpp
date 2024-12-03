@@ -20,7 +20,8 @@ public:
 
     GameText() {}
 
-    GameText(int size, const sf::Vector2f& position, const std::string& text, const sf::Color& fillColor, const sf::Color& outlineColor): 
+    GameText(int size, const sf::Vector2f& position, const std::string& text, 
+        const sf::Color& fillColor = sf::Color::White, const sf::Color& outlineColor = sf::Color::Black): 
             defaultPosition(position) {
             if (defaultFont == nullptr) {
                 throw std::runtime_error("Default font is not set");
@@ -33,6 +34,7 @@ public:
             textObject.setPosition(defaultPosition);
             textObject.setString(text);
     }
+    
     void setScale(float x, float y) {
         textObject.setScale(x, y);
     }

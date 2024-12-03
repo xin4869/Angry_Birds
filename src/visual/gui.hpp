@@ -67,14 +67,19 @@ public:
         texts["final_score"].setString(std::to_string(score));
     }
 
+    void toggleMusic() {
+        isMusicOn = !isMusicOn;
+    }
+
     void drawHome(){
         setBackground("home_bg");
         window.draw(background_sprite);
 
-        activateButtons({"play_btn", "help_btn", "music_btn"});
+        activateButtons({"play_btn", "help_btn", "music_btn"}); //activate music or no music btn
         buttons["play_btn"].draw(window);
         buttons["help_btn"].draw(window);
-        buttons["music_btn"].draw(window);
+        buttons["music_btn"].draw(window); //button.draw will only draw active btn
+        buttons["no_music_btn"].draw(window); 
           
         /*if (buttons.find("play_btn") != buttons.end()) {
             std::cout << "Drawing play button at position: " 
@@ -115,9 +120,9 @@ public:
     void drawGame(int level){
         currentLevel = level;
         switch (currentLevel) {
-            case 1: setBackground("lvl1_bg"); break;
-            case 2: setBackground("lvl2_bg"); break;
-            case 3: setBackground("lvl3_bg"); break;
+            case 1: setBackground("level1_bg"); break;
+            case 2: setBackground("level2_bg"); break;
+            case 3: setBackground("level3_bg"); break;
         }
         window.draw(background_sprite);
 
@@ -128,9 +133,9 @@ public:
 
     void drawWin(int starCount){
         switch (currentLevel) {
-            case 1: setBackground("lvl1_bg"); break;
-            case 2: setBackground("lvl2_bg"); break;
-            case 3: setBackground("lvl3_bg"); break;
+            case 1: setBackground("level1_bg"); break;
+            case 2: setBackground("level2_bg"); break;
+            case 3: setBackground("level3_bg"); break;
         }
         setOverlay("win_bg");
         window.draw(background_sprite);
@@ -149,9 +154,9 @@ public:
     void drawLost(){
         switch (currentLevel)
         {
-        case 1: setBackground("lvl1_bg"); break;
-        case 2: setBackground("lvl2_bg"); break;
-        case 3: setBackground("lvl3_bg"); break;
+        case 1: setBackground("level1_bg"); break;
+        case 2: setBackground("level2_bg"); break;
+        case 3: setBackground("level3_bg"); break;
         }
         setOverlay("lost_bg");
         window.draw(background_sprite);
@@ -170,6 +175,7 @@ private:
     sf::Sprite background_sprite;
     sf::Sprite overlay_sprite;
     bool isOverlayActive = false;
+    bool isMusicOn = true;
     float scaleX = 1.f;
     float scaleY = 1.f;
     int currentLevel;
@@ -205,11 +211,14 @@ private:
         for (auto& [name, button] : buttons) {
             button.deactivate();
         }
-
         for (const auto& name : buttonNames) {
-            auto it = buttons.find(name);
-            if (it != buttons.end()) {
-                it->second.activate();
+            if (name == "music_btn" || name == "no_music_btn") {
+                buttons[isMusicOn? "music_btn" : "no_music_btn"].activate();
+            } else {
+                auto it = buttons.find(name);
+                if (it != buttons.end()) {
+                    it->second.activate();
+                } 
             } 
         }
     }
@@ -233,21 +242,20 @@ private:
     }
 
     void scaleButtons() {
-        buttons["help_btn"].setScale(sf::Vector2f(112.f,114.f));
-        buttons["music_btn"].setScale(sf::Vector2f(112.f,114.f));  
-        buttons["no_music_btn"].setScale(sf::Vector2f(112.f,114.f));
-        buttons["home_btn"].setScale(sf::Vector2f(112.f,114.f));
-        buttons["lvl1_btn"].setScale(sf::Vector2f(336.f,653.f));
-        buttons["lvl2_btn"].setScale(sf::Vector2f(336.f,653.f));
-        buttons["lvl3_btn"].setScale(sf::Vector2f(336.f,653.f));
-        buttons["back_btn"].setScale(sf::Vector2f(112.f,114.f));
-        buttons["replay_btn"].setScale(sf::Vector2f(112.f,114.f));
+        //buttons["help_btn"].setScale(sf::Vector2f(94.f,95.f));
+        // buttons["music_btn"].setScale(sf::Vector2f(112.f,114.f));  
+        // buttons["no_music_btn"].setScale(sf::Vector2f(112.f,114.f));
+        // buttons["home_btn"].setScale(sf::Vector2f(112.f,114.f));
+        // buttons["lvl1_btn"].setScale(sf::Vector2f(336.f,653.f));
+        // buttons["lvl2_btn"].setScale(sf::Vector2f(336.f,653.f));
+        // buttons["lvl3_btn"].setScale(sf::Vector2f(336.f,653.f));
+        // buttons["replay_btn"].setScale(sf::Vector2f(112.f,114.f));
     }
     void initButtonPosition() {
         buttons["play_btn"].setDefaultPosition(730.f, 452.f);  
-        buttons["help_btn"].setDefaultPosition(1800.0f, 980.f);     
-        buttons["music_btn"].setDefaultPosition(100.f, 980.f);     
-        buttons["no_music_btn"].setDefaultPosition(100.f, 980.f);   
+        buttons["help_btn"].setDefaultPosition(1800.0f, 990.f);     
+        buttons["music_btn"].setDefaultPosition(100.f, 987.f);     
+        buttons["no_music_btn"].setDefaultPosition(100.f, 987.f);   
         buttons["no_btn"].setDefaultPosition(290.3f, 798.1f);
         buttons["home_btn"].setDefaultPosition(53.6f, 1105.3f);
         buttons["lvl1_btn"].setDefaultPosition(368.6f, 337.f);  
@@ -260,13 +268,13 @@ private:
    }
 
     void initText() {
-        texts["score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "", sf::Color::White, sf::Color::Black);
-        texts["final_score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "", sf::Color::White, sf::Color::Black);
+        texts["score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "");
+        texts["final_score"] = GameText(56, sf::Vector2f(1656.2f, 10.4f), "");
         texts["help_title"] = GameText(223, sf::Vector2f(795.f, 118.8f), "Help", sf::Color::Black, sf::Color::White);
         texts["help_body"] = GameText(75, sf::Vector2f(632.8f, 472.8f), "Drag the bird and shot!\n          That's it! :D", sf::Color::Black, sf::Color::White);
-        texts["level1"] = GameText(117, sf::Vector2f(519.8f, 205.8f), "1", sf::Color::White, sf::Color::Black);
-        texts["level2"] = GameText(117, sf::Vector2f(971.8f, 740.8f), "2", sf::Color::White, sf::Color::Black);
-        texts["level3"] = GameText(117, sf::Vector2f(1450.8f, 221.8f), "3", sf::Color::White, sf::Color::Black);
+        texts["level1"] = GameText(117, sf::Vector2f(519.8f, 205.8f), "1");
+        texts["level2"] = GameText(117, sf::Vector2f(971.8f, 740.8f), "2");
+        texts["level3"] = GameText(117, sf::Vector2f(1450.8f, 221.8f), "3");
     }
 
 

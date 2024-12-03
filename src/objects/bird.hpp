@@ -18,6 +18,10 @@ public:
     virtual ~Bird() {}
     virtual void Attack() = 0;
 
+    bool contains(const b2Vec2& worldPos) const {
+        b2Fixture* fixture = body->GetFixtureList();
+        return fixture->TestPoint(worldPos);        
+    }
 protected:
     bool canAttack = true;
 };

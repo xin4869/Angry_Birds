@@ -53,15 +53,6 @@ public:
       render();
     }
   }
-  
-  void setLevel(int level_number){
-    if (level_number > MAX_LEVELS) {
-      std::cerr << "Invalid level number: " << level_number << std::endl;
-      return;
-    }
-    level = std::make_unique<Level>(level_number);
-    levelNumber = level_number;
-  }
 
   void update(float deltaTime){
     if (level) {
@@ -71,8 +62,6 @@ public:
 
   void render(){
     window.clear();
-    //renderer->drawObjects();
-    //renderer->drawBirds();
     if (gui) {
       switch (currentState){
         case GameState::home:
@@ -85,7 +74,8 @@ public:
           gui->drawLevel();
           break;
         case GameState::in_game:
-          renderer->drawGameObjects(levelNumber);
+          gui->drawGame(levelNumber);
+          //renderer->drawGameObjects(levelNumber);
           break;
         case GameState::win:
           gui->drawWin(level->getStars());
@@ -105,17 +95,13 @@ public:
         window.close();
       }
     
-      if (event.type == sf::Event::MouseButtonPressed) {
-        if (event.mouseButton.button == sf::Mouse::Left) {
-          sf::Vector2f mousePos(sf::Mouse::getPosition(window));  // Get mouse position as sf::Vector2f
-          auto clicked_button = gui->getClickedButton(mousePos);
-          if (clicked_button) {
-            handleButtonClicks(*clicked_button);
-          }          
-        }
+      if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+        handleMousePress();
+      } else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
+        handleMouseRelease();
+      } else if (event.type == sf::Event::MouseMoved) {
+        handleMouseMove();
       }
-
-      //TODO mouse release
 
       // window resizing event - update UI positions
       if (event.type == sf::Event::Resized){
@@ -123,10 +109,39 @@ public:
         window.setView(sf::View(visibleArea)); 
         gui->updateScale();
       }
-
     }
   }
-    //TODO music button -> off, on music implementation
+
+  b2Vec2 screenToWorldPos(const sf::Vector2i& screenPos) {
+    sf::Vector2f worldPos = window.mapPixelToCoords(screenPos);
+    return b2Vec2(worldPos.x / ObjectDefs::pixel_per_meter, worldPos.y / ObjectDefs::pixel_per_meter);
+  }
+
+  void handleMousePress() {
+    sf::Vector2f mousePos(sf::Mouse::getPosition(window));  // Get mouse position as sf::Vector2f
+    auto clicked_button = gui->getClickedButton(mousePos);
+    if (clicked_button) {
+      handleButtonClicks(*clicked_button);}
+    else if (currentState == GameState::in_game && level) {
+      b2Vec2 b2WorldPos = screenToWorldPos(static_cast<sf::Vector2i>(mousePos));
+      level->startDragging(b2WorldPos);
+    }       
+  }
+
+  void handleMouseRelease() {
+    if (currentState == GameState::in_game && level) {
+      level->endDragging();
+    }
+  }
+
+  void handleMouseMove() {
+    if (currentState == GameState::in_game && level) {
+      sf::Vector2i mousePos = sf::Mouse::getPosition(window);  // Get mouse position as sf::Vector2f
+      b2Vec2 b2WorldPos = screenToWorldPos(mousePos);
+      level->updateDragging(b2WorldPos);
+    }
+  }
+
   void handleButtonClicks(const std::string& button_name){
     std::cout << "Button clicked: " << button_name << std::endl;
     switch (currentState){
@@ -136,8 +151,9 @@ public:
           currentState = GameState::level;
         } else if (button_name == "help_btn") {
           currentState = GameState::help;
-        } else if (button_name == "music_btn") {
+        } else if (button_name == "music_btn" || button_name == "no_music_btn") {
           SoundManager::setMusicVolume(SoundManager::getMusicVolume() ? 0 : 100);
+          gui->toggleMusic();
         } break; 
       
       case GameState::help: 
@@ -148,15 +164,13 @@ public:
       case GameState::level: 
         if (button_name == "home_btn") {
           currentState = GameState::home;
-        } else if (button_name == "lv1_btn") {
-          setLevel(1);
+        } else if (
+          button_name == "lvl1_btn" || 
+          button_name == "lvl2_btn"|| 
+          button_name == "lvl3_btn"){
+          int level = (button_name == "lvl1_btn") ? 1 : (button_name == "lvl2_btn") ? 2 : 3;
+          setLevel(level);
           currentState = GameState::in_game;        
-        } else if (button_name == "lv2_btn") {
-          setLevel(2); 
-          currentState = GameState::in_game;
-        } else if (button_name == "lv3_btn") {
-          setLevel(3);
-          currentState = GameState::in_game;
         } break;
 
       case GameState::in_game:
@@ -181,6 +195,17 @@ public:
 
 
   b2World& getWorld() { return level->getWorld(); }
+
+  void setLevel(int level_number){
+    if (level_number > MAX_LEVELS) {
+      std::cerr << "Invalid level number: " << level_number << std::endl;
+      return;
+    }
+    level = std::make_unique<Level>(level_number);
+    levelNumber = level_number;
+  }
+
+
   
 private:
   sf::Music music;

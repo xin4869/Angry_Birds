@@ -13,7 +13,12 @@ public:
 
     void init(){}
 
-    void drawGameObjects(int level){}
+    // void renderGame(const Level& level){
+    //     drawObjects();
+    //     drawBirds();
+    //     drawSlingshot();
+    //     drawTrajectory();
+    // }
    
 private:
     sf::RenderWindow& window;

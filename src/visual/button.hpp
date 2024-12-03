@@ -10,7 +10,7 @@ public:
     Button(const sf::Texture& texture) {
         sprite.setTexture(texture);     
     }
-    
+
     Button() {}
 
     void setScale(sf::Vector2f targetSize) {
@@ -40,8 +40,6 @@ public:
             window.draw(sprite);
         }
     }
-
-   //check if cursor is on this button
     
     bool isClicked(const sf::Vector2f& mousePos) const {
         return active && sprite.getGlobalBounds().contains(mousePos);

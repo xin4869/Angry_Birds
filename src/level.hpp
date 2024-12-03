@@ -37,6 +37,7 @@ public:
 		}
 
 		parseLevelFile(file);
+		initializeFirstBird();
 		addGround();
 		isActive = true;  	
 	}
@@ -72,15 +73,47 @@ public:
 		return scoreLimits.size();
 	}
 
+	bool isMouseOnBird(const b2Vec2& worldPos) const {
+		return currentBird && currentBird->contains(worldPos);
+	}
+
+	bool startDragging(const b2Vec2& worldPos) {
+		if  (isDragging || !currentBird) return false;
+
+		if (isMouseOnBird(worldPos)) {
+			isDragging = true;
+			return true;
+		}
+		return false;
+	}
+
+	void updateDragging(const b2Vec2& worldPos) {
+		if (isDragging && currentBird) {
+			slingshot.drag(currentBird, worldPos.x, worldPos.y);
+		}
+	}
+
+	void endDragging() {
+		if (isDragging && currentBird) {
+			b2Vec2 birdPos = currentBird->getBody()->GetPosition();
+			slingshot.release(currentBird, birdPos.x, birdPos.y);
+
+			currentBird->getBody()->SetAwake(true);
+			currentBird->getBody()->SetEnabled(true);
+
+			isDragging = false;
+		}
+	}
+
 	b2World& getWorld() { return world; }
 	Slingshot& getSlingshot() { return slingshot; }
 	void setActive(bool active) { isActive = active; }
 	float getScore() { return score; }
 	void setScore(float value) { score = value; }
 	void addScore(float add) { score += add; }
-	void launchObject(Object* object) { slingshot.launchObject(object); }
 
 protected:
+
 	void clearLevel() {
 		for (auto i: birds) { delete i; }
 		birds.clear();
@@ -133,6 +166,38 @@ protected:
 		if (setSetting(parameter, x, y, z)) return;
 		if (addPig(parameter, x, y)) return;
 		addBlock(parameter, x, y);
+	}
+	static Bird* createBird(b2World* world, float x, float y, const std::string& birdType) {
+        if (birdType == "normalBird") {
+            return new NormalBird(world, x, y);
+        } else if (birdType == "speedBird") {
+            return new SpeedBird(world, x, y);
+        } else if (birdType == "explodeBird") {
+            return new ExplodeBird(world, x, y);
+        } else {
+            return nullptr;
+        }
+    }
+
+	void initializeFirstBird() {
+		if (!currentBird && !unusedBirds.empty()) {
+			std::string birdType = unusedBirds.front();
+			unusedBirds.pop();
+
+			if (birdType == "normalBird") {
+				currentBird = new NormalBird(&world, slingshot.getPos().x, slingshot.getPos().y);
+			} else if (birdType == "speedBird") {
+				currentBird = new SpeedBird(&world, slingshot.getPos().x, slingshot.getPos().y);
+			} else if (birdType == "explodeBird") {
+				currentBird = new ExplodeBird(&world, slingshot.getPos().x, slingshot.getPos().y);
+			} else {
+				currentBird = nullptr;
+			}
+
+			if (currentBird) {
+				birds.push_back(currentBird);
+			}
+		}
 	}
 
 	bool addBird(const std::string& className) {
@@ -202,14 +267,17 @@ protected:
 		return val;
 	}
 
-	float accumulator = 0;
 
+	Bird* currentBird = nullptr;
+	bool isDragging = false;
+
+	float accumulator = 0;
 	float frameRate;
 	float timeStep;
 	bool isActive = false;
 
 	b2Vec2 gravity;
-	b2World world;
+	b2World world; 
 
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;

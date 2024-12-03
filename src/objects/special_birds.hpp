@@ -52,6 +52,7 @@ namespace ObjectDefs
         if (birdName == "explodeBird") return &explodeBirdDefaults;
         return nullptr;
     }
+
 }
 
 /**
