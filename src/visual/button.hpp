@@ -9,7 +9,6 @@ class Button {
 public:
     Button(const sf::Texture& texture) {
         sprite.setTexture(texture);    
-        // setDefaultSize();
     }
 
     Button() {}
@@ -47,8 +46,8 @@ public:
 
     void draw(sf::RenderWindow& window) {
         if (active) {
-            std::cout << "Drawing button at position: " << sprite.getPosition().x << ", " << sprite.getPosition().y << std::endl;
-            std::cout << "Button size: " << sprite.getGlobalBounds().width << ", " << sprite.getGlobalBounds().height << std::endl;
+            // std::cout << "Drawing button at position: " << sprite.getPosition().x << ", " << sprite.getPosition().y << std::endl;
+            // std::cout << "Button size: " << sprite.getGlobalBounds().width << ", " << sprite.getGlobalBounds().height << std::endl;
             window.draw(sprite);
         }
     }

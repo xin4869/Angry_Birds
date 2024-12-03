@@ -16,8 +16,6 @@ public:
             textObject.setOutlineThickness(2);
             textObject.setPosition(defaultPosition);
             textObject.setString(text);
-
-            defaultScreenSize = textObject.getLocalBounds().getSize();
         }
 
     GameText() {}
@@ -85,7 +83,6 @@ private:
     sf::Text textObject;
     static inline sf::Font* defaultFont = nullptr;
     sf::Vector2f defaultPosition;
-    sf::Vector2f defaultScreenSize;
 };
 
 #endif
