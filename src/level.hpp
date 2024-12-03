@@ -67,6 +67,9 @@ public:
 		}
 	}
 
+	bool isWin() {  }
+	bool isLost() {  }
+
 	int getStars() {
 		for (size_t stars=0; stars<scoreLimits.size(); stars++) {
 			if (score < scoreLimits[stars]) return stars;

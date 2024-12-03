@@ -37,17 +37,16 @@ public:
     }
 
     void updateScale(){
-        sf::Vector2f windowSize = static_cast<sf::Vector2f>(window.getSize());
-        sf::Vector2f textureSize = static_cast<sf::Vector2f>(background_sprite.getTexture()->getSize());
+        sf::Vector2f windowSize(window.getSize());
+        sf::Vector2f textureSize(background_sprite.getTexture()->getSize());
         scaleX = windowSize.x / textureSize.x;
         scaleY = windowSize.y / textureSize.y;   
 
         background_sprite.setScale(scaleX, scaleY);  
-        if (isOverlayActive) {
-            overlay_sprite.setScale(scaleX, scaleY);
-        }
+        overlay_sprite.setScale(scaleX, scaleY);
         
         updateAllPositions();
+        updateAllSizes();
     } 
 
     void updateAllPositions(){
@@ -61,6 +60,18 @@ public:
             star.updatePosition(scaleX, scaleY);
         }
    } 
+
+   void updateAllSizes() {
+        for (auto& [name, button] : buttons) {
+            button.updateSize(scaleX, scaleY);
+        }
+        for (auto& [name, text] : texts) {
+            text.updateSize(scaleX, scaleY);
+        }
+        for (Star& star : stars) {
+            star.updateSize(scaleX, scaleY);
+        }
+   }
 
     void updateScore(int score) {
         texts["score"].setString("Score: " + std::to_string(score));
@@ -81,14 +92,14 @@ public:
         buttons["music_btn"].draw(window); //button.draw will only draw active btn
         buttons["no_music_btn"].draw(window); 
           
-        /*if (buttons.find("play_btn") != buttons.end()) {
-            std::cout << "Drawing play button at position: " 
-                    << buttons["play_btn"].getPosition().x << ", " 
-                    << buttons["play_btn"].getPosition().y << std::endl;
-            buttons["play_btn"].draw(window);
-        } else {
-            std::cout << "Play button not found in buttons map" << std::endl;
-        }*/
+        // if (buttons.find("play_btn") != buttons.end()) {
+        //     std::cout << "Drawing play button at position: " 
+        //             << buttons["play_btn"].getPosition().x << ", " 
+        //             << buttons["play_btn"].getPosition().y << std::endl;
+        //     buttons["play_btn"].draw(window);
+        // } else {
+        //     std::cout << "Play button not found in buttons map" << std::endl;
+        // }
 
     }
 
@@ -174,7 +185,6 @@ private:
     sf::Font font;
     sf::Sprite background_sprite;
     sf::Sprite overlay_sprite;
-    bool isOverlayActive = false;
     bool isMusicOn = true;
     float scaleX = 1.f;
     float scaleY = 1.f;
@@ -192,6 +202,10 @@ private:
             float newY = defaultPosition.y * scaleY;
             sprite.setPosition(newX, newY);
         }
+
+        void updateSize (float scaleX, float scaleY) {
+            sprite.setScale(scaleX, scaleY);
+        }
     };
     std::vector<Star> stars;
 
@@ -203,8 +217,7 @@ private:
     // set overlay for dimming effect  (double layer)
     void setOverlay (const std::string& texture_name) {
         overlay_sprite.setTexture(TextureManager::getTexture(texture_name));
-        overlay_sprite.setScale(scaleX, scaleY);
-        isOverlayActive = true;
+        overlay_sprite.setScale(scaleX, scaleY);     
     }
 
     void activateButtons(const std::vector<std::string>& buttonNames) {
@@ -236,21 +249,21 @@ private:
         buttons["back_btn"] = Button(TextureManager::getTexture("back_btn"));
         buttons["level_btn"] = Button(TextureManager::getTexture("level_btn"));
         buttons["replay_btn"] = Button(TextureManager::getTexture("replay_btn"));
-        buttons["next_btn"] = Button(TextureManager::getTexture("next_btn"));
-        scaleButtons();
+        buttons["next_btn"] = Button(TextureManager::getTexture("next_btn"));     
         initButtonPosition();
     }
 
-    void scaleButtons() {
-        //buttons["help_btn"].setScale(sf::Vector2f(94.f,95.f));
-        // buttons["music_btn"].setScale(sf::Vector2f(112.f,114.f));  
-        // buttons["no_music_btn"].setScale(sf::Vector2f(112.f,114.f));
-        // buttons["home_btn"].setScale(sf::Vector2f(112.f,114.f));
-        // buttons["lvl1_btn"].setScale(sf::Vector2f(336.f,653.f));
-        // buttons["lvl2_btn"].setScale(sf::Vector2f(336.f,653.f));
-        // buttons["lvl3_btn"].setScale(sf::Vector2f(336.f,653.f));
-        // buttons["replay_btn"].setScale(sf::Vector2f(112.f,114.f));
-    }
+    // void scaleButtons() {
+    //     buttons["help_btn"].setScale(sf::Vector2f(94.f,95.f));
+    //     buttons["music_btn"].setScale(sf::Vector2f(112.f,114.f));  
+    //     buttons["no_music_btn"].setScale(sf::Vector2f(112.f,114.f));
+    //     buttons["home_btn"].setScale(sf::Vector2f(112.f,114.f));
+    //     buttons["lvl1_btn"].setScale(sf::Vector2f(336.f,653.f));
+    //     buttons["lvl2_btn"].setScale(sf::Vector2f(336.f,653.f));
+    //     buttons["lvl3_btn"].setScale(sf::Vector2f(336.f,653.f));
+    //     buttons["replay_btn"].setScale(sf::Vector2f(112.f,114.f));
+    // }
+
     void initButtonPosition() {
         buttons["play_btn"].setDefaultPosition(730.f, 472.f);  
         buttons["help_btn"].setDefaultPosition(1800.0f, 990.f);     

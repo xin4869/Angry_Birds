@@ -16,6 +16,8 @@ public:
             textObject.setOutlineThickness(2);
             textObject.setPosition(defaultPosition);
             textObject.setString(text);
+
+            defaultScreenSize = textObject.getLocalBounds().getSize();
         }
 
     GameText() {}
@@ -35,9 +37,9 @@ public:
             textObject.setString(text);
     }
     
-    void setScale(float x, float y) {
-        textObject.setScale(x, y);
-    }
+    // void setScale(float x, float y) {
+    //     textObject.setScale(x, y);
+    // }
 
     void setString(const std::string& text) {
         textObject.setString(text);
@@ -64,6 +66,11 @@ public:
     void setSize(size_t size) {
         textObject.setCharacterSize(size);
     }
+
+    void updateSize (float scaleX, float scaleY) {
+        textObject.setScale(scaleX, scaleY);
+    }
+
     void draw(sf::RenderWindow& window) {
         if (textObject.getFont() == nullptr) {
             throw std::runtime_error("Font is not set");
@@ -78,6 +85,7 @@ private:
     sf::Text textObject;
     static inline sf::Font* defaultFont = nullptr;
     sf::Vector2f defaultPosition;
+    sf::Vector2f defaultScreenSize;
 };
 
 #endif

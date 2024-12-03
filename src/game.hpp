@@ -105,7 +105,7 @@ public:
         handleMouseMove();
       }
 
-      // window resizing event - update UI positions
+      // window resizing event - update UI positions, sizes
       if (event.type == sf::Event::Resized){
         sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
         window.setView(sf::View(visibleArea)); 
@@ -178,20 +178,25 @@ public:
       case GameState::in_game:
         if (button_name == "back_btn") {
           currentState = GameState::level;
-        } break; 
+        } else if (level->isWin()) {
+          currentState = GameState::win;
+        } else if (level->isLost()) {
+          currentState = GameState::lost;
+        }
+        break; 
   
       case GameState::win: 
       case GameState::lost:
-        if (button_name == "level_btn") {
-          currentState = GameState::level;
-        } else if (button_name == "next_btn") {
-          levelNumber++;
-          setLevel(levelNumber);  //TODO game render
-          currentState = GameState::in_game;
-        } else if (button_name == "replay_btn") {
-          setLevel(levelNumber);  //TODO game render
-          currentState = GameState::in_game;
-        } break;
+          if (button_name == "level_btn") {
+            currentState = GameState::level;
+          } else if (button_name == "next_btn") {
+            levelNumber++;
+            setLevel(levelNumber);  //TODO game render
+            currentState = GameState::in_game;
+          } else if (button_name == "replay_btn") {
+            setLevel(levelNumber);  //TODO game render
+            currentState = GameState::in_game;
+          } break;      
     }
   }
 

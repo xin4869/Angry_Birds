@@ -8,20 +8,26 @@
 class Button {
 public:
     Button(const sf::Texture& texture) {
-        sprite.setTexture(texture);     
+        sprite.setTexture(texture);    
+        // setDefaultSize();
     }
 
     Button() {}
 
-    void setScale(sf::Vector2f targetSize) {
-        float scale_x = targetSize.x / getSize().x;
-        float scale_y = targetSize.y / getSize().y;
-        sprite.setScale(scale_x, scale_y);
-    }
+    // void setDefaultSize () {
+    //     sf::FloatRect bound = sprite.getGlobalBounds();
+    //     defaultSize = sf::Vector2f(bound.width, bound.height);
+    //     std::cout << "Default size: " << defaultSize.x << ", " << defaultSize.y << std::endl;
+    // }
 
-    sf::Vector2f getSize() const {
-        sf::FloatRect bound = sprite.getGlobalBounds();
-        return sf::Vector2f(bound.width, bound.height);
+    // void setScale(sf::Vector2f targetSize) {
+    //     float scale_x = targetSize.x / getSize().x;
+    //     float scale_y = targetSize.y / getSize().y;
+    //     sprite.setScale(scale_x, scale_y);
+    // }
+
+    void updateSize (float scaleX, float scaleY) {
+        sprite.setScale(scaleX, scaleY);
     }
 
     void setDefaultPosition(float x, float y) {
@@ -35,8 +41,14 @@ public:
         sprite.setPosition(newX, newY);
     }
 
+    sf::Vector2f getPosition() const {
+        return sprite.getGlobalBounds().getPosition();       
+    }
+
     void draw(sf::RenderWindow& window) {
         if (active) {
+            std::cout << "Drawing button at position: " << sprite.getPosition().x << ", " << sprite.getPosition().y << std::endl;
+            std::cout << "Button size: " << sprite.getGlobalBounds().width << ", " << sprite.getGlobalBounds().height << std::endl;
             window.draw(sprite);
         }
     }
@@ -65,6 +77,7 @@ private:
     sf::Sprite sprite;
     bool active = false;
     sf::Vector2f defaultPosition;
+
 };
 
 
