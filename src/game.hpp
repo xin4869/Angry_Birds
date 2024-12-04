@@ -172,12 +172,14 @@ public:
           button_name == "lvl3_btn"){
           int level = (button_name == "lvl1_btn") ? 1 : (button_name == "lvl2_btn") ? 2 : 3;
           setLevel(level);
-          currentState = GameState::in_game;        
+          currentState = GameState::in_game;
+          SoundManager::playMusic("Forest ambient");
         } break;
 
       case GameState::in_game:
         if (button_name == "back_btn") {
           currentState = GameState::level;
+          SoundManager::playMusic("Theme song");
         } else if (level->isWin()) {
           currentState = GameState::win;
         } else if (level->isLost()) {

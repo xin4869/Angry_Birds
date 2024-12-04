@@ -1,6 +1,6 @@
+#include <iostream>
 #include "bird.hpp"
 #include "object_defs.hpp"
-#include <iostream>
 
 #ifndef OBJECT_SPECIAL_BIRD_HPP
 #define OBJECT_SPECIAL_BIRD_HPP
@@ -61,6 +61,8 @@ namespace ObjectDefs
 class NormalBird : public Bird
 {
 public:
+    NormalBird(){}
+    virtual ~NormalBird(){}
     NormalBird(b2World* world, float x, float y) :
         Bird(world, x, y, &ObjectDefs::normalBirdDefaults) {}
 
@@ -70,7 +72,11 @@ public:
         playSound("bird 01 select");
     }
 
-    void TakeDamage(float dmg) {
+    /**
+     * @brief Take damage, play sounds, destroy if killed
+     * @param dmg damage
+     */
+    virtual bool TakeDamage(float dmg) {
         // Textures?
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
@@ -81,6 +87,8 @@ public:
         } else if (dmg > 10.0f) {
             playSound(rand() % 4);
         }
+
+        return CurrentHP <= 0;
     }
 };
 
@@ -100,7 +108,7 @@ public:
         playSound("special boost");
     }
 
-    void TakeDamage(float dmg) {
+    virtual bool TakeDamage(float dmg) {
         // Textures?
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
@@ -111,6 +119,8 @@ public:
         } else if (dmg > 10.0f) {
             playSound(rand() % 4);
         }
+
+        return CurrentHP <= 0;
     }
 
 protected:
@@ -130,8 +140,8 @@ public:
         // raycast blast
         RayCastHitFirst raycast;
         for (float i = 0; i < blastRays; i++) {
-            float angle = i / blastRays * 2.0f * M_PI;
-            b2Vec2 dir(cosf(angle), sinf(angle));
+            float angleRad = i / blastRays * 2.0f * M_PI;
+            b2Vec2 dir(cosf(angleRad), sinf(angleRad));
             dir *= blastRadius;
             body->GetWorld()->RayCast(&raycast, body->GetPosition(), body->GetPosition() + dir);
             
@@ -148,7 +158,7 @@ public:
         Destroy(2.0f);
     }
 
-    void TakeDamage(float dmg) {
+    virtual bool TakeDamage(float dmg) {
         // Textures?
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
@@ -159,6 +169,8 @@ public:
         } else if (dmg > 10.0f) {
             playSound(rand() % 4);
         }
+
+        return CurrentHP <= 0;
     }
 
 protected:

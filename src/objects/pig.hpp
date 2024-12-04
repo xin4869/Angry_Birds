@@ -52,11 +52,11 @@ public:
      * @param defaults default values
      */
     Pig(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults):
-        Object(world, x, y, defaults) {}
+        Object(world, x, y, defaults) { score = 500.0f; }
     
     virtual ~Pig(){}
 
-    virtual void TakeDamage(float dmg) {
+    virtual bool TakeDamage(float dmg) {
         // TODO: Textures?
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
@@ -67,6 +67,8 @@ public:
         } else if (dmg > 10.0f) {
             playSound(rand() % 2);
         }
+
+        return CurrentHP <= 0;
     }
 };
 

@@ -13,11 +13,12 @@ public:
     Block(b2World* world, float x, float y, Defs* defaults) :
         Object(world, x, y, defaults) {
             isAnimated = false;
+            score = 50.0f;
         }
     
     Block(){}  // for testing
     virtual ~Block() {}
-    virtual void TakeDamage(float dmg) {
+    virtual bool TakeDamage(float dmg) {
         // Better way: sound lists for collision, damage, destroy
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
@@ -34,6 +35,8 @@ public:
             if (isIce) playSound(rand() % 8);
             else playSound(rand() % 5);
         }
+
+        return CurrentHP <= 0;
     }
 };
 

@@ -12,6 +12,7 @@
 class Bird : public Object
 {
 public:
+    Bird(){}
     Bird(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults) :
         Object(world, x, y, defaults) {}
 

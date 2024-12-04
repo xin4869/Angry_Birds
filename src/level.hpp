@@ -53,6 +53,7 @@ public:
 
 		while (accumulator >= timeStep) {
 			world.Step(timeStep, velocityIterations, positionIterations);
+			addScore(collisionHandler.transferScore());
 
 			for (auto i = Object::destroyList.begin(); i != Object::destroyList.end(); i++) {
 				i->first -= timeStep;
@@ -131,6 +132,7 @@ protected:
 		for (auto i=world.GetBodyList(); i!=nullptr; i->GetNext()) {
 			world.DestroyBody(i);
 		}
+		setScore(0);
 		isActive = false;
 	}
 
@@ -188,11 +190,11 @@ protected:
 			std::string birdType = unusedBirds.front();
 			unusedBirds.pop();
 
-			if (birdType == "normalBird") {
+			if (birdType == "normalbird") {
 				currentBird = new NormalBird(&world, slingshot.getPos().x, slingshot.getPos().y);
-			} else if (birdType == "speedBird") {
+			} else if (birdType == "speedbird") {
 				currentBird = new SpeedBird(&world, slingshot.getPos().x, slingshot.getPos().y);
-			} else if (birdType == "explodeBird") {
+			} else if (birdType == "explodebird") {
 				currentBird = new ExplodeBird(&world, slingshot.getPos().x, slingshot.getPos().y);
 			} else {
 				currentBird = nullptr;

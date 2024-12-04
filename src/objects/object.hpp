@@ -16,7 +16,7 @@
 class Object
 {
 public:
-    Object(){};
+    Object(){}
     virtual ~Object(){
         body->GetWorld()->DestroyBody(body);
     }
@@ -63,8 +63,9 @@ public:
    /**
     * @brief Overridden in subclasses. Set functionality there.
     * @param dmg damage taken
+    * @return true if killed
     */
-    virtual void TakeDamage(float dmg){
+    virtual bool TakeDamage(float dmg){
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
 
         if (!isDamaged) {
@@ -73,6 +74,7 @@ public:
                 currentTextureIdx = 0;
             }
         }
+        return CurrentHP <= 0;
     } 
 
     /**
@@ -112,7 +114,7 @@ public:
     }
 
     bool playSound(size_t index) {
-        if (index >= sounds.size() || index < 0) return false;
+        if (index >= sounds.size()) return false;
         auto start = sounds.begin();
         for (size_t i = 0; i < index; i++) start++;
         (*start).second.play();
@@ -120,6 +122,7 @@ public:
     }
 
     b2Body* getBody() { return body; }
+    float getScore() { return score; }
     constexpr const static float speedDamageMultiplier = 10.0f;  // tune this value
     static std::list< std::pair< float, Object* > > destroyList;  // <timer, object>
 
@@ -132,6 +135,7 @@ protected :
     std::map<std::string, sf::Sound> sounds;  // <name, sound>
     float MaxHP;
     float CurrentHP;
+    float score = 0;
 
     bool isAnimated = true;
     bool isDamaged = false;
@@ -144,7 +148,7 @@ std::list< std::pair< float, Object* > > Object::destroyList;
 class ObjectCollisions : public b2ContactListener
 {
     /**
-     * @brief Handles collisions between Objects by calling TakeDamage.
+     * @brief Handles collisions between Objects, adds score.
      * @brief Damage increases linearly with difference in velocity.
      * @param contact supplied by box2d
      */
@@ -164,13 +168,36 @@ class ObjectCollisions : public b2ContactListener
         void* bodyData2 = (void*)body2->GetUserData().pointer;
         
         // consider mass / density too?
+        float dmg = deltaVel * Object::speedDamageMultiplier;
+        bool killed;
+        Object* object;
+
         if (bodyData1) {
-            static_cast<Object*>(bodyData1)->TakeDamage(deltaVel * Object::speedDamageMultiplier);
+            object = static_cast<Object*>(bodyData1);
+            killed = object->TakeDamage(dmg);
+            if (killed) scoreToAdd += object->getScore();
         }
         if (bodyData2) {
-            static_cast<Object*>(bodyData2)->TakeDamage(deltaVel * Object::speedDamageMultiplier);
+            object = static_cast<Object*>(bodyData2);
+            killed = object->TakeDamage(dmg);
+            if (killed) scoreToAdd += object->getScore();
         }
     }
+
+public:
+    /**
+     * @brief Gives score from collisions, resets.
+     * @brief Does not need to know about other score sources.
+     * @return score
+     */
+    float transferScore() {
+        float score = scoreToAdd;
+        scoreToAdd = 0;
+        return score;
+    }
+
+private:
+    float scoreToAdd = 0;
 };
 
 /**
