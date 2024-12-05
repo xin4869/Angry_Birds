@@ -33,8 +33,8 @@ namespace ObjectDefs
     };
 
     ObjectDefaults* getPigDefaults(const std::string& pigName) {
-        if (pigName == "normalPig") return &normalPigDefaults;
-        if (pigName == "ironPig") return &ironPigDefaults;
+        if (pigName == "normalpig") return &normalPigDefaults;
+        if (pigName == "ironpig") return &ironPigDefaults;
         return nullptr;
     }
 }

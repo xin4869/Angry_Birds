@@ -40,7 +40,7 @@ public:
 		parseLevelFile(file);
 		initializeFirstBird();
 		addGround();
-		isActive = true;  	
+		isActive = true;
 	}
 
 	void loadLevel(int level) {
@@ -58,6 +58,8 @@ public:
 			for (auto i = Object::destroyList.begin(); i != Object::destroyList.end(); i++) {
 				i->first -= timeStep;
 				if (i->first <= 0) {
+					findErase(i->second);
+					delete i->second;
 					i = Object::destroyList.erase(i);
 					i--;
 				}
@@ -68,8 +70,8 @@ public:
 		}
 	}
 
-	bool isWin() {  }
-	bool isLost() {  }
+	bool isWin() { return pigs.empty(); }
+	bool isLost() { return unusedBirds.empty() && birds.empty(); }
 
 	int getStars() {
 		for (size_t stars=0; stars<scoreLimits.size(); stars++) {
@@ -113,11 +115,40 @@ public:
 	b2World& getWorld() { return world; }
 	Slingshot& getSlingshot() { return slingshot; }
 	void setActive(bool active) { isActive = active; }
+	bool getActive() { return isActive; }
 	float getScore() { return score; }
 	void setScore(float value) { score = value; }
 	void addScore(float add) { score += add; }
+	const std::vector<Bird*>& getBirds() { return birds; }
+	const std::vector<Block*>& getBlocks() { return blocks; }
+	const std::vector<Pig*>& getPigs() { return pigs; }
+	const std::queue<std::string>& getUnusedBirds() { return unusedBirds; }
 
 protected:
+	/**
+	 * @brief Finds object in birds, blocks or pigs and deletes it from the list.
+	 * @param toDelete remove this from the lists
+	 */
+	void findErase(Object* toDelete) {
+		for (auto i=birds.begin(); i!=birds.end(); i++) {
+			if (*i == toDelete) {
+				birds.erase(i);
+				return;
+			}
+		}
+		for (auto i=pigs.begin(); i!=pigs.end(); i++) {
+			if (*i == toDelete) {
+				pigs.erase(i);
+				return;
+			}
+		}
+		for (auto i=blocks.begin(); i!=blocks.end(); i++) {
+			if (*i == toDelete) {
+				blocks.erase(i);
+				return;
+			}
+		}
+	}
 
 	void clearLevel() {
 		for (auto i: birds) { delete i; }
@@ -129,7 +160,7 @@ protected:
 		for (auto i: blocks) { delete i; }
 		blocks.clear();
 
-		for (auto i=world.GetBodyList(); i!=nullptr; i->GetNext()) {
+		for (auto i=world.GetBodyList(); i!=nullptr; i=world.GetBodyList()) {
 			world.DestroyBody(i);
 		}
 		setScore(0);
@@ -159,6 +190,7 @@ protected:
 	}
 
 	void parseLine(std::stringstream& lineStream) {
+		// line is in lowercase!
 		std::string parameter;
 		getline(lineStream, parameter, ',');
 		if (addBird(parameter)) return;
@@ -173,12 +205,13 @@ protected:
 		if (addPig(parameter, x, y)) return;
 		addBlock(parameter, x, y);
 	}
+	
 	static Bird* createBird(b2World* world, float x, float y, const std::string& birdType) {
-        if (birdType == "normalBird") {
+        if (birdType == "normalbird") {
             return new NormalBird(world, x, y);
-        } else if (birdType == "speedBird") {
+        } else if (birdType == "speedbird") {
             return new SpeedBird(world, x, y);
-        } else if (birdType == "explodeBird") {
+        } else if (birdType == "explodebird") {
             return new ExplodeBird(world, x, y);
         } else {
             return nullptr;
@@ -261,6 +294,11 @@ protected:
 		}
 	}
 
+	/**
+	 * @brief Reads a float from the stream, including a ',', the delimiter
+	 * @param line the stream
+	 * @return the read float, or FLT_MIN if unsuccesful
+	 */
 	float readFloat(std::stringstream& line) {
 		float val;
 		// better way to do this?

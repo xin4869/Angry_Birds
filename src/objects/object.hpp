@@ -43,11 +43,13 @@ public:
 
         for (auto i: soundNames)
         {
+            const sf::SoundBuffer* sound = SoundManager::getSound(i);
+            if (!sound) continue;
             sounds.emplace(std::make_pair(i, sf::Sound()));
-            sounds[i].setBuffer(*SoundManager::getSound(i));
+            sounds[i].setBuffer(*sound);
         }
-
-        sprite = ObjectDefs::CreateSprite(spriteWidth, spriteHeight, TextureManager::getTexture(normalTextures[0]));      
+        const sf::Texture& txt = TextureManager::getTexture(normalTextures[0]);
+        sprite = ObjectDefs::CreateSprite(spriteWidth, spriteHeight, txt);
         bodyDef->position.Set(x, y);
         body = world->CreateBody(bodyDef);
         body->CreateFixture(shape, density);
@@ -123,6 +125,8 @@ public:
 
     b2Body* getBody() { return body; }
     float getScore() { return score; }
+    float getMaxHP() { return MaxHP; }
+    float getHP() { return CurrentHP; }
     constexpr const static float speedDamageMultiplier = 10.0f;  // tune this value
     static std::list< std::pair< float, Object* > > destroyList;  // <timer, object>
 

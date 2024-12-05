@@ -31,7 +31,8 @@ public:
         {
             return it->second;
         }
-        throw std::runtime_error("Texture not found: " + name);
+        return textures.begin()->second;  // default texture
+        //throw std::runtime_error("Texture not found: " + name);
     }
 
     // Optional: Method to check if a texture exists
@@ -249,6 +250,6 @@ public:
 
 };
 
-std::unordered_map<std::string, sf::Texture> TextureManager::textures;
+std::unordered_map<std::string, sf::Texture> TextureManager::textures = { {"", sf::Texture()} };  // default texture
 
 #endif

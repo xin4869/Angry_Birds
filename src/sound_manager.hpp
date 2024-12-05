@@ -28,7 +28,7 @@ public:
         return res;
     }
 
-    static bool stopMusic() {
+    static void stopMusic() {
         music.stop();
     }
 
@@ -62,7 +62,8 @@ public:
         {
             return it->second;
         }
-        throw std::runtime_error("Sound not found: " + name);
+        return nullptr;
+        //throw std::runtime_error("Sound not found: " + name);
     }
 
     // Optional: Method to check if a sound exists

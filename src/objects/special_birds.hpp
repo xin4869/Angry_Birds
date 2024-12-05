@@ -47,9 +47,9 @@ namespace ObjectDefs
     };
     
     ObjectDefaults* getBirdDefaults(const std::string& birdName) {
-        if (birdName == "normalBird") return &normalBirdDefaults;
-        if (birdName == "speedBird") return &speedBirdDefaults;
-        if (birdName == "explodeBird") return &explodeBirdDefaults;
+        if (birdName == "normalbird") return &normalBirdDefaults;
+        if (birdName == "speedbird") return &speedBirdDefaults;
+        if (birdName == "explodebird") return &explodeBirdDefaults;
         return nullptr;
     }
 

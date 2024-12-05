@@ -23,6 +23,9 @@ public:
         b2Fixture* fixture = body->GetFixtureList();
         return fixture->TestPoint(worldPos);        
     }
+
+    bool getCanAttack() { return canAttack; }
+
 protected:
     bool canAttack = true;
 };
