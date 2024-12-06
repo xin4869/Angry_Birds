@@ -62,7 +62,6 @@ class NormalBird : public Bird
 {
 public:
     NormalBird(){}
-    virtual ~NormalBird(){}
     NormalBird(b2World* world, float x, float y) :
         Bird(world, x, y, &ObjectDefs::normalBirdDefaults) {}
 

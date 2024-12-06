@@ -16,8 +16,7 @@ public:
             score = 50.0f;
         }
     
-    Block(){}  // for testing
-    virtual ~Block() {}
+    Block(){}
     virtual bool TakeDamage(float dmg) {
         // Better way: sound lists for collision, damage, destroy
         bool isDead = CurrentHP <= 0;

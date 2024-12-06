@@ -16,7 +16,6 @@ public:
     Bird(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults) :
         Object(world, x, y, defaults) {}
 
-    virtual ~Bird() {}
     virtual void Attack() = 0;
 
     bool contains(const b2Vec2& worldPos) const {

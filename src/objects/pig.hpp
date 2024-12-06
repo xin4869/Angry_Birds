@@ -53,8 +53,6 @@ public:
      */
     Pig(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults):
         Object(world, x, y, defaults) { score = 500.0f; }
-    
-    virtual ~Pig(){}
 
     virtual bool TakeDamage(float dmg) {
         // TODO: Textures?

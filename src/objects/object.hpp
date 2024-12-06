@@ -17,9 +17,7 @@ class Object
 {
 public:
     Object(){}
-    virtual ~Object(){
-        body->GetWorld()->DestroyBody(body);
-    }
+    virtual ~Object() { body->GetWorld()->DestroyBody(body); }
 
     Object(
         b2World* world,

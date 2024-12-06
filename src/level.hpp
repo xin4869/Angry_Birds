@@ -151,6 +151,8 @@ protected:
 	}
 
 	void clearLevel() {
+		Object::destroyList.clear();
+
 		for (auto i: birds) { delete i; }
 		birds.clear();
 
