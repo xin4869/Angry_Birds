@@ -13,8 +13,8 @@ class Bird : public Object
 {
 public:
     Bird(){}
-    Bird(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults) :
-        Object(world, x, y, defaults) {}
+    Bird(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults, float rot=0.0f) :
+        Object(world, x, y, defaults, rot) {}
 
     virtual void Attack() = 0;
 

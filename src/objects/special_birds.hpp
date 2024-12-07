@@ -12,8 +12,8 @@ namespace ObjectDefs
         .shape = CreateShape(1.0f),
         .density = 1.0f,
         .maxHp = 100.0f,
-        .spriteWidth = pixel_per_meter * 1.0f,
-        .spriteHeight = pixel_per_meter * 1.0f,
+        .spriteWidth = pixel_per_meter * 2.0f,
+        .spriteHeight = pixel_per_meter * 2.0f,
         .normalTextures = { "NormalBird1", "NormalBird2"},
         .damageTextures = { "NormalBirdDead"},
         .soundNames = { "bird 01 collision a1", "bird 01 collision a2", "bird 01 collision a3", "bird 01 collision a4",
@@ -25,8 +25,8 @@ namespace ObjectDefs
         .shape = CreateShape(1.0f),
         .density = 1.0f,
         .maxHp = 100.0f,
-        .spriteWidth = pixel_per_meter * 1.0f,
-        .spriteHeight = pixel_per_meter * 1.0f,
+        .spriteWidth = pixel_per_meter * 2.0f,
+        .spriteHeight = pixel_per_meter * 2.0f,
         .normalTextures = { "SpeedBird1", "SpeedBird2", "SpeedBird3", "SpeedBird4"},
         .damageTextures = { "SpeedBirdDead"},
         .soundNames = { "bird 03 collision a1", "bird 03 collision a2", "bird 03 collision a3", "bird 03 collision a4",
@@ -38,8 +38,8 @@ namespace ObjectDefs
         .shape = CreateShape(1.0f),
         .density = 1.0f,
         .maxHp = 100.0f,
-        .spriteWidth = pixel_per_meter * 1.0f,
-        .spriteHeight = pixel_per_meter * 1.0f,
+        .spriteWidth = pixel_per_meter * 2.0f,
+        .spriteHeight = pixel_per_meter * 2.0f,
         .normalTextures = { "ExplodeBird1", "ExplodeBird2", "ExplodeBird3", "ExplodeBird4"},
         .damageTextures = { "ExplodeBirdDead"},
         .soundNames = { "bird 05 collision a1", "bird 05 collision a2", "bird 05 collision a3", "bird 05 collision a4",
@@ -62,8 +62,8 @@ class NormalBird : public Bird
 {
 public:
     NormalBird(){}
-    NormalBird(b2World* world, float x, float y) :
-        Bird(world, x, y, &ObjectDefs::normalBirdDefaults) {}
+    NormalBird(b2World* world, float x, float y, float rot=0.0f) :
+        Bird(world, x, y, &ObjectDefs::normalBirdDefaults, rot) {}
 
     void Attack() {
         if (!canAttack) return;
@@ -94,8 +94,8 @@ public:
 class SpeedBird : public Bird
 {
 public:
-    SpeedBird(b2World* world, float x, float y) :
-        Bird(world, x, y, &ObjectDefs::speedBirdDefaults) {}
+    SpeedBird(b2World* world, float x, float y, float rot=0.0f) :
+        Bird(world, x, y, &ObjectDefs::speedBirdDefaults, rot) {}
 
     void Attack() {
         if (!canAttack) return;
@@ -129,8 +129,8 @@ protected:
 class ExplodeBird : public Bird
 {
 public:
-    ExplodeBird(b2World* world, float x, float y) :
-        Bird(world, x, y, &ObjectDefs::explodeBirdDefaults) {}
+    ExplodeBird(b2World* world, float x, float y, float rot=0.0f) :
+        Bird(world, x, y, &ObjectDefs::explodeBirdDefaults, rot) {}
 
     void Attack() {
         if (!canAttack) return;

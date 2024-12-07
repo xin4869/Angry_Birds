@@ -10,8 +10,8 @@ using Defs = ObjectDefs::ObjectDefaults;
 
 class Block : public Object{
 public:
-    Block(b2World* world, float x, float y, Defs* defaults) :
-        Object(world, x, y, defaults) {
+    Block(b2World* world, float x, float y, Defs* defaults, float rotation=0.0f) :
+        Object(world, x, y, defaults, rotation) {
             isAnimated = false;
             score = 50.0f;
         }
@@ -92,7 +92,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShapeTriangle(2.0f, 2.0f, true),  
         .density = 0.8f,
-        .maxHp = CalculateHp(2.0f, 2.0f),
+        .maxHp = CalculateHpTriangle(50.0f, 2.0f, 2.0f),
         .spriteWidth = 2.0f * pixel_per_meter,
         .spriteHeight = 2.0f * pixel_per_meter,
         .normalTextures = {"IceTriangleLeft"},
@@ -104,7 +104,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShapeTriangle(2.0f, 2.0f, false),  
         .density = 0.8f,
-        .maxHp = CalculateHp(2.0f, 2.0f),
+        .maxHp = CalculateHp(50.0f, 2.0f, 2.0f),
         .spriteWidth = 2.0f * pixel_per_meter,
         .spriteHeight = 2.0f * pixel_per_meter,
         .normalTextures = {"IceTriangleRight"},
@@ -187,11 +187,11 @@ namespace ObjectDefs{
 
     ObjectDefaults woodSquare = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.05f),
+        .shape = CreateShape(1.05f, 1.05f),
         .density = 1.2f,
-        .maxHp = CalculateHp(150.0f, 1.05f),
-        .spriteWidth = 1.05f * 2 * pixel_per_meter,
-        .spriteHeight = 1.05f * 2 * pixel_per_meter,
+        .maxHp = CalculateHp(150.0f, 1.05f, 1.05f),
+        .spriteWidth = 1.05f * pixel_per_meter,
+        .spriteHeight = 1.05f * pixel_per_meter,
         .normalTextures = {"WoodSquare"},
         .damageTextures = {"WoodSquareDamaged1", "WoodSquareDamaged2", "WoodSquareDamaged3"},
         .soundNames = woodSoundNames
@@ -201,9 +201,9 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShapeTriangle(2.0f, 2.0f, true),
         .density = 1.2f,
-        .maxHp = CalculateHp(150.0f, 2.0f, 2.0f),
-        .spriteWidth = 2.0f * 2 * pixel_per_meter,
-        .spriteHeight = 2.0f * 2 * pixel_per_meter,
+        .maxHp = CalculateHpTriangle(150.0f, 2.0f, 2.0f),
+        .spriteWidth = 2.0f * pixel_per_meter,
+        .spriteHeight = 2.0f * pixel_per_meter,
         .normalTextures = {"WoodTriangleLeft"},
         .damageTextures = {"WoodTriangleLeftDamaged1", "WoodTriangleLeftDamaged2", "WoodTriangleLeftDamaged3"},
         .soundNames = woodSoundNames
@@ -213,9 +213,9 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShapeTriangle(2.0f, 2.0f, false),
         .density = 1.2f,
-        .maxHp = CalculateHp(150.0f, 2.0f, 2.0f),
-        .spriteWidth = 2.0f * 2 * pixel_per_meter,
-        .spriteHeight = 2.0f * 2 * pixel_per_meter,
+        .maxHp = CalculateHpTriangle(150.0f, 2.0f, 2.0f),
+        .spriteWidth = 2.0f * pixel_per_meter,
+        .spriteHeight = 2.0f * pixel_per_meter,
         .normalTextures = {"WoodTriangleRight"},
         .damageTextures = {"WoodTriangleRightDamaged1", "WoodTriangleRightDamaged2", "WoodTriangleRightDamaged3"},
         .soundNames = woodSoundNames
@@ -296,11 +296,11 @@ namespace ObjectDefs{
 
     ObjectDefaults stoneSquare = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.05f),
+        .shape = CreateShape(1.05f, 1.05f),
         .density = 2.6f,
-        .maxHp = CalculateHp(300.0f, 1.05f),
-        .spriteWidth = 1.05f * 2 * pixel_per_meter,
-        .spriteHeight = 1.05f * 2 * pixel_per_meter,
+        .maxHp = CalculateHp(300.0f, 1.05f, 1.05f),
+        .spriteWidth = 1.05f * pixel_per_meter,
+        .spriteHeight = 1.05f * pixel_per_meter,
         .normalTextures = {"StoneSquare"},
         .damageTextures = {"StoneSquareDamaged1", "StoneSquareDamaged2", "StoneSquareDamaged3"},
         .soundNames = rockSoundNames
@@ -310,7 +310,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShapeTriangle(2.0f, 2.0f, true),
         .density = 2.6f,
-        .maxHp = CalculateHp(300.0f, 2.0f),
+        .maxHp = CalculateHpTriangle(300.0f, 2.0f, 2.0f),
         .spriteWidth = 2.0f  * pixel_per_meter,
         .spriteHeight = 2.0f * pixel_per_meter,
         .normalTextures = {"StoneTriangleLeft"},
@@ -322,7 +322,7 @@ namespace ObjectDefs{
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
         .shape = CreateShapeTriangle(2.0f, 2.0f, false),
         .density = 2.6f,
-        .maxHp = CalculateHp(300.0f, 2.0f),
+        .maxHp = CalculateHpTriangle(300.0f, 2.0f, 2.0f),
         .spriteWidth = 2.0f  * pixel_per_meter,
         .spriteHeight = 2.0f * pixel_per_meter,
         .normalTextures = {"StoneTriangleRight"},
@@ -401,11 +401,11 @@ namespace ObjectDefs{
 
     ObjectDefaults fixedSquare = {
         .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShape(1.05f),
+        .shape = CreateShape(1.05f, 1.05f),
         .density = 0.0f,
         .maxHp = FLT_MAX,
-        .spriteWidth = 1.05f * 2 * pixel_per_meter,
-        .spriteHeight = 1.05f * 2 * pixel_per_meter,
+        .spriteWidth = 1.05f * pixel_per_meter,
+        .spriteHeight = 1.05f * pixel_per_meter,
         .normalTextures = {"StoneSquare"}
     };
 

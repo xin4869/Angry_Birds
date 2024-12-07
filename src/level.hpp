@@ -204,8 +204,8 @@ protected:
 		if (x == FLT_MIN || y == FLT_MIN) return;
 
 		if (setSetting(parameter, x, y, z)) return;
-		if (addPig(parameter, x, y)) return;
-		addBlock(parameter, x, y);
+		if (addPig(parameter, x, y, z)) return;
+		addBlock(parameter, x, y, z);
 	}
 	
 	static Bird* createBird(b2World* world, float x, float y, const std::string& birdType) {
@@ -226,11 +226,11 @@ protected:
 			unusedBirds.pop();
 
 			if (birdType == "normalbird") {
-				currentBird = new NormalBird(&world, slingshot.getPos().x, slingshot.getPos().y);
+				currentBird = new NormalBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
 			} else if (birdType == "speedbird") {
-				currentBird = new SpeedBird(&world, slingshot.getPos().x, slingshot.getPos().y);
+				currentBird = new SpeedBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
 			} else if (birdType == "explodebird") {
-				currentBird = new ExplodeBird(&world, slingshot.getPos().x, slingshot.getPos().y);
+				currentBird = new ExplodeBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
 			} else {
 				currentBird = nullptr;
 			}
@@ -247,17 +247,18 @@ protected:
 		return true;
 	}
 
-	bool addPig(const std::string& pigName, float x, float y) {
+	bool addPig(const std::string& pigName, float x, float y, float rotation) {
 		ObjectDefs::ObjectDefaults* defaults = ObjectDefs::getPigDefaults(pigName);
 		if (defaults == nullptr) return false;
-		pigs.push_back(new Pig(&world, x, y, defaults));
+		float rot = rotation == FLT_MIN ? 0 : rotation;
+		pigs.push_back(new Pig(&world, x, y, defaults, rot));
 		return true;
 	}
 
-	bool addBlock(const std::string& blockName, float x, float y) {
+	bool addBlock(const std::string& blockName, float x, float y, float rotation) {
 		ObjectDefs::ObjectDefaults* defaults = ObjectDefs::getBlockDefaults(blockName);
 		if (defaults == nullptr) return false;
-		blocks.push_back(new Block(&world, x, y, defaults));
+		blocks.push_back(new Block(&world, x, y, defaults, rotation));
 		return true;
 	}
 
@@ -279,8 +280,8 @@ protected:
 	}
 
 	void addGround() {
-		for (float x=-100; x<100; x+=5.075) {
-			blocks.push_back(new Block(&world, x, -0.55f/2, &ObjectDefs::fixedRectL));
+		for (float x=-100; x<100; x+=5.075f) {
+			blocks.push_back(new Block(&world, x, -0.55f/2.0f, &ObjectDefs::fixedRectL));
 		}
 	}
 

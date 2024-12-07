@@ -31,7 +31,8 @@ public:
         std::vector<std::string> textureDefs, 
         std::vector<std::string> damageTextureDefs,
         std::vector<std::string> soundNames,
-        float hp
+        float hp,
+        float rotation=0.0f
     ): normalTextures(textureDefs), damageTextures(damageTextureDefs), 
         MaxHP(hp), CurrentHP(hp) {
 
@@ -49,16 +50,22 @@ public:
         const sf::Texture& txt = TextureManager::getTexture(normalTextures[0]);
         sprite = ObjectDefs::CreateSprite(spriteWidth, spriteHeight, txt);
         bodyDef->position.Set(x, y);
+        bodyDef->angle = M_PI / 180.0f * rotation;
         body = world->CreateBody(bodyDef);
-        body->CreateFixture(shape, density);
-        body->SetTransform(b2Vec2(x,y), 0);
+        b2Fixture* fix = body->CreateFixture(shape, density);
+        
+        // tune these
+        body->SetAngularDamping(0.3f);
+        fix->SetFriction(0.4f);
+
+        body->SetTransform(b2Vec2(x,y), body->GetAngle());
         body->GetUserData().pointer = (uintptr_t)this;
     }
 
-    Object(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults) :
+    Object(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults, float rotation=0.0f) :
         Object(world, &defaults->bodyDef, defaults->shape.get(), defaults->density,
             x, y, defaults->spriteWidth, defaults->spriteHeight, defaults->normalTextures,
-            defaults->damageTextures, defaults->soundNames, defaults->maxHp) {}
+            defaults->damageTextures, defaults->soundNames, defaults->maxHp, rotation) {}
     
    /**
     * @brief Overridden in subclasses. Set functionality there.
@@ -125,6 +132,7 @@ public:
     float getScore() { return score; }
     float getMaxHP() { return MaxHP; }
     float getHP() { return CurrentHP; }
+    sf::Sprite& getSprite() { return sprite; }
     constexpr const static float speedDamageMultiplier = 10.0f;  // tune this value
     static std::list< std::pair< float, Object* > > destroyList;  // <timer, object>
 

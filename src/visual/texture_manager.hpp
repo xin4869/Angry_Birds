@@ -242,6 +242,9 @@ public:
        loadTexture("star1", "assets/textures/elements/star1.png");
        loadTexture("star2", "assets/textures/elements/star2.png");
        loadTexture("star3", "assets/textures/elements/star3.png");
+       loadTexture("slingshot1", "assets/textures/elements/slingshot_1.png");
+       loadTexture("slingshot2", "assets/textures/elements/slingshot_2.png");
+       loadTexture("slingshot3", "assets/textures/elements/slingshot_3.png");
     }
 
     TextureManager() = delete;

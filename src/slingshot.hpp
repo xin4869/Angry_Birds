@@ -2,13 +2,18 @@
 #define SLINGSHOT_HPP
 
 #include <box2d/box2d.h>
+#include <SFML/Graphics.hpp>
 #include "objects/object.hpp"
+#include "visual/texture_manager.hpp"
+#include "objects/object_defs.hpp"
 
 class Slingshot
 {
 public:
-    // TODO: sfx, textures
-    Slingshot(){}
+    // TODO: sfx
+    Slingshot(){
+        sprite = ObjectDefs::CreateSprite(80, 228, TextureManager::getTexture(textures[0]));
+    }
     Slingshot(float x, float y) : pos(x, y) {}
 
     /**
@@ -41,6 +46,7 @@ public:
         }
         object->getBody()->SetLinearVelocity(b2Vec2(0, 0));
         object->getBody()->SetTransform(pos + offset, 0);
+        sprite.setTexture(TextureManager::getTexture(textures[2]));
     }
 
     /**
@@ -51,17 +57,21 @@ public:
         // update textures, play audio?
         object->getBody()->SetTransform(b2Vec2(x, y), 0);
         launchObject(object);
+        sprite.setTexture(TextureManager::getTexture(textures[0]));
     }
     
     float getRadius() { return maxRadius; }
-    
     void setPos(float x, float y) { pos.Set(x, y); }
-    b2Vec2 getPos() { return pos; }
+    void setPos(b2Vec2 newPos) { pos = newPos; }
+    b2Vec2& getPos() { return pos; }
+    sf::Sprite& getSprite() { return sprite; }
 
 protected:
     b2Vec2 pos;
     float maxRadius = 3.0f;
     float powerMult = 5.0f;  // likely off. modify if necessary
+    sf::Sprite sprite;
+    std::vector< std::string > textures = { "slingshot1", "slingshot2", "slingshot3" };
 };
 
 #endif // SLINGSHOT_HPP

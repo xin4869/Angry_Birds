@@ -47,14 +47,12 @@ namespace ObjectDefs
         auto shape = std::make_unique<b2PolygonShape>();
         b2Vec2 vertices[3];
         
+        vertices[0] = b2Vec2(-base_m / 2.0f, -height_m / 2.0f);
+        vertices[1] = b2Vec2(base_m / 2.0f, -height_m / 2.0f);
         if (leftOriented) {
-            vertices[0] = b2Vec2(0, 0);
-            vertices[1] = b2Vec2(base_m, 0);
-            vertices[2] = b2Vec2(0, height_m);
+            vertices[2] = b2Vec2(-base_m / 2.0f, height_m / 2.0f);
         } else {
-            vertices[0] = b2Vec2(0, 0);
-            vertices[1] = b2Vec2(-base_m, 0);
-            vertices[2] = b2Vec2(0, height_m);
+            vertices[2] = b2Vec2(base_m / 2.0f, height_m / 2.0f);
         }
         shape->Set(vertices, 3);
         return shape;
@@ -75,7 +73,6 @@ namespace ObjectDefs
         return baseHP * area;
     }
 
- 
     sf::Sprite CreateSprite(float width_px, float height_px, const sf::Texture& texture)
     {
         sf::Sprite sprite(texture);

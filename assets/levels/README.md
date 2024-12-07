@@ -4,8 +4,10 @@ File format:
 
 - '#' marks a comment (has to be at start of line)
     - \# e.g. comment here
-- Basic idea is Classname/defaultsName, x, y
-    - x, y is the local origin point of the object
+- Basic idea is Classname/defaultsName, x, y, rotation
+    - x, y is the center of the object
+    - rotation (optional) in degrees
+        - object is rotated around center
 - File is case-insensitive
 - Extra spaces, extra text (at end of line), empty lines and bad lines will be ignored
 
@@ -24,14 +26,14 @@ Adding objects:
         - Them being physics objects before launch could lead to unusual behaviour (e.g. falling off the map)
 
 - Pigs:
-    - NormalPig, x, y
+    - NormalPig, x, y, rotation
     - IronPig, x, y
     - etc., name from default values
 
 - Blocks:
-    - DefaultsName, x, y
+    - DefaultsName, x, y, rotation
     - e.g.:
-    - IceCircleS, x, y
+    - IceCircleS, x, y, rot
     - WoodSquare, x, y
     - etc.
 

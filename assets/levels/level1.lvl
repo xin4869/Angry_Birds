@@ -1,9 +1,14 @@
 # See instructions for format
 
 NormalBird
-iceRectL, 10, 3
-normalPig, 13, 0
+normalPig, 8, 1, 180
+
+woodCircleM, 3, 5
+woodTriangleRight, 0, 2, -180
+woodrect, 4, 1
+woodrect, 4, 3, 180
+woodrectl, 3, 6, -45
 
 gravity, 0, -10
-slingshot, -5, 3
+slingshot, -5, 2
 scoreLimits, 1000, 2000, 3000

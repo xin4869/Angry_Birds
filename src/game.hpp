@@ -13,6 +13,7 @@
 #include "visual/texture_manager.hpp"
 #include "sound_manager.hpp"
 #include "level.hpp"
+#include "visual/game_render.hpp"
 
 enum class GameState {
   home,
@@ -52,6 +53,7 @@ public:
       update(deltaTime);
       render();
     }
+    window.close();
   }
 
   void update(float deltaTime){
@@ -77,6 +79,7 @@ public:
           break;
         case GameState::in_game:
           gui->drawGame(levelNumber);
+          renderer->renderGame(*level);
           //renderer->drawGameObjects(levelNumber);
           break;
         case GameState::win:
@@ -110,6 +113,7 @@ public:
         sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
         window.setView(sf::View(visibleArea)); 
         gui->updateScale();
+        renderer->init();
       }
     }
   }
@@ -206,12 +210,14 @@ public:
   b2World& getWorld() { return level->getWorld(); }
 
   void setLevel(int level_number){
-    if (level_number > MAX_LEVELS) {
+    if (level_number > MAX_LEVELS || level_number <= 0) {
       std::cerr << "Invalid level number: " << level_number << std::endl;
       return;
     }
     level = std::make_unique<Level>(level_number);
     levelNumber = level_number;
+
+    level->setActive(true);
   }
 
 
