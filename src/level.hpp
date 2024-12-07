@@ -55,15 +55,18 @@ public:
 			world.Step(timeStep, velocityIterations, positionIterations);
 			addScore(collisionHandler.transferScore());
 
-			for (auto i = Object::destroyList.begin(); i != Object::destroyList.end(); i++) {
+			for (auto i = Object::destroyList.begin(); i != Object::destroyList.end();) {
 				i->first -= timeStep;
 				if (i->first <= 0) {
-					findErase(i->second);
-					delete i->second;
+					if (i->second != nullptr){
+						i->second->getBody()->SetEnabled(false);
+						findErase(i->second);
+						delete i->second;
+					}
 					i = Object::destroyList.erase(i);
-					i--;
+				} else {
+					i++;
 				}
-				if (i->second != nullptr) i->second->getBody()->SetEnabled(false);
 			}
 
 			accumulator -= timeStep;
