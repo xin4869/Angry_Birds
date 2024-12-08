@@ -42,7 +42,7 @@ Settings format:
 - Gravity, x, y
     - Default is 0, -10 if omitted
 - Slingshot, x, y
-    - Default is 0, 2 if omitted
+    - Default is -15, 2 if omitted
 - ScoreLimits, 1*, 2*, 3*
     - Score limits for stars
     - Defaults are <*reasonable defaults*> if omitted

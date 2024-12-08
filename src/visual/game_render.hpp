@@ -70,9 +70,9 @@ public:
      */
     sf::Vector2f toScreenPos(const b2Vec2& gamePos) const {
         float t = (gamePos.x - gameXBounds.x) / (gameXBounds.y - gameXBounds.x);
-        float x = lerp(0.0f, window.getSize().x, t);
+        float x = window.getSize().x * t;
         t = (gamePos.y - gameYBounds.x) / (gameYBounds.y - gameYBounds.x);
-        float y = lerp(window.getSize().y, 0.0f, t);
+        float y = window.getSize().y * (1-t);
         return sf::Vector2f(x, y);
     }
    

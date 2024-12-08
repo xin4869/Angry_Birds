@@ -26,7 +26,7 @@ public:
 	void loadLevel(const std::string path) {
 		clearLevel();
 		gravity.Set(0, -10);
-		slingshot.setPos(0, 2);
+		slingshot.setPos(-15, 2);
 		scoreLimits = { 1000, 2000, 3000 };
 		setScore(0);
 		
