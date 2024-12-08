@@ -76,11 +76,11 @@ public:
         return sf::Vector2f(x, y);
     }
 
-    b2Vec2 toGamePos(const sf::Vector2i& screenPos) const {
-        float t = (float)screenPos.x / (float)window.getSize().x;
-        float x = lerp(gameXBounds.x, gameXBounds.y, t);
-        t = (float)screenPos.y / (float)window.getSize().y;
-        float y = lerp(gameYBounds.y, gameYBounds.x, t);
+    b2Vec2 toGamePos(const sf::Vector2f& screenPos) const {
+        float t = screenPos.x / window.getSize().x;
+        float x = gameXBounds.x + (gameXBounds.y - gameXBounds.x) * t;
+        t = screenPos.y / window.getSize().y;
+        float y = gameYBounds.x + (gameYBounds.y - gameYBounds.x) * (1-t);
         return b2Vec2(x, y);
     }
    

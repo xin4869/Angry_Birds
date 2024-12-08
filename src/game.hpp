@@ -154,7 +154,7 @@ public:
 
   void handleMouseMove() {
     if (currentState == GameState::in_game && level) {
-      sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+      sf::Vector2f mousePos(sf::Mouse::getPosition(window));
       //b2Vec2 b2WorldPos = screenToWorldPos(mousePos);
       b2Vec2 b2WorldPos = renderer->toGamePos(mousePos);
       level->updateDragging(b2WorldPos);
