@@ -14,14 +14,17 @@ public:
     Slingshot(){
         sprite = ObjectDefs::CreateSprite(80, 228, TextureManager::getTexture(textures[0]));
     }
-    Slingshot(float x, float y) : pos(x, y) {}
+    Slingshot(float x, float y) : pos(x, y) {
+        launchPos = pos;
+        launchPos.y += 2.0f;
+    }
 
     /**
      * @brief Shoots object towards slingshot. Impulse depends linearly on distance from slingshot
      * @param object launch this
      */
     void launchObject(Object* object) {
-        b2Vec2 impulse = pos - object->getBody()->GetPosition();
+        b2Vec2 impulse = launchPos - object->getBody()->GetPosition();
         if (impulse.LengthSquared() > maxRadius * maxRadius) {
             impulse.Normalize();
             impulse *= maxRadius;
@@ -39,13 +42,13 @@ public:
     void drag(Object* object, float x, float y) {
         // update textures, play audio?
         b2Vec2 offset(x, y);
-        offset -= pos;
+        offset -= launchPos;
         if (offset.LengthSquared() > maxRadius * maxRadius) {
             offset.Normalize();
             offset *= maxRadius;
         }
         object->getBody()->SetLinearVelocity(b2Vec2(0, 0));
-        object->getBody()->SetTransform(pos + offset, 0);
+        object->getBody()->SetTransform(launchPos + offset, 0);
         sprite.setTexture(TextureManager::getTexture(textures[2]));
     }
 
@@ -61,15 +64,24 @@ public:
     }
     
     float getRadius() { return maxRadius; }
-    void setPos(float x, float y) { pos.Set(x, y); }
-    void setPos(b2Vec2 newPos) { pos = newPos; }
+    void setPos(float x, float y) {
+        pos.Set(x, y);
+        launchPos = pos;
+        launchPos.y += 2.0f;
+    }
+    void setPos(b2Vec2 newPos) {
+        pos = newPos;
+        launchPos = pos;
+        launchPos.y += 2.0f;
+    }
     b2Vec2& getPos() { return pos; }
     sf::Sprite& getSprite() { return sprite; }
 
 protected:
     b2Vec2 pos;
-    float maxRadius = 3.0f;
-    float powerMult = 5.0f;  // likely off. modify if necessary
+    b2Vec2 launchPos;
+    float maxRadius = 2.5f;
+    float powerMult = 50.0f;  // likely off. modify if necessary
     sf::Sprite sprite;
     std::vector< std::string > textures = { "slingshot1", "slingshot2", "slingshot3" };
 };

@@ -127,9 +127,10 @@ public:
     sf::Vector2f mousePos(sf::Mouse::getPosition(window));
     auto clicked_button = gui->getClickedButton(mousePos);
     if (clicked_button) {
-      handleButtonClicks(*clicked_button);}
-    else if (currentState == GameState::in_game && level) {
-      b2Vec2 b2WorldPos = screenToWorldPos(static_cast<sf::Vector2i>(mousePos));
+      handleButtonClicks(*clicked_button);
+    } else if (currentState == GameState::in_game && level) {
+      //b2Vec2 b2WorldPos = screenToWorldPos(static_cast<sf::Vector2i>(mousePos));
+      b2Vec2 b2WorldPos = renderer->toGamePos(static_cast<sf::Vector2i>(mousePos));
       level->startDragging(b2WorldPos);
     }       
   }
@@ -143,7 +144,8 @@ public:
   void handleMouseMove() {
     if (currentState == GameState::in_game && level) {
       sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-      b2Vec2 b2WorldPos = screenToWorldPos(mousePos);
+      //b2Vec2 b2WorldPos = screenToWorldPos(mousePos);
+      b2Vec2 b2WorldPos = renderer->toGamePos(mousePos);
       level->updateDragging(b2WorldPos);
     }
   }

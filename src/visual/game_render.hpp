@@ -75,6 +75,14 @@ public:
         float y = lerp(window.getSize().y, 0.0f, t);
         return sf::Vector2f(x, y);
     }
+
+    b2Vec2 toGamePos(const sf::Vector2i& screenPos) const {
+        float t = (float)screenPos.x / (float)window.getSize().x;
+        float x = lerp(gameXBounds.x, gameXBounds.y, t);
+        t = (float)screenPos.y / (float)window.getSize().y;
+        float y = lerp(gameYBounds.y, gameYBounds.x, t);
+        return b2Vec2(x, y);
+    }
    
 private:
     sf::RenderWindow& window;
