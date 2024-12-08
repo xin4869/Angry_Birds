@@ -128,8 +128,7 @@ public:
     if (clicked_button) {
       handleButtonClicks(*clicked_button);
     } else if (currentState == GameState::in_game && level) {
-      //b2Vec2 b2WorldPos = screenToWorldPos(static_cast<sf::Vector2i>(mousePos));
-      b2Vec2 b2WorldPos = renderer->toGamePos(static_cast<sf::Vector2i>(mousePos));
+      b2Vec2 b2WorldPos = renderer->toGamePos(mousePos);
       
       Bird* currentBird = level->getCurrentBird();
       // implicitly choose the action
@@ -154,8 +153,7 @@ public:
 
   void handleMouseMove() {
     if (currentState == GameState::in_game && level) {
-      sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-      //b2Vec2 b2WorldPos = screenToWorldPos(mousePos);
+      sf::Vector2f mousePos(sf::Mouse::getPosition(window));
       b2Vec2 b2WorldPos = renderer->toGamePos(mousePos);
       level->updateDragging(b2WorldPos);
     }
