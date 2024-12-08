@@ -10,5 +10,5 @@ woodrect, 4, 3, 180
 woodrectl, 3, 6, -45
 
 gravity, 0, -10
-slingshot, -5, 2
+slingshot, -15, 2
 scoreLimits, 1000, 2000, 3000

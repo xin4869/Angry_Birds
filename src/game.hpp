@@ -35,9 +35,8 @@ public:
     SoundManager::loadAllSounds();
 
     gui = std::make_unique<GUI>(window);
-    gui->init();
-
     renderer = std::make_unique<GameRender>(window);
+    
     SoundManager::playMusic("Theme song");
   } 
 
@@ -51,7 +50,7 @@ public:
 
       handleEvents();
       update(deltaTime);
-      render();
+      draw();
     }
     window.close();
   }
@@ -64,7 +63,7 @@ public:
     }
   }
 
-  void render(){
+  void draw(){
     window.clear();
     if (gui) {
       switch (currentState){
@@ -199,10 +198,10 @@ public:
             currentState = GameState::level;
           } else if (button_name == "next_btn") {
             levelNumber++;
-            setLevel(levelNumber);  //TODO game render
+            setLevel(levelNumber);  
             currentState = GameState::in_game;
           } else if (button_name == "replay_btn") {
-            setLevel(levelNumber);  //TODO game render
+            setLevel(levelNumber);  
             currentState = GameState::in_game;
           } break;      
     }

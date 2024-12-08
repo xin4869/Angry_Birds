@@ -14,7 +14,9 @@
 
 class GUI {
 public:
-    GUI(sf::RenderWindow& game_window): window(game_window) {}
+    GUI(sf::RenderWindow& game_window): window(game_window) {
+        init();
+    }
 
     void init(){
         if (!font.loadFromFile("assets/font/angrybirds.ttf")) {
@@ -271,9 +273,9 @@ private:
         buttons["no_music_btn"].setDefaultPosition(100.f, 987.f);   
         buttons["no_btn"].setDefaultPosition(290.3f, 798.1f);
         buttons["home_btn"].setDefaultPosition(53.6f, 1105.3f);
-        buttons["lvl1_btn"].setDefaultPosition(368.6f, 337.f);  
-        buttons["lvl2_btn"].setDefaultPosition(829.4f, 96.f); 
-        buttons["lvl3_btn"].setDefaultPosition(1300.5f, 348.f);     
+        buttons["lvl1_btn"].setDefaultPosition(368.6f, 317.f);  
+        buttons["lvl2_btn"].setDefaultPosition(829.4f, 317.f); 
+        buttons["lvl3_btn"].setDefaultPosition(1300.5f, 317.f);     
         buttons["back_btn"].setDefaultPosition(15.4f, 10.8f);
         buttons["level_btn"].setDefaultPosition(854.6f, 959.6f); 
         buttons["replay_btn"].setDefaultPosition(1017.f, 961.f);
@@ -285,9 +287,9 @@ private:
         texts["final_score"] = GameText(56, sf::Vector2f(1686.2f, 10.4f), "");
         texts["help_title"] = GameText(203, sf::Vector2f(795.f, 128.8f), "Help", sf::Color::Black, sf::Color::White);
         texts["help_body"] = GameText(75, sf::Vector2f(632.8f, 472.8f), "Drag the bird and shot!\n          That's it! :D", sf::Color::Black, sf::Color::White);
-        texts["level1"] = GameText(117, sf::Vector2f(519.8f, 205.8f), "1");
-        texts["level2"] = GameText(117, sf::Vector2f(971.8f, 740.8f), "2");
-        texts["level3"] = GameText(117, sf::Vector2f(1450.8f, 221.8f), "3");
+        texts["level1"] = GameText(117, sf::Vector2f(505.8f, 195.8f), "1");
+        texts["level2"] = GameText(117, sf::Vector2f(971.8f, 195.8f), "2");
+        texts["level3"] = GameText(117, sf::Vector2f(1450.8f, 195.8f), "3");
     }
 
 
