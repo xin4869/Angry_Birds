@@ -130,7 +130,19 @@ public:
     } else if (currentState == GameState::in_game && level) {
       //b2Vec2 b2WorldPos = screenToWorldPos(static_cast<sf::Vector2i>(mousePos));
       b2Vec2 b2WorldPos = renderer->toGamePos(static_cast<sf::Vector2i>(mousePos));
+      
+      Bird* currentBird = level->getCurrentBird();
+      // implicitly choose the action
+      if (!currentBird || !currentBird->getCanAttack()) {
+        level->setNextBird();
+      }
+      else if (currentBird->getHP() != currentBird->getMaxHP() ||
+            currentBird->getBody()->GetLinearVelocity().LengthSquared() > 0) {
+        currentBird->Attack();
+      }
+      else {
       level->startDragging(b2WorldPos);
+      }
     }       
   }
 

@@ -130,6 +130,7 @@ public:
 
     b2Body* getBody() { return body; }
     float getScore() { return score; }
+    void setScore(float newScore) { score = newScore; }
     float getMaxHP() { return MaxHP; }
     float getHP() { return CurrentHP; }
     sf::Sprite& getSprite() { return sprite; }
@@ -185,12 +186,19 @@ class ObjectCollisions : public b2ContactListener
         if (bodyData1) {
             object = static_cast<Object*>(bodyData1);
             killed = object->TakeDamage(dmg);
-            if (killed) scoreToAdd += object->getScore();
+            // set special value for score to recognize and only count score once
+            if (killed && object->getScore() > FLT_MIN) {
+                scoreToAdd += object->getScore();
+                object->setScore(FLT_MIN);
+            }
         }
         if (bodyData2) {
             object = static_cast<Object*>(bodyData2);
             killed = object->TakeDamage(dmg);
-            if (killed) scoreToAdd += object->getScore();
+            if (killed && object->getScore() > FLT_MIN) {
+                scoreToAdd += object->getScore();
+                object->setScore(FLT_MIN);
+            }
         }
     }
 

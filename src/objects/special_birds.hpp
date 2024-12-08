@@ -123,7 +123,7 @@ public:
     }
 
 protected:
-    const float abilitySpeedGain = 5.0f;  // tune this value
+    const float abilitySpeedGain = 20.0f;  // tune this value
 };
 
 class ExplodeBird : public Bird
@@ -154,7 +154,7 @@ public:
             }
         }
         playSound("tnt box explodes");
-        Destroy(2.0f);
+        if (CurrentHP > 0) Destroy(2.0f);
     }
 
     virtual bool TakeDamage(float dmg) {
@@ -176,7 +176,7 @@ protected:
     // tune these values
     int blastRays = 32;
     float blastRadius = 5.0f;
-    float blastPower = 500.0f;
+    float blastPower = 1000.0f;
 };
 
 

@@ -38,7 +38,7 @@ public:
 		}
 
 		parseLevelFile(file);
-		initializeFirstBird();
+		setNextBird();
 		addGround();
 		isActive = true;
 	}
@@ -57,9 +57,13 @@ public:
 
 			for (auto i = Object::destroyList.begin(); i != Object::destroyList.end();) {
 				i->first -= timeStep;
+				// for implicitly detecting birds (score == 0)
+				if (i->second != nullptr && i->second->getScore() > 0) {
+					i->second->getBody()->SetEnabled(false);
+				}
 				if (i->first <= 0) {
 					if (i->second != nullptr){
-						i->second->getBody()->SetEnabled(false);
+						if (i->second == currentBird) currentBird = nullptr;
 						findErase(i->second);
 						delete i->second;
 					}
@@ -115,8 +119,32 @@ public:
 		}
 	}
 
+	void setNextBird() {
+		if (unusedBirds.empty()) return;
+		if (currentBird && currentBird->getCanAttack()) return;
+
+		std::string birdType = unusedBirds.front();
+		unusedBirds.pop();
+
+		if (birdType == "normalbird") {
+			currentBird = new NormalBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
+		} else if (birdType == "speedbird") {
+			currentBird = new SpeedBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
+		} else if (birdType == "explodebird") {
+			currentBird = new ExplodeBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
+		} else {
+			currentBird = nullptr;
+		}
+
+		if (currentBird) {
+			currentBird->getBody()->SetAwake(false);
+			birds.push_back(currentBird);
+		}
+	}
+
 	b2World& getWorld() { return world; }
 	Slingshot& getSlingshot() { return slingshot; }
+	Bird* getCurrentBird() { return currentBird; }
 	void setActive(bool active) { isActive = active; }
 	bool getActive() { return isActive; }
 	float getScore() { return score; }
@@ -222,27 +250,6 @@ protected:
             return nullptr;
         }
     }
-
-	void initializeFirstBird() {
-		if (!currentBird && !unusedBirds.empty()) {
-			std::string birdType = unusedBirds.front();
-			unusedBirds.pop();
-
-			if (birdType == "normalbird") {
-				currentBird = new NormalBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
-			} else if (birdType == "speedbird") {
-				currentBird = new SpeedBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
-			} else if (birdType == "explodebird") {
-				currentBird = new ExplodeBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
-			} else {
-				currentBird = nullptr;
-			}
-
-			if (currentBird) {
-				birds.push_back(currentBird);
-			}
-		}
-	}
 
 	bool addBird(const std::string& className) {
 		if (ObjectDefs::getBirdDefaults(className) == nullptr) return false;

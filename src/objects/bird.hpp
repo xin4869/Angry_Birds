@@ -19,6 +19,7 @@ public:
     virtual void Attack() = 0;
 
     bool contains(const b2Vec2& worldPos) const {
+        if (CurrentHP <= 0) return false;
         b2Fixture* fixture = body->GetFixtureList();
         return fixture->TestPoint(worldPos);        
     }
