@@ -6,6 +6,7 @@
 #include "objects/get_object_defaults.hpp"
 #include "slingshot.hpp"
 #include "objects/object.hpp"
+#include "objects/ground.hpp"
 
 class Level
 {
@@ -39,7 +40,7 @@ public:
 
 		parseLevelFile(file);
 		setNextBird();
-		addGround();
+		// addGround();
 		isActive = true;
 	}
 
@@ -86,6 +87,10 @@ public:
 		}
 		return scoreLimits.size();
 	}
+
+	std::unique_ptr<Ground>& getGround() { return ground; }
+
+	// std::vector<b2Vec2>& getGroundPoints() { return groundPoints; }
 
 	bool isMouseOnBird(const b2Vec2& worldPos) const {
 		return currentBird && currentBird->contains(worldPos);
@@ -236,9 +241,24 @@ protected:
 
 		if (setSetting(parameter, x, y, z)) return;
 		if (addPig(parameter, x, y, z)) return;
-		addBlock(parameter, x, y, z);
+		if (addBlock(parameter, x, y, z)) return;
+
+		if (parameter == "ground") {
+			float x, y;
+			while (true) {
+				x = readFloat(lineStream);
+				y = readFloat(lineStream);
+				if (x == FLT_MIN || y == FLT_MIN) break;
+				groundPoints.push_back(b2Vec2(x, y));
+			}
+		}
+		if (!groundPoints.empty()) {
+			ground = std::make_unique<Ground>(&world, groundPoints);
+		}
+
 	}
-	
+
+
 	static Bird* createBird(b2World* world, float x, float y, const std::string& birdType) {
         if (birdType == "normalbird") {
             return new NormalBird(world, x, y);
@@ -289,11 +309,11 @@ protected:
 		return false;
 	}
 
-	void addGround() {
-		for (float x=-100; x<100; x+=5.075f) {
-			blocks.push_back(new Block(&world, x, -0.55f/2.0f, &ObjectDefs::fixedRectL));
-		}
-	}
+	// void addGround() {
+	// 	for (float x=-100; x<100; x+=5.075f) {
+	// 		blocks.push_back(new Block(&world, x, -0.55f/2.0f, &ObjectDefs::fixedRectL));
+	// 	}
+	// }
 
 	char asciitolower(char in) {
 		if (in <= 'Z' && in >= 'A')
@@ -342,10 +362,12 @@ protected:
 	std::queue<std::string> unusedBirds;
 	std::array<float, 3> scoreLimits;
 	float score = 0;
+	std::vector<b2Vec2> groundPoints;
 
 	std::vector<Bird*>birds;
 	std::vector<Pig*>pigs;
 	std::vector<Block*> blocks;
+	std::unique_ptr<Ground> ground;
 	Slingshot slingshot;
 	ObjectCollisions collisionHandler;
 };

@@ -42,9 +42,12 @@ public:
         for (auto i: level.getBlocks()) {
             renderObject(i);
         }
+        
         //drawTrajectory();
-    }
 
+        renderGround(level.getGround());
+    }
+    
     void setXBounds(b2Vec2 bounds) { gameXBounds = bounds; }
     void setXBounds(float x, float y) { gameXBounds.Set(x, y); }
     void setYBounds(b2Vec2 bounds) { gameYBounds = bounds; }
@@ -111,6 +114,35 @@ private:
         sprite.setRotation(rotDeg);
         window.draw(sprite);
     }
+
+
+    // void renderGround(const std::unique_ptr<Ground>& ground) const {
+    //     if (!ground) return;
+    //     b2Vec2 bodyPos = ground->getBody()->GetPosition();   
+    //     std::cout << "Ground pos: " << bodyPos.x << ", " << bodyPos.y << std::endl;
+    //     sf::Vector2f windowPos = toScreenPos(bodyPos);
+    //     std::cout << "Window pos: " << windowPos.x << ", " << windowPos.y << std::endl;
+    //     ground->getGroundShape().setPosition(windowPos.x, windowPos.y);
+    //     window.draw(ground->getGroundShape());
+    // }
+
+    void renderGround(const std::unique_ptr<Ground>& ground) const {
+        if (!ground) return;
+        sf::ConvexShape groundShape;
+        const std::vector<b2Vec2>& vertices = ground->getVertices();
+        groundShape.setPointCount(vertices.size());
+
+        for (size_t i = 0; i < vertices.size(); ++i) {
+            groundShape.setPoint(i, toScreenPos(vertices[i]));
+        }
+
+        groundShape.setPosition(toScreenPos(ground->getBody()->GetPosition()));
+
+        groundShape.setTexture(&TextureManager::getTexture("ground"));
+
+        window.draw(groundShape);
+    }
+
 };
 
 #endif

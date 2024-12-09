@@ -3,12 +3,11 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**",
                 "${workspaceFolder}",
-                "/opt/homebrew/Cellar/sfml/2.6.2",
-                "/opt/homebrew/Cellar/box2d/2.4.2",
-                "/opt/homebrew/include",
-                "${workspaceFolder}/src"
+                "${workspaceFolder}/src",
+                "/opt/homebrew/Cellar/sfml/2.6.2/include",
+                "/opt/homebrew/Cellar/box2d/2.4.2/include",
+                "/opt/homebrew/include"          
             ],
             "defines": [],
             "macFrameworkPath": [
