@@ -20,6 +20,7 @@ public:
     Block(){}
     virtual bool TakeDamage(float dmg) override {
         // Better way: sound lists for collision, damage, destroy
+        if (MaxHP == FLT_MAX) return false;
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
         bool isIce = sounds.size() == 8;

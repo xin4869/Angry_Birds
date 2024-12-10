@@ -14,7 +14,7 @@ public:
     GameRender(sf::RenderWindow& game_window): window(game_window) {
         init();
         for (size_t i=0; i<trajectoryPoints; i++) {
-            trajectorySprites.push_back(ObjectDefs::CreateSprite(40, 43, TextureManager::getTexture("IceCircleS")));
+            trajectorySprites.push_back(ObjectDefs::CreateSprite(TextureManager::getTexture("IceCircleS")));
         }
     }
 

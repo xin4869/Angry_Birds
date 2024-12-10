@@ -3,8 +3,8 @@ project(angry_birds VERSION 0.1.0)
 
 enable_language(CXX)
 
-# use C++ standard version 17
-set(CMAKE_CXX_STANDARD 17)
+# use C++ standard version 20
+set(CMAKE_CXX_STANDARD 20)
 # produce non-optimized code with debug symbols
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -31,9 +31,7 @@ include_directories(/opt/homebrew/Cellar/box2d/2.4.2/include)
 # Add packages
 find_package(box2d 2.4 REQUIRED)
 find_package(SFML 2.5 COMPONENTS network audio graphics window system REQUIRED)
-find_package(TGUI REQUIRED)
 
-cmake_policy(SET CMP0135 NEW)
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -51,11 +49,11 @@ target_sources(angry_birds PUBLIC ${SOURCES})
 target_include_directories(angry_birds PUBLIC .)
 target_include_directories(angry_birds PUBLIC src)
 
-target_link_libraries(angry_birds box2d sfml-network sfml-audio sfml-graphics sfml-window sfml-system TGUI::TGUI)
+target_link_libraries(angry_birds box2d sfml-network sfml-audio sfml-graphics sfml-window sfml-system)
 
 enable_testing()
 add_executable(tests "tests/tests.cpp")
-target_link_libraries(tests GTest::gtest_main box2d sfml-network sfml-audio sfml-graphics sfml-window sfml-system TGUI::TGUI)
+target_link_libraries(tests GTest::gtest_main box2d sfml-network sfml-audio sfml-graphics sfml-window sfml-system)
 
 include(GoogleTest)
 gtest_discover_tests(tests)
