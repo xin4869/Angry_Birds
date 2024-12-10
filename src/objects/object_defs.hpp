@@ -8,7 +8,8 @@
 
 namespace ObjectDefs
 {
-    constexpr const float pixel_per_meter = 40;
+    float default_pixel_per_meter = 40;
+    float pixel_per_meter = default_pixel_per_meter;
 
     struct ObjectDefaults
     {
@@ -23,6 +24,13 @@ namespace ObjectDefs
         std::vector<std::string> soundNames;
     };
 
+    /**
+     * @brief Gets a bodydef for objects
+     * @param type body type (static, dynamic)
+     * @param x game pos
+     * @param y game pos
+     * @return b2BodyDef
+     */
     b2BodyDef GetBodyDef(b2BodyType type, float x=0, float y=0)
     {
         b2BodyDef bodyDef;
@@ -31,18 +39,36 @@ namespace ObjectDefs
         return bodyDef;
     }
 
+    /**
+     * @brief Creates a circle shape (collider)
+     * @param radius_m circle radius (m)
+     * @return std::unique_ptr<b2CircleShape>
+     */
     std::unique_ptr<b2CircleShape> CreateShape (float radius_m) {
         auto shape = std::make_unique<b2CircleShape>();
         shape->m_radius = radius_m;
         return shape;
     }
 
+    /**
+     * @brief Creates a rectangle shape (collider)
+     * @param width_m width (m)
+     * @param height_m height (m)
+     * @return std::unique_ptr<b2PolygonShape> 
+     */
     std::unique_ptr<b2PolygonShape> CreateShape (float width_m, float height_m){
         auto shape = std::make_unique<b2PolygonShape>();
         shape->SetAsBox(width_m/2, height_m/2);
         return shape;
     }
 
+    /**
+     * @brief Creates a triangle shape (collider)
+     * @param base_m base length (m)
+     * @param height_m height (m)
+     * @param leftOriented
+     * @return std::unique_ptr<b2PolygonShape> 
+     */
     std::unique_ptr<b2PolygonShape> CreateShapeTriangle(float base_m, float height_m, bool leftOriented) {
         auto shape = std::make_unique<b2PolygonShape>();
         b2Vec2 vertices[3];
@@ -58,16 +84,36 @@ namespace ObjectDefs
         return shape;
     }
 
+    /**
+     * @brief Get circle HP scaled by area
+     * @param baseHP HP when area == 1
+     * @param radius_m circle radius
+     * @return float HP
+     */
     float CalculateHp(float baseHP, float radius_m) {     
         float area = b2_pi * radius_m * radius_m;
         return baseHP * area;
     }
 
+    /**
+     * @brief Get rectangle HP scaled by area
+     * @param baseHP HP when area == 1
+     * @param width_m width (m)
+     * @param height_m height (m)
+     * @return float HP
+     */
     float CalculateHp(float baseHP, float width_m, float height_m) {
         float area = width_m * height_m;
         return baseHP * area;
     }
 
+    /**
+     * @brief Get triangle HP scaled by area
+     * @param baseHP HP when area == 1
+     * @param base_m base width (m)
+     * @param height_m height (m)
+     * @return float HP
+     */
     float CalculateHpTriangle(float baseHP, float base_m, float height_m) {
         float area = base_m * height_m / 2;
         return baseHP * area;
@@ -81,8 +127,7 @@ namespace ObjectDefs
         sprite.setScale(scale_w, scale_h);
         sprite.setOrigin(texture.getSize().x / 2.f, texture.getSize().y / 2.f);
         return sprite;
-    }
-    
+    }  
 };
 
 #endif

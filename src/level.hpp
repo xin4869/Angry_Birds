@@ -24,6 +24,10 @@ public:
 	}
 	~Level() { clearLevel(); }
 
+	/**
+	 * @brief Load a level from a level file
+	 * @param path path to level file
+	 */
 	void loadLevel(const std::string path) {
 		clearLevel();
 		gravity.Set(0, -10);
@@ -40,7 +44,7 @@ public:
 
 		parseLevelFile(file);
 		setNextBird();
-		// addGround();
+		addGroundBlocks();
 		isActive = true;
 	}
 
@@ -48,6 +52,10 @@ public:
 		loadLevel(getFilePath(level));
 	}
 
+	/**
+	 * @brief Updates the game
+	 * @param deltaTime update by this time
+	 */
 	void update(float deltaTime) {
 		if (!isActive) return;
 		accumulator += deltaTime;
@@ -78,9 +86,26 @@ public:
 		}
 	}
 
+	/**
+	 * @brief Tells if game is won
+	 * @return true if won
+	 */
 	bool isWin() { return pigs.empty(); }
-	bool isLost() { return unusedBirds.empty() && birds.empty(); }
+	/**
+	 * @brief Tells if game is lost
+	 * @return true if lost
+	 */
+	bool isLost() {
+		bool lost = unusedBirds.empty() && birds.empty();
+		if (!lost) return false;
+		if (Object::destroyList.size() > 0) return false;
+		return lost;
+	}
 
+	/**
+	 * @brief Get number of stars based on score and score limits
+	 * @return int stars
+	 */
 	int getStars() {
 		for (size_t stars=0; stars<scoreLimits.size(); stars++) {
 			if (score < scoreLimits[stars]) return stars;
@@ -92,10 +117,20 @@ public:
 
 	// std::vector<b2Vec2>& getGroundPoints() { return groundPoints; }
 
+	/**
+	 * @brief Is position on current active bird?
+	 * @param worldPos position in world coordinates
+	 * @return true if position on bird
+	 */
 	bool isMouseOnBird(const b2Vec2& worldPos) const {
 		return currentBird && currentBird->contains(worldPos);
 	}
 
+	/**
+	 * @brief Try to start dragging bird in slingshot
+	 * @param worldPos Drag from here
+	 * @return true if succesful
+	 */
 	bool startDragging(const b2Vec2& worldPos) {
 		if  (isDragging || !currentBird) return false;
 
@@ -106,12 +141,19 @@ public:
 		return false;
 	}
 
+	/**
+	 * @brief Updates bird dragging
+	 * @param worldPos Drag here
+	 */
 	void updateDragging(const b2Vec2& worldPos) {
 		if (isDragging && currentBird) {
 			slingshot.drag(currentBird, worldPos.x, worldPos.y);
 		}
 	}
 
+	/**
+	 * @brief Ends bird dragging, launches bird
+	 */
 	void endDragging() {
 		if (isDragging && currentBird) {
 			b2Vec2 birdPos = currentBird->getBody()->GetPosition();
@@ -124,6 +166,9 @@ public:
 		}
 	}
 
+	/**
+	 * @brief Set the next bird into the slingshot if available
+	 */
 	void setNextBird() {
 		if (unusedBirds.empty()) return;
 		if (currentBird && currentBird->getCanAttack()) return;
@@ -152,6 +197,8 @@ public:
 	Bird* getCurrentBird() { return currentBird; }
 	void setActive(bool active) { isActive = active; }
 	bool getActive() { return isActive; }
+	bool getDragging() { return isDragging; }
+	b2Vec2 getGravity() { return gravity; }
 	float getScore() { return score; }
 	void setScore(float value) { score = value; }
 	void addScore(float add) { score += add; }
@@ -186,6 +233,9 @@ protected:
 		}
 	}
 
+	/**
+	 * @brief Clears and deletes level objects
+	 */
 	void clearLevel() {
 		Object::destroyList.clear();
 
@@ -205,10 +255,19 @@ protected:
 		isActive = false;
 	}
 
+	/**
+	 * @brief Level number to default file path
+	 * @param level level number
+	 * @return const std::string level file path
+	 */
 	const std::string getFilePath(int level) {
 		return "assets/levels/level" + std::to_string(level) + ".lvl";
 	}
 
+	/**
+	 * @brief Parses and loads level file
+	 * @param file file object
+	 */
 	void parseLevelFile(std::ifstream& file) {
 		std::string line;
 		std::stringstream lineStream;
@@ -227,10 +286,15 @@ protected:
 		file.close();
 	}
 
+	/**
+	 * @brief Parses a line from file, performs action if valid line
+	 * @param lineStream line to parse
+	 */
 	void parseLine(std::stringstream& lineStream) {
 		// line is in lowercase!
 		std::string parameter;
 		getline(lineStream, parameter, ',');
+		if (addGround(parameter, lineStream)) return;
 		if (addBird(parameter)) return;
 
 		float x = readFloat(lineStream);
@@ -242,20 +306,6 @@ protected:
 		if (setSetting(parameter, x, y, z)) return;
 		if (addPig(parameter, x, y, z)) return;
 		if (addBlock(parameter, x, y, z)) return;
-
-		if (parameter == "ground") {
-			float x, y;
-			while (true) {
-				x = readFloat(lineStream);
-				y = readFloat(lineStream);
-				if (x == FLT_MIN || y == FLT_MIN) break;
-				groundPoints.push_back(b2Vec2(x, y));
-			}
-		}
-		if (!groundPoints.empty()) {
-			ground = std::make_unique<Ground>(&world, groundPoints);
-		}
-
 	}
 
 
@@ -271,12 +321,25 @@ protected:
         }
     }
 
+	/**
+	 * @brief Adds unused bird based on name
+	 * @param className name of bird class
+	 * @return true if succesful
+	 */
 	bool addBird(const std::string& className) {
 		if (ObjectDefs::getBirdDefaults(className) == nullptr) return false;
 		unusedBirds.push(className);
 		return true;
 	}
 
+	/**
+	 * @brief Adds a pig to world
+	 * @param pigName pig defaults name (see pig)
+	 * @param x world x pos
+	 * @param y world y pos
+	 * @param rotation in degrees
+	 * @return true if succesful
+	 */
 	bool addPig(const std::string& pigName, float x, float y, float rotation) {
 		ObjectDefs::ObjectDefaults* defaults = ObjectDefs::getPigDefaults(pigName);
 		if (defaults == nullptr) return false;
@@ -285,6 +348,14 @@ protected:
 		return true;
 	}
 
+	/**
+	 * @brief Adds a block to world
+	 * @param blockName block defaults name (see block)
+	 * @param x world x pos
+	 * @param y world y pos
+	 * @param rotation in degrees
+	 * @return true if succesful
+	 */
 	bool addBlock(const std::string& blockName, float x, float y, float rotation) {
 		ObjectDefs::ObjectDefaults* defaults = ObjectDefs::getBlockDefaults(blockName);
 		if (defaults == nullptr) return false;
@@ -292,6 +363,14 @@ protected:
 		return true;
 	}
 
+	/**
+	 * @brief Sets a setting value
+	 * @param setting Setting name
+	 * @param x parameter 1
+	 * @param y parameter 2
+	 * @param z parameter 3
+	 * @return true if succesful
+	 */
 	bool setSetting(const std::string& setting, float x, float y, float z=-1) {
 		// may need to change if more settings are added
 		if (setting == "gravity") {
@@ -309,18 +388,45 @@ protected:
 		return false;
 	}
 
-	// void addGround() {
-	// 	for (float x=-100; x<100; x+=5.075f) {
-	// 		blocks.push_back(new Block(&world, x, -0.55f/2.0f, &ObjectDefs::fixedRectL));
-	// 	}
-	// }
+	bool addGround(const std::string& parameter, std::stringstream& lineStream) {
+		if (parameter != "ground") return false;
+		float x, y;
+		while (true) {
+			x = readFloat(lineStream);
+			y = readFloat(lineStream);
+			if (x == FLT_MIN || y == FLT_MIN) break;
+			groundPoints.push_back(b2Vec2(x, y));
+		}
+		if (!groundPoints.empty()) {
+			ground = std::make_unique<Ground>(&world, groundPoints);
+		}
+		return true;
+	}
 
+	/**
+	 * @brief Adds an invisible fixed ground to world
+	 */
+	void addGroundBlocks() {
+		for (float x=-100; x<100; x+=5.075f) {
+			blocks.push_back(new Block(&world, x, -0.55f/2.0f, &ObjectDefs::fixedRectL));
+		}
+	}
+
+	/**
+	 * @brief Character to lowercase
+	 * @param in char
+	 * @return char lowercase'd
+	 */
 	char asciitolower(char in) {
 		if (in <= 'Z' && in >= 'A')
 			return in - ('Z' - 'z');
 		return in;
 	}
 
+	/**
+	 * @brief Transforms string to lowercase, in place
+	 * @param string to transform
+	 */
 	void toLower(std::string& string) {
 		for (size_t i=0; i<string.size(); i++) {
 			string[i] = asciitolower(string[i]);

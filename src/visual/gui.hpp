@@ -44,6 +44,8 @@ public:
         scaleX = windowSize.x / textureSize.x;
         scaleY = windowSize.y / textureSize.y;   
 
+        ObjectDefs::pixel_per_meter = ObjectDefs::default_pixel_per_meter * std::min(scaleX, scaleY);
+
         background_sprite.setScale(scaleX, scaleY);  
         overlay_sprite.setScale(scaleX, scaleY);
         

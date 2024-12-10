@@ -47,8 +47,10 @@ public:
             sounds.emplace(std::make_pair(i, sf::Sound()));
             sounds[i].setBuffer(*sound);
         }
+        if (normalTextures.size() > 0) {
         const sf::Texture& txt = TextureManager::getTexture(normalTextures[0]);
         sprite = ObjectDefs::CreateSprite(spriteWidth, spriteHeight, txt);
+        }
         bodyDef->position.Set(x, y);
         bodyDef->angle = M_PI / 180.0f * rotation;
         body = world->CreateBody(bodyDef);
@@ -68,7 +70,7 @@ public:
             defaults->damageTextures, defaults->soundNames, defaults->maxHp, rotation) {}
     
    /**
-    * @brief Overridden in subclasses. Set functionality there.
+    * @brief Take damage. Overridden in subclasses. Set functionality there.
     * @param dmg damage taken
     * @return true if killed
     */
@@ -113,6 +115,11 @@ public:
         }       
     }
 
+    /**
+     * @brief Plays a sound from sounds
+     * @param name Name of the sound (see sound manager for names)
+     * @return true if succesful
+     */
     bool playSound(const std::string& name)
     {
         if (sounds.find(name) == sounds.end()) return false;
@@ -134,7 +141,7 @@ public:
     float getMaxHP() { return MaxHP; }
     float getHP() { return CurrentHP; }
     sf::Sprite& getSprite() { return sprite; }
-    constexpr const static float speedDamageMultiplier = 10.0f;  // tune this value
+    constexpr const static float speedDamageMultiplier = 7.0f;  // tune this value
     static std::list< std::pair< float, Object* > > destroyList;  // <timer, object>
 
 protected :

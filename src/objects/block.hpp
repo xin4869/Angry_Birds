@@ -466,7 +466,7 @@ namespace ObjectDefs{
         .maxHp = FLT_MAX,
         .spriteWidth = 5.075f * pixel_per_meter,
         .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"StoneRectL"}
+        //.normalTextures = {"StoneRectL"}
     };
 
     ObjectDefaults* getBlockDefaults(const std::string& name){

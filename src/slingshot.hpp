@@ -24,13 +24,23 @@ public:
      * @param object launch this
      */
     void launchObject(Object* object) {
+        b2Vec2 impulse = getLaunchImpulse(object);
+        object->getBody()->ApplyLinearImpulseToCenter(impulse, true);
+    }
+
+    /**
+     * @brief Get the impulse object would be launched with
+     * @param object to launch
+     * @return b2Vec2 impulse
+     */
+    b2Vec2 getLaunchImpulse(Object* object) {
         b2Vec2 impulse = launchPos - object->getBody()->GetPosition();
         if (impulse.LengthSquared() > maxRadius * maxRadius) {
             impulse.Normalize();
             impulse *= maxRadius;
         }
         impulse *= powerMult;
-        object->getBody()->ApplyLinearImpulseToCenter(impulse, true);
+        return impulse;
     }
 
     /**
@@ -49,7 +59,7 @@ public:
         }
         object->getBody()->SetLinearVelocity(b2Vec2(0, 0));
         object->getBody()->SetTransform(launchPos + offset, 0);
-        sprite.setTexture(TextureManager::getTexture(textures[2]));
+        sprite.setTexture(TextureManager::getTexture(textures[1]));
     }
 
     /**

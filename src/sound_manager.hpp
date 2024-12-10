@@ -44,6 +44,11 @@ public:
         return music.getVolume();
     }
 
+    /**
+     * @brief Loads sound into memory
+     * @param name saved name
+     * @param filePath sound file path
+     */
     static void loadSound(const std::string& name, const std::string& filePath)
     {
         sf::SoundBuffer* sound = new sf::SoundBuffer;
@@ -55,6 +60,11 @@ public:
         sounds[name] = sound;
     }
 
+    /**
+     * @brief Get sound with name
+     * @param name saved name
+     * @return const sf::SoundBuffer* sound
+     */
     static const sf::SoundBuffer* getSound(const std::string& name)
     {
         auto it = sounds.find(name);
@@ -72,6 +82,9 @@ public:
         return sounds.find(name) != sounds.end();
     }
 
+    /**
+     * @brief Loads all necessary sounds into memory
+     */
     static void loadAllSounds(){
         // possibly make a loop here? these are generated anyway
 
@@ -167,16 +180,20 @@ public:
 
     ~SoundManager()
     {
-        for (auto i: sounds)
-        {
-            delete i.second;
-        }
+        releaseResources();
     }
 
     SoundManager() = delete;
     SoundManager(const SoundManager&) = delete;
     SoundManager& operator=(const SoundManager&) = delete;
-
+    static void releaseResources() {
+        for (auto i: sounds)
+        {
+            delete i.second;
+        }
+        sounds.clear();
+        music.stop();
+    }
 };
 
 std::unordered_map<std::string, sf::SoundBuffer*> SoundManager::sounds;

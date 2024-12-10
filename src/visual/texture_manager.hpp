@@ -12,6 +12,11 @@ private:
     static std::unordered_map<std::string, sf::Texture> textures;
 
 public:
+    /**
+     * @brief Loads texture into memory
+     * @param name Name the texture will be saved with
+     * @param filePath path to texture file
+     */
     static void loadTexture(const std::string& name, const std::string& filePath)
     {
         sf::Texture texture;
@@ -24,6 +29,11 @@ public:
         textures[name] = std::move(texture);
     }
 
+    /**
+     * @brief Gets a texture based on the saved name
+     * @param name Name of the texture
+     * @return const sf::Texture& the texture
+     */
     static const sf::Texture& getTexture(const std::string& name)
     {
         auto it = textures.find(name);
@@ -41,6 +51,9 @@ public:
         return textures.find(name) != textures.end();
     }
 
+    /**
+     * @brief Loads all necessary textures into memory
+     */
     static void loadAllTextures(){
         /////////////// ICE////////////////////
         loadTexture("IceCircleS","assets/textures/ice/circleS.png");

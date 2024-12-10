@@ -13,8 +13,14 @@ class GameRender{
 public: 
     GameRender(sf::RenderWindow& game_window): window(game_window) {
         init();
+        for (size_t i=0; i<trajectoryPoints; i++) {
+            trajectorySprites.push_back(ObjectDefs::CreateSprite(40, 43, TextureManager::getTexture("IceCircleS")));
+        }
     }
 
+    /**
+     * @brief Sets game bounds based on window size
+     */
     void init() {
         // correct scaling
         std::cout << "size: " << window.getSize().x << ", " << window.getSize().y << std::endl;
@@ -22,7 +28,7 @@ public:
         float y = window.getSize().y / ObjectDefs::pixel_per_meter;
         gameXBounds.Set(0, x);
         gameYBounds.Set(0, y);
-        setCenter(0, 10);
+        setCenter(0, 0.35f * y);
     }
 
     /**
@@ -43,7 +49,8 @@ public:
             renderObject(i);
         }
         
-        //drawTrajectory();
+        if (level.getDragging()) drawTrajectory(level.getCurrentBird(),
+                level.getSlingshot().getLaunchImpulse(level.getCurrentBird()), level.getGravity());
 
         renderGround(level.getGround());
     }
@@ -79,13 +86,17 @@ public:
         return sf::Vector2f(x, y);
     }
 
+    /**
+     * @brief Transforms a screen position to game position. Considers both bounds.
+     * @param screenPos transform this
+     * @return b2Vec2 game position
+     */
     b2Vec2 toGamePos(const sf::Vector2f& screenPos) const {
         float t = screenPos.x / window.getSize().x;
         float x = gameXBounds.x + (gameXBounds.y - gameXBounds.x) * t;
         t = screenPos.y / window.getSize().y;
         float y = gameYBounds.x + (gameYBounds.y - gameYBounds.x) * (1-t);
         return b2Vec2(x, y);
-
     }
    
 private:
@@ -93,6 +104,8 @@ private:
     const float radToDeg = 180.0f / M_PI;
     b2Vec2 gameXBounds;  // minX, maxX
     b2Vec2 gameYBounds;  // minY, maxY
+    std::vector<sf::Sprite> trajectorySprites;
+    size_t trajectoryPoints = 20;
 
     /**
      * @brief Renders object on screen.
@@ -110,9 +123,29 @@ private:
      * @param rotDeg rotation in game in degrees
      */
     void renderSprite(sf::Sprite& sprite, const b2Vec2& gamePos, float rotDeg) const {
+        float scale = ObjectDefs::pixel_per_meter / ObjectDefs::default_pixel_per_meter;
+        sprite.setScale(sf::Vector2f(scale, scale));
         sprite.setPosition(toScreenPos(gamePos));
         sprite.setRotation(rotDeg);
         window.draw(sprite);
+    }
+
+    /**
+     * @brief Draws the trajectory an object will take after an impulse.
+     * @param object Draw this object's trajectory
+     * @param impulse based on this impulse
+     * @param gravity and this gravity
+     */
+    void drawTrajectory(Object* object, b2Vec2 impulse, b2Vec2 gravity) {
+        if (object == nullptr) return;
+
+        for (size_t i=0; i<trajectorySprites.size(); i++) {
+            b2Vec2 vel = (1/object->getBody()->GetMass()) * impulse;
+            float dt = 0.1f * (i+1);
+            float x = object->getBody()->GetPosition().x + vel.x * dt + gravity.x / 2.0f * dt * dt;
+            float y = object->getBody()->GetPosition().y + vel.y * dt + gravity.y / 2.0f * dt * dt;
+            renderSprite(trajectorySprites[i], b2Vec2(x, y), 0);
+        }
     }
 
 
@@ -142,7 +175,6 @@ private:
 
         window.draw(groundShape);
     }
-
 };
 
 #endif

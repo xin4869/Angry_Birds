@@ -29,6 +29,7 @@ class Game {
 public:
   Game() {
     window.create(sf::VideoMode(2000, 1250), "Angry Birds");
+    window.setPosition(sf::Vector2i(400, 50));
     window.setFramerateLimit(frameRate);
 
     TextureManager::loadAllTextures();
@@ -40,8 +41,13 @@ public:
     SoundManager::playMusic("Theme song");
   } 
 
-  ~Game() {}
+  ~Game() {
+    SoundManager::releaseResources();
+  }
 
+  /**
+   * @brief Runs the game
+   */
   void run() {
     sf::Clock clock;
     while (window.isOpen()) {
@@ -55,6 +61,10 @@ public:
     window.close();
   }
 
+  /**
+   * @brief Updates the game
+   * @param deltaTime update by this time (s)
+   */
   void update(float deltaTime){
     if (level) {
       level->update(deltaTime);
@@ -63,6 +73,9 @@ public:
     }
   }
 
+  /**
+   * @brief Draws game and gui
+   */
   void draw(){
     window.clear();
     if (gui) {
@@ -92,6 +105,9 @@ public:
     window.display();
   }
 
+  /**
+   * @brief Handles sfml events
+   */
   void handleEvents(){
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -122,12 +138,23 @@ public:
     return b2Vec2(worldPos.x / ObjectDefs::pixel_per_meter, worldPos.y / ObjectDefs::pixel_per_meter);
   }
 
+  /**
+   * @brief Handles mouse presses, performs actions based on it
+   */
   void handleMousePress() {
     sf::Vector2f mousePos(sf::Mouse::getPosition(window));
     auto clicked_button = gui->getClickedButton(mousePos);
     if (clicked_button) {
       handleButtonClicks(*clicked_button);
     } else if (currentState == GameState::in_game && level) {
+        if (level->isWin()) {
+          currentState = GameState::win;
+          return;
+        } else if (level->isLost()) {
+          currentState = GameState::lost;
+          return;
+        }
+      
       b2Vec2 b2WorldPos = renderer->toGamePos(mousePos);
       
       Bird* currentBird = level->getCurrentBird();
@@ -145,12 +172,18 @@ public:
     }       
   }
 
+  /**
+   * @brief Handles mouse releases and performs relevant actions
+   */
   void handleMouseRelease() {
     if (currentState == GameState::in_game && level) {
       level->endDragging();
     }
   }
 
+  /**
+   * @brief Handles mouse movement and performs relevant actions
+   */
   void handleMouseMove() {
     if (currentState == GameState::in_game && level) {
       sf::Vector2f mousePos(sf::Mouse::getPosition(window));
@@ -159,6 +192,10 @@ public:
     }
   }
 
+  /**
+   * @brief Handles button clicks, clicks the button and performs it's action
+   * @param button_name Name of button clicked (see gui)
+   */
   void handleButtonClicks(const std::string& button_name){
     std::cout << "Button clicked: " << button_name << std::endl;
     switch (currentState){
@@ -195,10 +232,6 @@ public:
         if (button_name == "back_btn") {
           currentState = GameState::level;
           SoundManager::playMusic("Theme song");
-        } else if (level->isWin()) {
-          currentState = GameState::win;
-        } else if (level->isLost()) {
-          currentState = GameState::lost;
         }
         break; 
   
@@ -220,6 +253,10 @@ public:
 
   b2World& getWorld() { return level->getWorld(); }
 
+  /**
+   * @brief Sets and loads a level
+   * @param level_number level to load
+   */
   void setLevel(int level_number){
     if (level_number > MAX_LEVELS || level_number <= 0) {
       std::cerr << "Invalid level number: " << level_number << std::endl;
