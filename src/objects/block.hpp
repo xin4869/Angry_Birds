@@ -386,9 +386,7 @@ namespace ObjectDefs{
         .shape = CreateShape(5.075f, 0.55f),
         .density = 0.0f,
         .maxHp = FLT_MAX,
-        .spriteWidth = 5.075f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        //.normalTextures = {"StoneRectL"}
+        .normalTextures = {{"ground1", 0.f}}
     };
 
     ObjectDefaults* getBlockDefaults(const std::string& name){

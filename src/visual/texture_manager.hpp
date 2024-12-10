@@ -260,6 +260,8 @@ public:
        loadTexture("slingshot2", "assets/textures/elements/slingshot_2.png");
        loadTexture("slingshot3", "assets/textures/elements/slingshot_3.png");
        loadTexture("ground", "assets/textures/ground.png");
+       loadTexture("ground1", "assets/textures/elements/ground2.png");
+       loadTexture("cloud", "assets/textures/elements/cloud.png");
     }
 
     TextureManager() = delete;

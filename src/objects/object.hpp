@@ -45,10 +45,12 @@ public:
             sounds.emplace(std::make_pair(i, sf::Sound()));
             sounds[i].setBuffer(*sound);
         }
+
         if (normalTextures.size() > 0) {
-        const sf::Texture& txt = TextureManager::getTexture(normalTextures[0].first);
-        sprite = ObjectDefs::CreateSprite(txt);
+            const sf::Texture& txt = TextureManager::getTexture(normalTextures[0].first);
+            sprite = ObjectDefs::CreateSprite(txt);
         }
+        
         bodyDef->position.Set(x, y);
         bodyDef->angle = M_PI / 180.0f * rotation;
         body = world->CreateBody(bodyDef);
