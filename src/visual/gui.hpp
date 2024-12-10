@@ -42,7 +42,7 @@ public:
         sf::Vector2f windowSize(window.getSize());
         sf::Vector2f textureSize(background_sprite.getTexture()->getSize());
         scaleX = windowSize.x / textureSize.x;
-        scaleY = windowSize.y / textureSize.y;   
+        scaleY = windowSize.y / textureSize.y;
 
         ObjectDefs::pixel_per_meter = ObjectDefs::default_pixel_per_meter * std::min(scaleX, scaleY);
 
@@ -80,6 +80,10 @@ public:
     void updateScore(int score) {
         texts["score"].setString("Score: " + std::to_string(score));
         texts["final_score"].setString(std::to_string(score));
+    }
+
+    void updateBirdsLeft(int count) {
+        texts["birds_left"].setString("Birds Left: " + std::to_string(count));
     }
 
     void toggleMusic() {
@@ -144,6 +148,7 @@ public:
         activateButtons({"back_btn"});
         buttons["back_btn"].draw(window);
         texts["score"].draw(window);
+        texts["birds_left"].draw(window);
     }
 
     void drawWin(int starCount){
@@ -287,6 +292,7 @@ private:
     void initText() {
         texts["score"] = GameText(56, sf::Vector2f(1686.2f, 10.4f), "");
         texts["final_score"] = GameText(56, sf::Vector2f(1686.2f, 10.4f), "");
+        texts["birds_left"] = GameText(56, sf::Vector2f(1286.2f, 10.4f), "");
         texts["help_title"] = GameText(203, sf::Vector2f(795.f, 128.8f), "Help", sf::Color::Black, sf::Color::White);
         texts["help_body"] = GameText(75, sf::Vector2f(632.8f, 472.8f), "Drag the bird and shot!\n          That's it! :D", sf::Color::Black, sf::Color::White);
         texts["level1"] = GameText(117, sf::Vector2f(505.8f, 195.8f), "1");

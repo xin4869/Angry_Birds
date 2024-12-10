@@ -70,6 +70,7 @@ public:
       level->update(deltaTime);
       int currentScore = static_cast<int>(level->getScore());
       gui->updateScore(currentScore);
+      gui->updateBirdsLeft(level->getUnusedBirds().size());
     }
   }
 
@@ -167,9 +168,9 @@ public:
         currentBird->Attack();
       }
       else {
-      level->startDragging(b2WorldPos);
+        level->startDragging(b2WorldPos);
       }
-    }       
+    }
   }
 
   /**
