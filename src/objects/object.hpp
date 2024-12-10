@@ -26,10 +26,8 @@ public:
         float density,
         float x,
         float y,
-        float spriteWidth,
-        float spriteHeight,
-        std::vector<std::string> textureDefs, 
-        std::vector<std::string> damageTextureDefs,
+        std::vector<std::pair<std::string, float>> textureDefs, 
+        std::vector<std::pair<std::string, float>> damageTextureDefs,
         std::vector<std::string> soundNames,
         float hp,
         float rotation=0.0f
@@ -48,8 +46,8 @@ public:
             sounds[i].setBuffer(*sound);
         }
         if (normalTextures.size() > 0) {
-        const sf::Texture& txt = TextureManager::getTexture(normalTextures[0]);
-        sprite = ObjectDefs::CreateSprite(spriteWidth, spriteHeight, txt);
+        const sf::Texture& txt = TextureManager::getTexture(normalTextures[0].first);
+        sprite = ObjectDefs::CreateSprite(txt);
         }
         bodyDef->position.Set(x, y);
         bodyDef->angle = M_PI / 180.0f * rotation;
@@ -66,60 +64,8 @@ public:
 
     Object(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults, float rotation=0.0f) :
         Object(world, &defaults->bodyDef, defaults->shape.get(), defaults->density,
-            x, y, defaults->spriteWidth, defaults->spriteHeight, defaults->normalTextures,
-            defaults->damageTextures, defaults->soundNames, defaults->maxHp, rotation) {}
+            x, y, defaults->normalTextures, defaults->damageTextures, defaults->soundNames, defaults->maxHp, rotation) {}
     
-   /**
-    * @brief Take damage. Overridden in subclasses. Set functionality there.
-    * @param dmg damage taken
-    * @return true if killed
-    */
-    virtual bool TakeDamage(float dmg){
-        CurrentHP = std::max(0.0f, CurrentHP - dmg);
-
-        if (!isDamaged) {
-            isDamaged = true;
-            if (isAnimated) {
-                currentTextureIdx = 0;
-            }
-        }
-        return CurrentHP <= 0;
-    } 
-
-    /**
-     * @brief Delete object in timer_s seconds (deleted by Level).
-     * @brief Objects need to be deleted between steps
-     * @brief and sounds take time to finish.
-     * @param timer_s time to deletion
-     */
-    void Destroy(float timer_s=0.0f){
-        destroyList.push_back(std::make_pair(timer_s, this));
-    }
-
-    virtual void updateTexture(float deltaTime){
-        const auto& textures = isDamaged? damageTextures:normalTextures;
-        if (isAnimated) {
-            animationTimer += deltaTime;
-            if (animationTimer >= 0.1f) {
-                animationTimer = 0.0f;               
-                currentTextureIdx = (currentTextureIdx + 1) % textures.size();
-                sprite.setTexture(TextureManager::getTexture(textures[currentTextureIdx]));
-            }
-        } else {
-            if (!textures.empty()) {        
-                size_t idx = isDamaged? 
-                static_cast<size_t>((textures.size() - 1) * (1 - CurrentHP/MaxHP)) : 0;              
-                idx = std::min(idx, textures.size() - 1);
-                sprite.setTexture(TextureManager::getTexture(textures[idx]));
-            } 
-        }       
-    }
-
-    /**
-     * @brief Plays a sound from sounds
-     * @param name Name of the sound (see sound manager for names)
-     * @return true if succesful
-     */
     bool playSound(const std::string& name)
     {
         if (sounds.find(name) == sounds.end()) return false;
@@ -135,6 +81,27 @@ public:
         return true;
     }
 
+    void Destroy(float timer_s=0.0f) {
+        destroyList.push_back(std::make_pair(timer_s, this));
+    }
+   
+   /**
+    * @brief Overridden in subclasses. Set functionality there.
+    * @param dmg damage taken
+    * @return true if killed
+    */
+    virtual bool TakeDamage(float dmg) = 0;
+
+    /**
+     * @brief Delete object in timer_s seconds (deleted by Level).
+     * @brief Objects need to be deleted between steps
+     * @brief and sounds take time to finish.
+     * @param timer_s time to deletion
+     */
+
+    virtual void updateTexture(float deltaTime) = 0;
+
+
     b2Body* getBody() { return body; }
     float getScore() { return score; }
     void setScore(float newScore) { score = newScore; }
@@ -147,8 +114,8 @@ public:
 protected :
     b2Body* body;
     sf::Sprite sprite;
-    std::vector<std::string> normalTextures;
-    std::vector<std::string> damageTextures;
+    std::vector<std::pair<std::string, float>> normalTextures;
+    std::vector<std::pair<std::string, float>> damageTextures;
 
     std::map<std::string, sf::Sound> sounds;  // <name, sound>
     float MaxHP;

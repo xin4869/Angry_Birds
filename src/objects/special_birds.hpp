@@ -12,10 +12,8 @@ namespace ObjectDefs
         .shape = CreateShape(1.0f),
         .density = 1.0f,
         .maxHp = 100.0f,
-        .spriteWidth = pixel_per_meter * 2.0f,
-        .spriteHeight = pixel_per_meter * 2.0f,
-        .normalTextures = { "NormalBird1", "NormalBird2"},
-        .damageTextures = { "NormalBirdDead"},
+        .normalTextures = {{"NormalBird1", 2.f}, {"NormalBird2", 0.1f}},
+        .damageTextures = {{"NormalBirdDead", 0.f}},
         .soundNames = { "bird 01 collision a1", "bird 01 collision a2", "bird 01 collision a3", "bird 01 collision a4",
                 "bird 01 flying", "bird 01 select", "bird destroyed" }
     };
@@ -25,10 +23,8 @@ namespace ObjectDefs
         .shape = CreateShape(1.0f),
         .density = 1.0f,
         .maxHp = 100.0f,
-        .spriteWidth = pixel_per_meter * 2.0f,
-        .spriteHeight = pixel_per_meter * 2.0f,
-        .normalTextures = { "SpeedBird1", "SpeedBird2", "SpeedBird3", "SpeedBird4"},
-        .damageTextures = { "SpeedBirdDead"},
+        .normalTextures = {{"SpeedBird1", 2.f}, {"SpeedBird2", 0.1f}, {"SpeedBird3", 0.8f}, {"SpeedBird4", 0.8f}},
+        .damageTextures = {{"SpeedBirdDead", 0.f}},
         .soundNames = { "bird 03 collision a1", "bird 03 collision a2", "bird 03 collision a3", "bird 03 collision a4",
                 "bird 03 flying", "bird 03 select", "bird destroyed", "special boost" }
     };
@@ -38,10 +34,8 @@ namespace ObjectDefs
         .shape = CreateShape(1.0f),
         .density = 1.0f,
         .maxHp = 100.0f,
-        .spriteWidth = pixel_per_meter * 2.0f,
-        .spriteHeight = pixel_per_meter * 2.0f,
-        .normalTextures = { "ExplodeBird1", "ExplodeBird2", "ExplodeBird3", "ExplodeBird4"},
-        .damageTextures = { "ExplodeBirdDead"},
+        .normalTextures = {{"ExplodeBird1", 2.f}, {"ExplodeBird2", 0.1f}, {"ExplodeBird3", 0.1f}, {"ExplodeBird4", 0.1f}, {"ExplodeBird5", std::numeric_limits<float>::max()}},
+        .damageTextures = {{"ExplodeBirdDead", 0.f}},
         .soundNames = { "bird 05 collision a1", "bird 05 collision a2", "bird 05 collision a3", "bird 05 collision a4",
                 "bird 05 flying", "bird 05 select", "bird destroyed", "tnt box explodes" }
     };
@@ -58,14 +52,14 @@ namespace ObjectDefs
 /**
  * @brief Physics bird with a special attack (not this one)
  */
-class NormalBird : public Bird
-{
+class NormalBird : public Bird {
 public:
     NormalBird(){}
     NormalBird(b2World* world, float x, float y, float rot=0.0f) :
         Bird(world, x, y, &ObjectDefs::normalBirdDefaults, rot) {}
 
-    void Attack() {
+
+    void Attack() override {
         if (!canAttack) return;
         canAttack = false;
         playSound("bird 01 select");
@@ -75,20 +69,20 @@ public:
      * @brief Take damage, play sounds, destroy if killed
      * @param dmg damage
      */
-    virtual bool TakeDamage(float dmg) {
-        // Textures?
-        bool isDead = CurrentHP <= 0;
-        CurrentHP = std::max(0.0f, CurrentHP - dmg);
-        
-        if (CurrentHP <= 0) {
-            playSound("bird destroyed");
-            if (!isDead) Destroy(2.0f);
-        } else if (dmg > 10.0f) {
-            playSound(rand() % 4);
-        }
 
-        return CurrentHP <= 0;
+    virtual void updateTexture(float deltaTime) override {
+        if (isDamaged) {
+            sprite.setTexture(TextureManager::getTexture(damageTextures[0].first));
+        } else {     
+            animationTimer += deltaTime;     
+            if (animationTimer >= normalTextures[currentTextureIdx].second) {
+                animationTimer = 0.0f;               
+                currentTextureIdx = (currentTextureIdx + 1) % normalTextures.size();
+                sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first));
+            }
+        }
     }
+
 };
 
 class SpeedBird : public Bird
@@ -97,7 +91,7 @@ public:
     SpeedBird(b2World* world, float x, float y, float rot=0.0f) :
         Bird(world, x, y, &ObjectDefs::speedBirdDefaults, rot) {}
 
-    void Attack() {
+    void Attack() override {
         if (!canAttack) return;
         canAttack = false;
         b2Vec2 vel = body->GetLinearVelocity();
@@ -107,23 +101,31 @@ public:
         playSound("special boost");
     }
 
-    virtual bool TakeDamage(float dmg) {
-        // Textures?
-        bool isDead = CurrentHP <= 0;
-        CurrentHP = std::max(0.0f, CurrentHP - dmg);
-        
-        if (CurrentHP <= 0) {
-            playSound("bird destroyed");
-            if (!isDead) Destroy(2.0f);
-        } else if (dmg > 10.0f) {
-            playSound(rand() % 4);
-        }
 
-        return CurrentHP <= 0;
+    virtual void updateTexture(float deltaTime) override {
+        if (isDamaged) {
+            sprite.setTexture(TextureManager::getTexture(damageTextures[0].first));
+        } else {
+            animationTimer += deltaTime;
+            if (animationTimer > normalTextures[currentTextureIdx].second) {
+                animationTimer = 0;
+                column += 1;
+                if (column > texture_order[row].size() - 1) {
+                    column = 0;
+                    row = rand() % texture_order.size();
+                }
+                currentTextureIdx = texture_order[row][column];
+                sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first));
+            }     
+        }
     }
 
 protected:
     const float abilitySpeedGain = 20.0f;  // tune this value
+    std::vector<std::vector<size_t>> texture_order = {{0,1}, {0,2,3,2}};
+    size_t row = 0;
+    size_t column = 0;
+
 };
 
 class ExplodeBird : public Bird
@@ -132,7 +134,7 @@ public:
     ExplodeBird(b2World* world, float x, float y, float rot=0.0f) :
         Bird(world, x, y, &ObjectDefs::explodeBirdDefaults, rot) {}
 
-    void Attack() {
+    void Attack() override {
         if (!canAttack) return;
         canAttack = false;
         
@@ -157,7 +159,7 @@ public:
         if (CurrentHP > 0) Destroy(2.0f);
     }
 
-    virtual bool TakeDamage(float dmg) {
+    virtual bool TakeDamage(float dmg) override {
         // Textures?
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
@@ -169,7 +171,32 @@ public:
             playSound(rand() % 4);
         }
 
+        if (!isDamaged) {isDamaged = true;}
+        
         return CurrentHP <= 0;
+    }
+
+
+    virtual void updateTexture(float deltaTime) override {
+        if (isDamaged) {
+            sprite.setTexture(TextureManager::getTexture(damageTextures[0].first));
+        } else {
+            if (!canAttack) {
+                sprite.setTexture(TextureManager::getTexture(normalTextures[4].first));
+            } else {
+                animationTimer += deltaTime;
+                if (animationTimer > normalTextures[currentTextureIdx].second) {
+                    animationTimer = 0;
+                    column += 1;
+                    if (column > texture_order[row].size() - 1) {
+                        column = 0;
+                        row = rand() % texture_order.size();
+                    }  
+                    currentTextureIdx = texture_order[row][column];
+                    sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first));
+                }
+            }
+        }
     }
 
 protected:
@@ -177,6 +204,9 @@ protected:
     int blastRays = 32;
     float blastRadius = 5.0f;
     float blastPower = 1000.0f;
+    size_t row = 0;
+    size_t column = 0;
+    std::vector<std::vector<size_t>> texture_order = {{0,1}, {0,2}, {0,3}};
 };
 
 

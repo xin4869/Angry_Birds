@@ -163,13 +163,14 @@ private:
         if (!ground) return;
         sf::ConvexShape groundShape;
         const std::vector<b2Vec2>& vertices = ground->getVertices();
+        
+        groundShape.setOrigin(toScreenPos(ground->getBody()->GetPosition()));
+        groundShape.setPosition(toScreenPos(ground->getBody()->GetPosition()));
+        
         groundShape.setPointCount(vertices.size());
-
         for (size_t i = 0; i < vertices.size(); ++i) {
             groundShape.setPoint(i, toScreenPos(vertices[i]));
         }
-
-        groundShape.setPosition(toScreenPos(ground->getBody()->GetPosition()));
 
         groundShape.setTexture(&TextureManager::getTexture("ground"));
 

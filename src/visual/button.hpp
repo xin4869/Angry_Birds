@@ -41,7 +41,7 @@ public:
     }
 
     sf::Vector2f getPosition() const {
-        return sprite.getGlobalBounds().getPosition();       
+        return sprite.getPosition();    
     }
 
     void draw(sf::RenderWindow& window) {

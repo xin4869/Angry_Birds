@@ -64,6 +64,18 @@ public:
 			world.Step(timeStep, velocityIterations, positionIterations);
 			addScore(collisionHandler.transferScore());
 
+			for (auto bird : birds) {
+				bird->updateTexture(timeStep);
+			}
+
+			for (auto pig : pigs) {
+				pig->updateTexture(timeStep);
+			}
+
+			for (auto block : blocks) {
+				block->updateTexture(timeStep);
+			}
+
 			for (auto i = Object::destroyList.begin(); i != Object::destroyList.end();) {
 				i->first -= timeStep;
 				// for implicitly detecting birds (score == 0)

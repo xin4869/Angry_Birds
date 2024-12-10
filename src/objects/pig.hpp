@@ -13,10 +13,8 @@ namespace ObjectDefs
         .shape = CreateShape(1.0f),
         .density = 1.0f,
         .maxHp = 100.0f,
-        .spriteWidth = pixel_per_meter * 2.0f,
-        .spriteHeight = pixel_per_meter * 2.0f,
-        .normalTextures = { "Pig1", "Pig2", "Pig3"},
-        .damageTextures = { "PigDamage1", "PigDamage2"},
+        .normalTextures = { {"Pig1", 3.f}, {"Pig2", 0.4f}, {"Pig3", 4.f}},
+        .damageTextures = { {"PigDamage1", 3.f}, {"PigDamage2", 0.4f}},
         .soundNames = pigSoundNames
     };
 
@@ -25,10 +23,8 @@ namespace ObjectDefs
         .shape = CreateShape(1.0f),
         .density = 1.0f,
         .maxHp = 300.0f,
-        .spriteWidth = pixel_per_meter * 2.0f,
-        .spriteHeight = pixel_per_meter * 2.0f,
-        .normalTextures = { "IronPig1", "IronPig2", "IronPig3"},
-        .damageTextures = { "IronPigDamage1", "IronPigDamage2"},
+        .normalTextures = { {"IronPig1", 3.f}, {"IronPig2", 0.4f}, {"IronPig3", 4.f}},
+        .damageTextures = { {"IronPigDamage1", 3.f}, {"IronPigDamage2", 0.4f}},
         .soundNames = pigSoundNames
     };
 
@@ -54,7 +50,8 @@ public:
     Pig(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults, float rot=0.0f):
         Object(world, x, y, defaults, rot) { score = 500.0f; }
 
-    virtual bool TakeDamage(float dmg) {
+
+    virtual bool TakeDamage(float dmg) override {
         // TODO: Textures?
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
@@ -66,8 +63,37 @@ public:
             playSound(rand() % 2);
         }
 
+        if (!isDamaged) {isDamaged = true;}
+        
         return CurrentHP <= 0;
     }
+
+    virtual void updateTexture(float deltaTime) override {
+        animationTimer += deltaTime;
+        if (isDamaged) {
+            if (animationTimer > damageTextures[currentTextureIdx].second) {
+                animationTimer = 0;
+                currentTextureIdx = (currentTextureIdx + 1) % damageTextures.size();
+            }
+            sprite.setTexture(TextureManager::getTexture(damageTextures[currentTextureIdx].first));
+        } else {
+            if (animationTimer > normalTextures[currentTextureIdx].second) {
+                animationTimer = 0;
+                column += 1; 
+                if (column > texture_order[row].size() - 1) {
+                    column = 0;
+                    row = rand() % texture_order.size();
+                }
+                currentTextureIdx = texture_order[row][column];
+                sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first));
+            }
+        }
+    }
+
+private:
+    std::vector<std::vector<size_t>> texture_order = {{0,1}, {0,2}};
+    size_t row = 0;
+    size_t column = 0;
 };
 
 #endif

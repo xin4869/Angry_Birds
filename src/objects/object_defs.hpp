@@ -19,8 +19,8 @@ namespace ObjectDefs
         float maxHp;
         float spriteWidth;
         float spriteHeight;
-        std::vector<std::string> normalTextures;
-        std::vector<std::string> damageTextures;
+        std::vector<std::pair<std::string, float>> normalTextures;
+        std::vector<std::pair<std::string, float>> damageTextures;
         std::vector<std::string> soundNames;
     };
 
@@ -119,12 +119,12 @@ namespace ObjectDefs
         return baseHP * area;
     }
 
-    sf::Sprite CreateSprite(float width_px, float height_px, const sf::Texture& texture)
+    sf::Sprite CreateSprite(const sf::Texture& texture)
     {
         sf::Sprite sprite(texture);
-        float scale_w = width_px / texture.getSize().x;
-        float scale_h = height_px / texture.getSize().y;
-        sprite.setScale(scale_w, scale_h);
+        // float scale_w = width_px / texture.getSize().x;
+        // float scale_h = height_px / texture.getSize().y;
+        // sprite.setScale(scale_w, scale_h);
         sprite.setOrigin(texture.getSize().x / 2.f, texture.getSize().y / 2.f);
         return sprite;
     }  

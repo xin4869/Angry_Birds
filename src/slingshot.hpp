@@ -12,7 +12,7 @@ class Slingshot
 public:
     // TODO: sfx
     Slingshot(){
-        sprite = ObjectDefs::CreateSprite(80, 228, TextureManager::getTexture(textures[0]));
+        sprite = ObjectDefs::CreateSprite(TextureManager::getTexture(textures[0]));
     }
     Slingshot(float x, float y) : pos(x, y) {
         launchPos = pos;

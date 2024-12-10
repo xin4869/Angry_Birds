@@ -34,6 +34,24 @@ public:
 
     bool getCanAttack() { return canAttack; }
 
+
+    virtual bool TakeDamage(float dmg) override {
+        // Textures?
+        bool isDead = CurrentHP <= 0;
+        CurrentHP = std::max(0.0f, CurrentHP - dmg);
+        
+        if (CurrentHP <= 0) {
+            playSound("bird destroyed");
+            if (!isDead) Destroy(2.0f);
+        } else if (dmg > 10.0f) {
+            playSound(rand() % 4);
+        }
+
+        if (!isDamaged) {isDamaged = true;}
+        
+        return CurrentHP <= 0;
+    }
+
 protected:
     bool canAttack = true;
 };

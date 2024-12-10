@@ -10,6 +10,7 @@ using Defs = ObjectDefs::ObjectDefaults;
 
 class Block : public Object{
 public:
+
     Block(b2World* world, float x, float y, Defs* defaults, float rotation=0.0f) :
         Object(world, x, y, defaults, rotation) {
             isAnimated = false;
@@ -17,7 +18,7 @@ public:
         }
     
     Block(){}
-    virtual bool TakeDamage(float dmg) {
+    virtual bool TakeDamage(float dmg) override {
         // Better way: sound lists for collision, damage, destroy
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
@@ -35,7 +36,21 @@ public:
             else playSound(rand() % 5);
         }
 
+        if (!isDamaged) {isDamaged = true;}
+        
         return CurrentHP <= 0;
+    }
+    
+    virtual void updateTexture(float deltaTime) override {
+        animationTimer += deltaTime;
+        if (animationTimer > 0.1f) {
+            if (isDamaged) {
+                animationTimer = 0.f;
+                size_t idx = static_cast<size_t>((damageTextures.size() - 1) * (1 - CurrentHP/MaxHP));              
+                idx = std::min(idx, damageTextures.size() - 1);
+                this->sprite.setTexture(TextureManager::getTexture(damageTextures[idx].first));
+            }   
+        }              
     }
 };
 
@@ -57,10 +72,8 @@ namespace ObjectDefs{
         .shape = CreateShape(0.53f),  
         .density = 0.8f,
         .maxHp = CalculateHp(50.0f, 0.53f),
-        .spriteWidth = 0.53f * 2 * pixel_per_meter,
-        .spriteHeight = 0.53f * 2 * pixel_per_meter,
-        .normalTextures = {"IceCircleS"},
-        .damageTextures = {"IceCircleSDamaged1", "IceCircleSDamaged2", "IceCircleSDamaged3"},
+        .normalTextures = {{"IceCircleS", 0.f}},
+        .damageTextures = {{"IceCircleSDamaged1",0.f}, {"IceCircleSDamaged2",0.f}, {"IceCircleSDamaged3", 0.f}},
         .soundNames = iceSoundNames
     };
 
@@ -69,10 +82,8 @@ namespace ObjectDefs{
         .shape = CreateShape(1.0f),  
         .density = 0.8f,
         .maxHp = CalculateHp(50.0f, 1.0f),
-        .spriteWidth = 1.0f * 2 * pixel_per_meter,
-        .spriteHeight = 1.0f * 2 * pixel_per_meter,
-        .normalTextures = {"IceCircleM"},
-        .damageTextures = {"IceCircleMDamaged1", "IceCircleMDamaged2", "IceCircleMDamaged3"},
+        .normalTextures = {{"IceCircleM",0.f}},
+        .damageTextures = {{"IceCircleMDamaged1",0.f}, {"IceCircleMDamaged2", 0.f}, {"IceCircleMDamaged3", 0.f}},
         .soundNames = iceSoundNames
     };
 
@@ -81,10 +92,8 @@ namespace ObjectDefs{
         .shape = CreateShape(1.05f, 1.05f),
         .density = 0.8f,
         .maxHp = CalculateHp(50.0f, 1.05f, 1.05f),
-        .spriteWidth = 1.05f * pixel_per_meter,
-        .spriteHeight = 1.05f * pixel_per_meter,
-        .normalTextures = {"IceSquare"},
-        .damageTextures = {"IceSquareDamaged1", "IceSquareDamaged2", "IceSquareDamaged3"},
+        .normalTextures = {{"IceSquare", 0.f}},
+        .damageTextures = {{"IceSquareDamaged1",0.f}, {"IceSquareDamaged2", 0.f}, {"IceSquareDamaged3", 0.f}},
         .soundNames = iceSoundNames
     };
 
@@ -93,10 +102,8 @@ namespace ObjectDefs{
         .shape = CreateShapeTriangle(2.0f, 2.0f, true),  
         .density = 0.8f,
         .maxHp = CalculateHpTriangle(50.0f, 2.0f, 2.0f),
-        .spriteWidth = 2.0f * pixel_per_meter,
-        .spriteHeight = 2.0f * pixel_per_meter,
-        .normalTextures = {"IceTriangleLeft"},
-        .damageTextures = {"IceTriangleLeftDamaged1", "IceTriangleLeftDamaged2", "IceTriangleLeftDamaged3"},
+        .normalTextures = {{"IceTriangleLeft", 0.f}},
+        .damageTextures = {{"IceTriangleLeftDamaged1",0.f}, {"IceTriangleLeftDamaged2", 0.f}, {"IceTriangleLeftDamaged3", 0.f}},
         .soundNames = iceSoundNames
     };
 
@@ -105,10 +112,8 @@ namespace ObjectDefs{
         .shape = CreateShapeTriangle(2.0f, 2.0f, false),  
         .density = 0.8f,
         .maxHp = CalculateHp(50.0f, 2.0f, 2.0f),
-        .spriteWidth = 2.0f * pixel_per_meter,
-        .spriteHeight = 2.0f * pixel_per_meter,
-        .normalTextures = {"IceTriangleRight"},
-        .damageTextures = {"IceTriangleRightDamaged1", "IceTriangleRightDamaged2", "IceTriangleRightDamaged3"},
+        .normalTextures = {{"IceTriangleRight", 0.f}},
+        .damageTextures = {{"IceTriangleRightDamaged1",0.f}, {"IceTriangleRightDamaged2", 0.f}, {"IceTriangleRightDamaged3", 0.f}},
         .soundNames = iceSoundNames
     };
   
@@ -117,10 +122,8 @@ namespace ObjectDefs{
         .shape = CreateShape(2.3f, 1.3f),
         .density = 0.8f,
         .maxHp = CalculateHp(50.0f, 2.3f, 1.3f),
-        .spriteWidth = 2.3f * pixel_per_meter,
-        .spriteHeight = 1.3f * pixel_per_meter,
-        .normalTextures = {"IceRect"},
-        .damageTextures = {"IceRectDamaged1", "IceRectDamaged2", "IceRectDamaged3"},
+        .normalTextures = {{"IceRect", 0.f}},
+        .damageTextures = {{"IceRectDamaged1",0.f}, {"IceRectDamaged2", 0.f}, {"IceRectDamaged3", 0.f}},
         .soundNames = iceSoundNames
     };
 
@@ -129,10 +132,8 @@ namespace ObjectDefs{
         .shape = CreateShape(2.0f, 0.55f),
         .density = 0.8f,
         .maxHp = CalculateHp(50.0f, 2.0f, 0.55f),
-        .spriteWidth = 2.0f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"IceRectS"},
-        .damageTextures = {"IceRectSDamaged1", "IceRectSDamaged2", "IceRectSDamaged3"},
+        .normalTextures = {{"IceRectS", 0.f}},
+        .damageTextures = {{"IceRectSDamaged1",0.f}, {"IceRectSDamaged2", 0.f}, {"IceRectSDamaged3", 0.f}},
         .soundNames = iceSoundNames
     };
 
@@ -141,10 +142,8 @@ namespace ObjectDefs{
         .shape = CreateShape(4.25f, 0.55f),
         .density = 0.8f,
         .maxHp = CalculateHp(50.0f, 4.25f, 0.55f),
-        .spriteWidth = 4.25f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"IceRectM"},
-        .damageTextures = {"IceRectMDamaged1", "IceRectMDamaged2", "IceRectMDamaged3"},
+        .normalTextures = {{"IceRectM", 0.f}},
+        .damageTextures = {{"IceRectMDamaged1",0.f}, {"IceRectMDamaged2", 0.f}, {"IceRectMDamaged3", 0.f}},
         .soundNames = iceSoundNames
     };
 
@@ -153,10 +152,8 @@ namespace ObjectDefs{
         .shape = CreateShape(5.075f, 0.55f),
         .density = 0.8f,
         .maxHp = CalculateHp(50.0f, 5.075f, 0.55f),
-        .spriteWidth = 5.075f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"IceRectL"},
-        .damageTextures = {"IceRectLDamaged1", "IceRectLDamaged2", "IceRectLDamaged3"},
+        .normalTextures = {{"IceRectL", 0.f}},
+        .damageTextures = {{"IceRectLDamaged1",0.f}, {"IceRectLDamaged2", 0.f}, {"IceRectLDamaged3", 0.f}},
         .soundNames = iceSoundNames
     };
 
@@ -166,10 +163,8 @@ namespace ObjectDefs{
         .shape = CreateShape(0.53f),
         .density = 1.2f,
         .maxHp = CalculateHp(150.0f, 0.53f),
-        .spriteWidth = 0.53f * 2 * pixel_per_meter,
-        .spriteHeight = 0.53f * 2 * pixel_per_meter,
-        .normalTextures = {"WoodCircleS"},
-        .damageTextures = {"WoodCircleSDamaged1", "WoodCircleSDamaged2", "WoodCircleSDamaged3"},
+        .normalTextures = {{"WoodCircleS", 0.f}},
+        .damageTextures = {{"WoodCircleSDamaged1",0.f}, {"WoodCircleSDamaged2", 0.f}, {"WoodCircleSDamaged3", 0.f}},
         .soundNames = woodSoundNames
     };
 
@@ -178,10 +173,8 @@ namespace ObjectDefs{
         .shape = CreateShape(1.0f),
         .density = 1.2f,
         .maxHp = CalculateHp(150.0f, 1.0f),
-        .spriteWidth = 1.0f * 2 * pixel_per_meter,
-        .spriteHeight = 1.0f * 2 *  pixel_per_meter,
-        .normalTextures = {"WoodCircleM"},
-        .damageTextures = {"WoodCircleMDamaged1", "WoodCircleMDamaged2", "WoodCircleMDamaged3"},
+        .normalTextures = {{"WoodCircleM", 0.f}},
+        .damageTextures = {{"WoodCircleMDamaged1",0.f}, {"WoodCircleMDamaged2", 0.f}, {"WoodCircleMDamaged3", 0.f}},
         .soundNames = woodSoundNames
     };
 
@@ -190,10 +183,8 @@ namespace ObjectDefs{
         .shape = CreateShape(1.05f, 1.05f),
         .density = 1.2f,
         .maxHp = CalculateHp(150.0f, 1.05f, 1.05f),
-        .spriteWidth = 1.05f * pixel_per_meter,
-        .spriteHeight = 1.05f * pixel_per_meter,
-        .normalTextures = {"WoodSquare"},
-        .damageTextures = {"WoodSquareDamaged1", "WoodSquareDamaged2", "WoodSquareDamaged3"},
+        .normalTextures = {{"WoodSquare", 0.f}},
+        .damageTextures = {{"WoodSquareDamaged1",0.f}, {"WoodSquareDamaged2", 0.f}, {"WoodSquareDamaged3", 0.f}},
         .soundNames = woodSoundNames
     };
 
@@ -202,10 +193,8 @@ namespace ObjectDefs{
         .shape = CreateShapeTriangle(2.0f, 2.0f, true),
         .density = 1.2f,
         .maxHp = CalculateHpTriangle(150.0f, 2.0f, 2.0f),
-        .spriteWidth = 2.0f * pixel_per_meter,
-        .spriteHeight = 2.0f * pixel_per_meter,
-        .normalTextures = {"WoodTriangleLeft"},
-        .damageTextures = {"WoodTriangleLeftDamaged1", "WoodTriangleLeftDamaged2", "WoodTriangleLeftDamaged3"},
+        .normalTextures = {{"WoodTriangleLeft", 0.f}},
+        .damageTextures = {{"WoodTriangleLeftDamaged1",0.f}, {"WoodTriangleLeftDamaged2", 0.f}, {"WoodTriangleLeftDamaged3", 0.f}},
         .soundNames = woodSoundNames
     };
 
@@ -214,10 +203,8 @@ namespace ObjectDefs{
         .shape = CreateShapeTriangle(2.0f, 2.0f, false),
         .density = 1.2f,
         .maxHp = CalculateHpTriangle(150.0f, 2.0f, 2.0f),
-        .spriteWidth = 2.0f * pixel_per_meter,
-        .spriteHeight = 2.0f * pixel_per_meter,
-        .normalTextures = {"WoodTriangleRight"},
-        .damageTextures = {"WoodTriangleRightDamaged1", "WoodTriangleRightDamaged2", "WoodTriangleRightDamaged3"},
+        .normalTextures = {{"WoodTriangleRight", 0.f}},
+        .damageTextures = {{"WoodTriangleRightDamaged1",0.f}, {"WoodTriangleRightDamaged2", 0.f}, {"WoodTriangleRightDamaged3", 0.f}},
         .soundNames = woodSoundNames
     };
 
@@ -226,10 +213,8 @@ namespace ObjectDefs{
         .shape = CreateShape(2.3f, 1.3f),
         .density = 1.2f,
         .maxHp = CalculateHp(150.0f, 2.3f, 1.3f),
-        .spriteWidth = 2.3f * pixel_per_meter,
-        .spriteHeight = 1.3f * pixel_per_meter,
-        .normalTextures = {"WoodRect"},
-        .damageTextures = {"WoodRectDamaged1", "WoodRectDamaged2", "WoodRectDamaged3"},
+        .normalTextures = {{"WoodRect", 0.f}},
+        .damageTextures = {{"WoodRectDamaged1",0.f}, {"WoodRectDamaged2", 0.f}, {"WoodRectDamaged3", 0.f}},
         .soundNames = woodSoundNames
     };
 
@@ -238,10 +223,8 @@ namespace ObjectDefs{
         .shape = CreateShape(2.0f, 0.55f),
         .density = 1.2f,
         .maxHp = CalculateHp(150.0f, 2.0f, 0.55f),
-        .spriteWidth = 2.0f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"WoodRectS"},
-        .damageTextures = {"WoodRectSDamaged1", "WoodRectSDamaged2", "WoodRectSDamaged3"},
+        .normalTextures = {{"WoodRectS", 0.f}},
+        .damageTextures = {{"WoodRectSDamaged1",0.f}, {"WoodRectSDamaged2", 0.f}, {"WoodRectSDamaged3", 0.f}},
         .soundNames = woodSoundNames
     };
 
@@ -250,10 +233,8 @@ namespace ObjectDefs{
         .shape = CreateShape(4.25f, 0.55f),
         .density = 1.2f,
         .maxHp = CalculateHp(150.0f, 4.25f, 0.55f),
-        .spriteWidth = 4.25f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"WoodRectM"},
-        .damageTextures = {"WoodRectMDamaged1", "WoodRectMDamaged2", "WoodRectMDamaged3"},
+        .normalTextures = {{"WoodRectM", 0.f}},
+        .damageTextures = {{"WoodRectMDamaged1",0.f}, {"WoodRectMDamaged2", 0.f}, {"WoodRectMDamaged3", 0.f}},
         .soundNames = woodSoundNames
     };
 
@@ -262,10 +243,8 @@ namespace ObjectDefs{
         .shape = CreateShape(5.075f, 0.55f),
         .density = 1.2f,
         .maxHp = CalculateHp(150.0f, 5.075f, 0.55f),
-        .spriteWidth = 5.075f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"WoodRectL"},
-        .damageTextures = {"WoodRectLDamaged1", "WoodRectLDamaged2", "WoodRectLDamaged3"},
+        .normalTextures = {{"WoodRectL", 0.f}},
+        .damageTextures = {{"WoodRectLDamaged1",0.f}, {"WoodRectLDamaged2", 0.f}, {"WoodRectLDamaged3", 0.f}},
         .soundNames = woodSoundNames
     };
 
@@ -275,10 +254,8 @@ namespace ObjectDefs{
         .shape = CreateShape(0.53f),
         .density = 2.6f,
         .maxHp = CalculateHp(300.0f, 0.53f),
-        .spriteWidth = 0.53f * 2 * pixel_per_meter,
-        .spriteHeight = 0.53f * 2 * pixel_per_meter,
-        .normalTextures = {"StoneCircleS"},
-        .damageTextures = {"StoneCircleSDamaged1", "StoneCircleSDamaged2", "StoneCircleSDamaged3"},
+        .normalTextures = {{"StoneCircleS", 0.f}},
+        .damageTextures = {{"StoneCircleSDamaged1",0.f}, {"StoneCircleSDamaged2", 0.f}, {"StoneCircleSDamaged3", 0.f}},
         .soundNames = rockSoundNames
     };
 
@@ -287,10 +264,8 @@ namespace ObjectDefs{
         .shape = CreateShape(1.0f),
         .density = 2.6f,
         .maxHp = CalculateHp(300.0f, 1.0f),
-        .spriteWidth = 1.0f * 2 * pixel_per_meter,
-        .spriteHeight = 1.0f * 2 * pixel_per_meter,
-        .normalTextures = {"StoneCircleM"},
-        .damageTextures = {"StoneCircleMDamaged1", "StoneCircleMDamaged2", "StoneCircleMDamaged3"},
+        .normalTextures = {{"StoneCircleM", 0.f}},
+        .damageTextures = {{"StoneCircleMDamaged1",0.f}, {"StoneCircleMDamaged2", 0.f}, {"StoneCircleMDamaged3", 0.f}},
         .soundNames = rockSoundNames
     };
 
@@ -299,10 +274,8 @@ namespace ObjectDefs{
         .shape = CreateShape(1.05f, 1.05f),
         .density = 2.6f,
         .maxHp = CalculateHp(300.0f, 1.05f, 1.05f),
-        .spriteWidth = 1.05f * pixel_per_meter,
-        .spriteHeight = 1.05f * pixel_per_meter,
-        .normalTextures = {"StoneSquare"},
-        .damageTextures = {"StoneSquareDamaged1", "StoneSquareDamaged2", "StoneSquareDamaged3"},
+        .normalTextures = {{"StoneSquare", 0.f}},
+        .damageTextures = {{"StoneSquareDamaged1",0.f}, {"StoneSquareDamaged2", 0.f}, {"StoneSquareDamaged3", 0.f}},
         .soundNames = rockSoundNames
     };
 
@@ -311,10 +284,8 @@ namespace ObjectDefs{
         .shape = CreateShapeTriangle(2.0f, 2.0f, true),
         .density = 2.6f,
         .maxHp = CalculateHpTriangle(300.0f, 2.0f, 2.0f),
-        .spriteWidth = 2.0f  * pixel_per_meter,
-        .spriteHeight = 2.0f * pixel_per_meter,
-        .normalTextures = {"StoneTriangleLeft"},
-        .damageTextures = {"StoneTriangleLeftDamaged1", "StoneTriangleLeftDamaged2", "StoneTriangleLeftDamaged3"},
+        .normalTextures = {{"StoneTriangleLeft", 0.f}},
+        .damageTextures = {{"StoneTriangleLeftDamaged1", 0.f}, {"StoneTriangleLeftDamaged2", 0.f}, {"StoneTriangleLeftDamaged3", 0.f}},
         .soundNames = rockSoundNames
     };
 
@@ -323,10 +294,8 @@ namespace ObjectDefs{
         .shape = CreateShapeTriangle(2.0f, 2.0f, false),
         .density = 2.6f,
         .maxHp = CalculateHpTriangle(300.0f, 2.0f, 2.0f),
-        .spriteWidth = 2.0f  * pixel_per_meter,
-        .spriteHeight = 2.0f * pixel_per_meter,
-        .normalTextures = {"StoneTriangleRight"},
-        .damageTextures = {"StoneTriangleRightDamaged1", "StoneTriangleRightDamaged2", "StoneTriangleRightDamaged3"},
+        .normalTextures = {{"StoneTriangleRight", 0.f}},
+        .damageTextures = {{"StoneTriangleRightDamaged1", 0.f}, {"StoneTriangleRightDamaged2", 0.f}, {"StoneTriangleRightDamaged3", 0.f}},
         .soundNames = rockSoundNames
     };
 
@@ -335,10 +304,8 @@ namespace ObjectDefs{
         .shape = CreateShape(2.3f, 1.3f),
         .density = 2.6f,
         .maxHp = CalculateHp(300.0f, 2.3f, 1.3f),
-        .spriteWidth = 2.3f * pixel_per_meter,
-        .spriteHeight = 1.3f * pixel_per_meter,
-        .normalTextures = {"StoneRect"},
-        .damageTextures = {"StoneRectDamaged1", "StoneRectDamaged2", "StoneRectDamaged3"},
+        .normalTextures = {{"StoneRect", 0.f}},
+        .damageTextures = {{"StoneRectDamaged1", 0.f}, {"StoneRectDamaged2", 0.f}, {"StoneRectDamaged3", 0.f}},
         .soundNames = rockSoundNames
     };
 
@@ -347,10 +314,8 @@ namespace ObjectDefs{
         .shape = CreateShape(2.0f, 0.55f),
         .density = 2.6f,
         .maxHp = CalculateHp(300.0f, 2.0f, 0.55f),
-        .spriteWidth = 2.0f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"StoneRectS"},
-        .damageTextures = {"StoneRectSDamaged1", "StoneRectSDamaged2", "StoneRectSDamaged3"},
+        .normalTextures = {{"StoneRectS", 0.f}},
+        .damageTextures = {{"StoneRectSDamaged1", 0.f}, {"StoneRectSDamaged2", 0.f}, {"StoneRectSDamaged3", 0.f}},
         .soundNames = rockSoundNames
     };
     
@@ -359,10 +324,8 @@ namespace ObjectDefs{
         .shape = CreateShape(4.25f, 0.55f),
         .density = 2.6f,
         .maxHp = CalculateHp(300.0f, 4.25f, 0.55f),
-        .spriteWidth = 4.25f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"StoneRectM"},
-        .damageTextures = {"StoneRectMDamaged1", "StoneRectMDamaged2", "StoneRectMDamaged3"},
+        .normalTextures = {{"StoneRectM", 0.f}},
+        .damageTextures = {{"StoneRectMDamaged1", 0.f}, {"StoneRectMDamaged2", 0.f}, {"StoneRectMDamaged3", 0.f}},
         .soundNames = rockSoundNames
     };
     
@@ -371,10 +334,8 @@ namespace ObjectDefs{
         .shape = CreateShape(5.075f, 0.55f),
         .density = 2.6f,
         .maxHp = CalculateHp(300.0f, 5.075f, 0.55f),
-        .spriteWidth = 5.075f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"StoneRectL"},
-        .damageTextures = {"StoneRectLDamaged1", "StoneRectLDamaged2", "StoneRectLDamaged3"},
+        .normalTextures = {{"StoneRectL", 0.f}},
+        .damageTextures = {{"StoneRectLDamaged1", 0.f}, {"StoneRectLDamaged2", 0.f}, {"StoneRectLDamaged3", 0.f}},
         .soundNames = rockSoundNames
     };
 
@@ -384,9 +345,7 @@ namespace ObjectDefs{
         .shape = CreateShape(0.53f),
         .density = 0.0f,
         .maxHp = FLT_MAX,
-        .spriteWidth = 0.53f * 2 * pixel_per_meter,
-        .spriteHeight = 0.53f * 2 * pixel_per_meter,
-        .normalTextures = {"StoneCircleS"}
+        .normalTextures = {{"StoneCircleS", 0.f}}
     };
 
     ObjectDefaults fixedCircleM = {
@@ -394,9 +353,7 @@ namespace ObjectDefs{
         .shape = CreateShape(1.0f),
         .density = 0.0f,
         .maxHp = FLT_MAX,
-        .spriteWidth = 1.0f * 2 * pixel_per_meter,
-        .spriteHeight = 1.0f * 2 * pixel_per_meter,
-        .normalTextures = {"StoneCircleM"}
+        .normalTextures = {{"StoneCircleM", 0.f}}
     };
 
     ObjectDefaults fixedSquare = {
@@ -404,9 +361,7 @@ namespace ObjectDefs{
         .shape = CreateShape(1.05f, 1.05f),
         .density = 0.0f,
         .maxHp = FLT_MAX,
-        .spriteWidth = 1.05f * pixel_per_meter,
-        .spriteHeight = 1.05f * pixel_per_meter,
-        .normalTextures = {"StoneSquare"}
+        .normalTextures = {{"StoneSquare", 0.f}}
     };
 
     ObjectDefaults fixedTriangleLeft = {
@@ -414,9 +369,7 @@ namespace ObjectDefs{
         .shape = CreateShapeTriangle(2.0f, 2.0f, true),
         .density = 0.0f,
         .maxHp = FLT_MAX,
-        .spriteWidth = 2.0f  * pixel_per_meter,
-        .spriteHeight = 2.0f * pixel_per_meter,
-        .normalTextures = {"StoneTriangleLeft"}
+        .normalTextures = {{"StoneTriangleLeft", 0.f}}
     };
 
     ObjectDefaults fixedTriangleRight = {
@@ -424,39 +377,7 @@ namespace ObjectDefs{
         .shape = CreateShapeTriangle(2.0f, 2.0f, false),
         .density = 0.0f,
         .maxHp = FLT_MAX,
-        .spriteWidth = 2.0f  * pixel_per_meter,
-        .spriteHeight = 2.0f * pixel_per_meter,
-        .normalTextures = {"StoneTriangleRight"}
-    };
-
-    ObjectDefaults fixedRect = {
-        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShape(2.3f, 1.3f),
-        .density = 0.0f,
-        .maxHp = FLT_MAX,
-        .spriteWidth = 2.3f * pixel_per_meter,
-        .spriteHeight = 1.3f * pixel_per_meter,
-        .normalTextures = {"StoneRect"}
-    };
-
-    ObjectDefaults fixedRectS = {
-        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShape(2.0f, 0.55f),
-        .density = 0.0f,
-        .maxHp = FLT_MAX,
-        .spriteWidth = 2.0f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"StoneRectS"}
-    };
-    
-    ObjectDefaults fixedRectM = {
-        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShape(4.25f, 0.55f),
-        .density = 0.0f,
-        .maxHp = FLT_MAX,
-        .spriteWidth = 4.25f * pixel_per_meter,
-        .spriteHeight = 0.55f * pixel_per_meter,
-        .normalTextures = {"StoneRectM"}
+        .normalTextures = {{"StoneTriangleRight", 0.f}}
     };
     
     ObjectDefaults fixedRectL = {
@@ -502,9 +423,6 @@ namespace ObjectDefs{
         if (name == "fixedsquare") return &fixedSquare;
         if (name == "fixedtriangleleft") return &fixedTriangleLeft;
         if (name == "fixedtriangleright") return &fixedTriangleRight;
-        if (name == "fixedrect") return &fixedRect;
-        if (name == "fixedrects") return &fixedRectS;
-        if (name == "fixedrectm") return &fixedRectM;
         if (name == "fixedrectl") return &fixedRectL;
         return nullptr;
     }
