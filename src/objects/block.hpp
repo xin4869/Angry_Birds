@@ -56,6 +56,19 @@ public:
 };
 
 namespace ObjectDefs{
+    // SHAPES
+    const float circleSRadius = 0.53f;
+    const float circleMRadius = 1.0f;
+    const float squareSize = 1.05f;
+    const float triangleSize = 2.0f;
+    const float rectWidth = 2.3f;
+    const float rectHeight = 1.3f;
+    const float rectXHeight = 0.55f;
+    const float rectSWidth = 2.0f;
+    const float rectMWidth = 4.25f;
+    const float rectLWidth = 5.075f;
+
+    // ICE
     std::vector<std::string> iceSoundNames = { "ice light collision a2", "ice light collision a1", "ice light collision a3", "ice light collision a4",
             "ice light collision a5", "ice light collision a6", "ice light collision a7", "ice light collision a8" };
     
@@ -67,12 +80,14 @@ namespace ObjectDefs{
             "rock collision a5", "rock damage a1", "rock damage a2", "rock damage a3",
             "rock destroyed a1", "rock destroyed a2", "rock destroyed a3", "rock rolling" };
 
-    // ICE
+    const float iceDensity = 0.8f;
+    const float iceBaseHP = 50.0f;
+
     ObjectDefaults iceCircleS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(0.53f),  
-        .density = 0.8f,
-        .maxHp = CalculateHp(50.0f, 0.53f),
+        .shape = CreateShape(circleSRadius),
+        .density = iceDensity,
+        .maxHp = CalculateHp(iceBaseHP, circleSRadius),
         .normalTextures = {{"IceCircleS", 0.f}},
         .damageTextures = {{"IceCircleSDamaged1",0.f}, {"IceCircleSDamaged2",0.f}, {"IceCircleSDamaged3", 0.f}},
         .soundNames = iceSoundNames
@@ -80,9 +95,9 @@ namespace ObjectDefs{
 
     ObjectDefaults iceCircleM = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.0f),  
-        .density = 0.8f,
-        .maxHp = CalculateHp(50.0f, 1.0f),
+        .shape = CreateShape(circleMRadius),  
+        .density = iceDensity,
+        .maxHp = CalculateHp(iceBaseHP, circleMRadius),
         .normalTextures = {{"IceCircleM",0.f}},
         .damageTextures = {{"IceCircleMDamaged1",0.f}, {"IceCircleMDamaged2", 0.f}, {"IceCircleMDamaged3", 0.f}},
         .soundNames = iceSoundNames
@@ -90,9 +105,9 @@ namespace ObjectDefs{
 
     ObjectDefaults iceSquare = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.05f, 1.05f),
-        .density = 0.8f,
-        .maxHp = CalculateHp(50.0f, 1.05f, 1.05f),
+        .shape = CreateShape(squareSize, squareSize),
+        .density = iceDensity,
+        .maxHp = CalculateHp(iceBaseHP, squareSize, squareSize),
         .normalTextures = {{"IceSquare", 0.f}},
         .damageTextures = {{"IceSquareDamaged1",0.f}, {"IceSquareDamaged2", 0.f}, {"IceSquareDamaged3", 0.f}},
         .soundNames = iceSoundNames
@@ -100,9 +115,9 @@ namespace ObjectDefs{
 
     ObjectDefaults iceTriangleLeft = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShapeTriangle(2.0f, 2.0f, true),  
-        .density = 0.8f,
-        .maxHp = CalculateHpTriangle(50.0f, 2.0f, 2.0f),
+        .shape = CreateShapeTriangle(triangleSize, triangleSize, true),
+        .density = iceDensity,
+        .maxHp = CalculateHpTriangle(iceBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"IceTriangleLeft", 0.f}},
         .damageTextures = {{"IceTriangleLeftDamaged1",0.f}, {"IceTriangleLeftDamaged2", 0.f}, {"IceTriangleLeftDamaged3", 0.f}},
         .soundNames = iceSoundNames
@@ -110,9 +125,9 @@ namespace ObjectDefs{
 
     ObjectDefaults iceTriangleRight = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShapeTriangle(2.0f, 2.0f, false),  
-        .density = 0.8f,
-        .maxHp = CalculateHp(50.0f, 2.0f, 2.0f),
+        .shape = CreateShapeTriangle(triangleSize, triangleSize, false),  
+        .density = iceDensity,
+        .maxHp = CalculateHpTriangle(iceBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"IceTriangleRight", 0.f}},
         .damageTextures = {{"IceTriangleRightDamaged1",0.f}, {"IceTriangleRightDamaged2", 0.f}, {"IceTriangleRightDamaged3", 0.f}},
         .soundNames = iceSoundNames
@@ -120,9 +135,9 @@ namespace ObjectDefs{
   
     ObjectDefaults iceRect = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(2.3f, 1.3f),
-        .density = 0.8f,
-        .maxHp = CalculateHp(50.0f, 2.3f, 1.3f),
+        .shape = CreateShape(rectWidth, rectHeight),
+        .density = iceDensity,
+        .maxHp = CalculateHp(iceBaseHP, rectWidth, rectHeight),
         .normalTextures = {{"IceRect", 0.f}},
         .damageTextures = {{"IceRectDamaged1",0.f}, {"IceRectDamaged2", 0.f}, {"IceRectDamaged3", 0.f}},
         .soundNames = iceSoundNames
@@ -130,9 +145,9 @@ namespace ObjectDefs{
 
     ObjectDefaults iceRectS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(2.0f, 0.55f),
-        .density = 0.8f,
-        .maxHp = CalculateHp(50.0f, 2.0f, 0.55f),
+        .shape = CreateShape(rectSWidth, rectXHeight),
+        .density = iceDensity,
+        .maxHp = CalculateHp(iceBaseHP, rectSWidth, rectXHeight),
         .normalTextures = {{"IceRectS", 0.f}},
         .damageTextures = {{"IceRectSDamaged1",0.f}, {"IceRectSDamaged2", 0.f}, {"IceRectSDamaged3", 0.f}},
         .soundNames = iceSoundNames
@@ -140,9 +155,9 @@ namespace ObjectDefs{
 
     ObjectDefaults iceRectM = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(4.25f, 0.55f),
-        .density = 0.8f,
-        .maxHp = CalculateHp(50.0f, 4.25f, 0.55f),
+        .shape = CreateShape(rectMWidth, rectXHeight),
+        .density = iceDensity,
+        .maxHp = CalculateHp(iceBaseHP, rectMWidth, rectXHeight),
         .normalTextures = {{"IceRectM", 0.f}},
         .damageTextures = {{"IceRectMDamaged1",0.f}, {"IceRectMDamaged2", 0.f}, {"IceRectMDamaged3", 0.f}},
         .soundNames = iceSoundNames
@@ -150,20 +165,23 @@ namespace ObjectDefs{
 
     ObjectDefaults iceRectL = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(5.075f, 0.55f),
-        .density = 0.8f,
-        .maxHp = CalculateHp(50.0f, 5.075f, 0.55f),
+        .shape = CreateShape(rectLWidth, rectXHeight),
+        .density = iceDensity,
+        .maxHp = CalculateHp(iceBaseHP, rectLWidth, rectXHeight),
         .normalTextures = {{"IceRectL", 0.f}},
         .damageTextures = {{"IceRectLDamaged1",0.f}, {"IceRectLDamaged2", 0.f}, {"IceRectLDamaged3", 0.f}},
         .soundNames = iceSoundNames
     };
 
     // WOOD
+    const float woodDensity = 1.2f;
+    const float woodBaseHP = 150.0f;
+
     ObjectDefaults woodCircleS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(0.53f),
-        .density = 1.2f,
-        .maxHp = CalculateHp(150.0f, 0.53f),
+        .shape = CreateShape(circleSRadius),
+        .density = woodDensity,
+        .maxHp = CalculateHp(woodBaseHP, circleSRadius),
         .normalTextures = {{"WoodCircleS", 0.f}},
         .damageTextures = {{"WoodCircleSDamaged1",0.f}, {"WoodCircleSDamaged2", 0.f}, {"WoodCircleSDamaged3", 0.f}},
         .soundNames = woodSoundNames
@@ -171,9 +189,9 @@ namespace ObjectDefs{
 
     ObjectDefaults woodCircleM = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.0f),
-        .density = 1.2f,
-        .maxHp = CalculateHp(150.0f, 1.0f),
+        .shape = CreateShape(circleMRadius),
+        .density = woodDensity,
+        .maxHp = CalculateHp(woodBaseHP, circleMRadius),
         .normalTextures = {{"WoodCircleM", 0.f}},
         .damageTextures = {{"WoodCircleMDamaged1",0.f}, {"WoodCircleMDamaged2", 0.f}, {"WoodCircleMDamaged3", 0.f}},
         .soundNames = woodSoundNames
@@ -181,9 +199,9 @@ namespace ObjectDefs{
 
     ObjectDefaults woodSquare = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.05f, 1.05f),
-        .density = 1.2f,
-        .maxHp = CalculateHp(150.0f, 1.05f, 1.05f),
+        .shape = CreateShape(squareSize, squareSize),
+        .density = woodDensity,
+        .maxHp = CalculateHp(woodBaseHP, squareSize, squareSize),
         .normalTextures = {{"WoodSquare", 0.f}},
         .damageTextures = {{"WoodSquareDamaged1",0.f}, {"WoodSquareDamaged2", 0.f}, {"WoodSquareDamaged3", 0.f}},
         .soundNames = woodSoundNames
@@ -191,9 +209,9 @@ namespace ObjectDefs{
 
     ObjectDefaults woodTriangleLeft = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShapeTriangle(2.0f, 2.0f, true),
-        .density = 1.2f,
-        .maxHp = CalculateHpTriangle(150.0f, 2.0f, 2.0f),
+        .shape = CreateShapeTriangle(triangleSize, triangleSize, true),
+        .density = woodDensity,
+        .maxHp = CalculateHpTriangle(woodBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"WoodTriangleLeft", 0.f}},
         .damageTextures = {{"WoodTriangleLeftDamaged1",0.f}, {"WoodTriangleLeftDamaged2", 0.f}, {"WoodTriangleLeftDamaged3", 0.f}},
         .soundNames = woodSoundNames
@@ -201,9 +219,9 @@ namespace ObjectDefs{
 
     ObjectDefaults woodTriangleRight = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShapeTriangle(2.0f, 2.0f, false),
-        .density = 1.2f,
-        .maxHp = CalculateHpTriangle(150.0f, 2.0f, 2.0f),
+        .shape = CreateShapeTriangle(triangleSize, triangleSize, false),
+        .density = woodDensity,
+        .maxHp = CalculateHpTriangle(woodBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"WoodTriangleRight", 0.f}},
         .damageTextures = {{"WoodTriangleRightDamaged1",0.f}, {"WoodTriangleRightDamaged2", 0.f}, {"WoodTriangleRightDamaged3", 0.f}},
         .soundNames = woodSoundNames
@@ -211,9 +229,9 @@ namespace ObjectDefs{
 
     ObjectDefaults woodRect = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(2.3f, 1.3f),
-        .density = 1.2f,
-        .maxHp = CalculateHp(150.0f, 2.3f, 1.3f),
+        .shape = CreateShape(rectWidth, rectHeight),
+        .density = woodDensity,
+        .maxHp = CalculateHp(woodBaseHP, rectWidth, rectHeight),
         .normalTextures = {{"WoodRect", 0.f}},
         .damageTextures = {{"WoodRectDamaged1",0.f}, {"WoodRectDamaged2", 0.f}, {"WoodRectDamaged3", 0.f}},
         .soundNames = woodSoundNames
@@ -221,9 +239,9 @@ namespace ObjectDefs{
 
     ObjectDefaults woodRectS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(2.0f, 0.55f),
-        .density = 1.2f,
-        .maxHp = CalculateHp(150.0f, 2.0f, 0.55f),
+        .shape = CreateShape(rectSWidth, rectXHeight),
+        .density = woodDensity,
+        .maxHp = CalculateHp(woodBaseHP, rectSWidth, rectXHeight),
         .normalTextures = {{"WoodRectS", 0.f}},
         .damageTextures = {{"WoodRectSDamaged1",0.f}, {"WoodRectSDamaged2", 0.f}, {"WoodRectSDamaged3", 0.f}},
         .soundNames = woodSoundNames
@@ -231,9 +249,9 @@ namespace ObjectDefs{
 
     ObjectDefaults woodRectM = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(4.25f, 0.55f),
-        .density = 1.2f,
-        .maxHp = CalculateHp(150.0f, 4.25f, 0.55f),
+        .shape = CreateShape(rectMWidth, rectXHeight),
+        .density = woodDensity,
+        .maxHp = CalculateHp(woodBaseHP, rectMWidth, rectXHeight),
         .normalTextures = {{"WoodRectM", 0.f}},
         .damageTextures = {{"WoodRectMDamaged1",0.f}, {"WoodRectMDamaged2", 0.f}, {"WoodRectMDamaged3", 0.f}},
         .soundNames = woodSoundNames
@@ -241,20 +259,23 @@ namespace ObjectDefs{
 
     ObjectDefaults woodRectL = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(5.075f, 0.55f),
-        .density = 1.2f,
-        .maxHp = CalculateHp(150.0f, 5.075f, 0.55f),
+        .shape = CreateShape(rectLWidth, rectXHeight),
+        .density = woodDensity,
+        .maxHp = CalculateHp(woodBaseHP, rectLWidth, rectXHeight),
         .normalTextures = {{"WoodRectL", 0.f}},
         .damageTextures = {{"WoodRectLDamaged1",0.f}, {"WoodRectLDamaged2", 0.f}, {"WoodRectLDamaged3", 0.f}},
         .soundNames = woodSoundNames
     };
 
     // STONE
+    const float stoneDensity = 2.6f;
+    const float stoneBaseHP = 300.0f;
+
     ObjectDefaults stoneCircleS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(0.53f),
-        .density = 2.6f,
-        .maxHp = CalculateHp(300.0f, 0.53f),
+        .shape = CreateShape(circleSRadius),
+        .density = stoneDensity,
+        .maxHp = CalculateHp(stoneBaseHP, circleSRadius),
         .normalTextures = {{"StoneCircleS", 0.f}},
         .damageTextures = {{"StoneCircleSDamaged1",0.f}, {"StoneCircleSDamaged2", 0.f}, {"StoneCircleSDamaged3", 0.f}},
         .soundNames = rockSoundNames
@@ -262,9 +283,9 @@ namespace ObjectDefs{
 
     ObjectDefaults stoneCircleM = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.0f),
-        .density = 2.6f,
-        .maxHp = CalculateHp(300.0f, 1.0f),
+        .shape = CreateShape(circleMRadius),
+        .density = stoneDensity,
+        .maxHp = CalculateHp(stoneBaseHP, circleMRadius),
         .normalTextures = {{"StoneCircleM", 0.f}},
         .damageTextures = {{"StoneCircleMDamaged1",0.f}, {"StoneCircleMDamaged2", 0.f}, {"StoneCircleMDamaged3", 0.f}},
         .soundNames = rockSoundNames
@@ -272,9 +293,9 @@ namespace ObjectDefs{
 
     ObjectDefaults stoneSquare = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.05f, 1.05f),
-        .density = 2.6f,
-        .maxHp = CalculateHp(300.0f, 1.05f, 1.05f),
+        .shape = CreateShape(squareSize, squareSize),
+        .density = stoneDensity,
+        .maxHp = CalculateHp(stoneBaseHP, squareSize, squareSize),
         .normalTextures = {{"StoneSquare", 0.f}},
         .damageTextures = {{"StoneSquareDamaged1",0.f}, {"StoneSquareDamaged2", 0.f}, {"StoneSquareDamaged3", 0.f}},
         .soundNames = rockSoundNames
@@ -282,9 +303,9 @@ namespace ObjectDefs{
 
     ObjectDefaults stoneTriangleLeft = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShapeTriangle(2.0f, 2.0f, true),
-        .density = 2.6f,
-        .maxHp = CalculateHpTriangle(300.0f, 2.0f, 2.0f),
+        .shape = CreateShapeTriangle(triangleSize, triangleSize, true),
+        .density = stoneDensity,
+        .maxHp = CalculateHpTriangle(stoneBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"StoneTriangleLeft", 0.f}},
         .damageTextures = {{"StoneTriangleLeftDamaged1", 0.f}, {"StoneTriangleLeftDamaged2", 0.f}, {"StoneTriangleLeftDamaged3", 0.f}},
         .soundNames = rockSoundNames
@@ -292,9 +313,9 @@ namespace ObjectDefs{
 
     ObjectDefaults stoneTriangleRight = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShapeTriangle(2.0f, 2.0f, false),
-        .density = 2.6f,
-        .maxHp = CalculateHpTriangle(300.0f, 2.0f, 2.0f),
+        .shape = CreateShapeTriangle(triangleSize, triangleSize, false),
+        .density = stoneDensity,
+        .maxHp = CalculateHpTriangle(stoneBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"StoneTriangleRight", 0.f}},
         .damageTextures = {{"StoneTriangleRightDamaged1", 0.f}, {"StoneTriangleRightDamaged2", 0.f}, {"StoneTriangleRightDamaged3", 0.f}},
         .soundNames = rockSoundNames
@@ -302,9 +323,9 @@ namespace ObjectDefs{
 
     ObjectDefaults stoneRect = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(2.3f, 1.3f),
-        .density = 2.6f,
-        .maxHp = CalculateHp(300.0f, 2.3f, 1.3f),
+        .shape = CreateShape(rectWidth, rectHeight),
+        .density = stoneDensity,
+        .maxHp = CalculateHp(stoneBaseHP, rectWidth, rectHeight),
         .normalTextures = {{"StoneRect", 0.f}},
         .damageTextures = {{"StoneRectDamaged1", 0.f}, {"StoneRectDamaged2", 0.f}, {"StoneRectDamaged3", 0.f}},
         .soundNames = rockSoundNames
@@ -312,9 +333,9 @@ namespace ObjectDefs{
 
     ObjectDefaults stoneRectS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(2.0f, 0.55f),
-        .density = 2.6f,
-        .maxHp = CalculateHp(300.0f, 2.0f, 0.55f),
+        .shape = CreateShape(rectSWidth, rectXHeight),
+        .density = stoneDensity,
+        .maxHp = CalculateHp(stoneBaseHP, rectSWidth, rectXHeight),
         .normalTextures = {{"StoneRectS", 0.f}},
         .damageTextures = {{"StoneRectSDamaged1", 0.f}, {"StoneRectSDamaged2", 0.f}, {"StoneRectSDamaged3", 0.f}},
         .soundNames = rockSoundNames
@@ -322,9 +343,9 @@ namespace ObjectDefs{
     
     ObjectDefaults stoneRectM = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(4.25f, 0.55f),
-        .density = 2.6f,
-        .maxHp = CalculateHp(300.0f, 4.25f, 0.55f),
+        .shape = CreateShape(rectMWidth, rectXHeight),
+        .density = stoneDensity,
+        .maxHp = CalculateHp(stoneBaseHP, rectMWidth, rectXHeight),
         .normalTextures = {{"StoneRectM", 0.f}},
         .damageTextures = {{"StoneRectMDamaged1", 0.f}, {"StoneRectMDamaged2", 0.f}, {"StoneRectMDamaged3", 0.f}},
         .soundNames = rockSoundNames
@@ -332,9 +353,9 @@ namespace ObjectDefs{
     
     ObjectDefaults stoneRectL = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(5.075f, 0.55f),
-        .density = 2.6f,
-        .maxHp = CalculateHp(300.0f, 5.075f, 0.55f),
+        .shape = CreateShape(rectLWidth, rectXHeight),
+        .density = stoneDensity,
+        .maxHp = CalculateHp(stoneBaseHP, rectLWidth, rectXHeight),
         .normalTextures = {{"StoneRectL", 0.f}},
         .damageTextures = {{"StoneRectLDamaged1", 0.f}, {"StoneRectLDamaged2", 0.f}, {"StoneRectLDamaged3", 0.f}},
         .soundNames = rockSoundNames
@@ -343,48 +364,42 @@ namespace ObjectDefs{
     // FIXED
     ObjectDefaults fixedCircleS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShape(0.53f),
-        .density = 0.0f,
+        .shape = CreateShape(circleSRadius),
         .maxHp = FLT_MAX,
         .normalTextures = {{"StoneCircleS", 0.f}}
     };
 
     ObjectDefaults fixedCircleM = {
         .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShape(1.0f),
-        .density = 0.0f,
+        .shape = CreateShape(circleMRadius),
         .maxHp = FLT_MAX,
         .normalTextures = {{"StoneCircleM", 0.f}}
     };
 
     ObjectDefaults fixedSquare = {
         .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShape(1.05f, 1.05f),
-        .density = 0.0f,
+        .shape = CreateShape(squareSize, squareSize),
         .maxHp = FLT_MAX,
         .normalTextures = {{"StoneSquare", 0.f}}
     };
 
     ObjectDefaults fixedTriangleLeft = {
         .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShapeTriangle(2.0f, 2.0f, true),
-        .density = 0.0f,
+        .shape = CreateShapeTriangle(triangleSize, triangleSize, true),
         .maxHp = FLT_MAX,
         .normalTextures = {{"StoneTriangleLeft", 0.f}}
     };
 
     ObjectDefaults fixedTriangleRight = {
         .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShapeTriangle(2.0f, 2.0f, false),
-        .density = 0.0f,
+        .shape = CreateShapeTriangle(triangleSize, triangleSize, false),
         .maxHp = FLT_MAX,
         .normalTextures = {{"StoneTriangleRight", 0.f}}
     };
     
     ObjectDefaults fixedRectL = {
         .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShape(5.075f, 0.55f),
-        .density = 0.0f,
+        .shape = CreateShape(rectLWidth, rectXHeight),
         .maxHp = FLT_MAX,
         .normalTextures = {{"ground1", 0.f}}
     };

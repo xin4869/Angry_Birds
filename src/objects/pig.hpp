@@ -7,11 +7,13 @@
 namespace ObjectDefs
 {
     std::vector<std::string> pigSoundNames = { "piglette damage a4", "piglette damage a7", "piglette destroyed" };
+    const float pigRadius = 1.0f;
+    const float pigDensity = 1.0f;
 
     ObjectDefaults normalPigDefaults = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.0f),
-        .density = 1.0f,
+        .shape = CreateShape(pigRadius),
+        .density = pigDensity,
         .maxHp = 100.0f,
         .normalTextures = { {"Pig1", 3.f}, {"Pig2", 0.4f}, {"Pig3", 4.f}},
         .damageTextures = { {"PigDamage1", 3.f}, {"PigDamage2", 0.4f}},
@@ -20,8 +22,8 @@ namespace ObjectDefs
 
     ObjectDefaults ironPigDefaults = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.0f),
-        .density = 1.0f,
+        .shape = CreateShape(pigRadius),
+        .density = pigDensity,
         .maxHp = 300.0f,
         .normalTextures = { {"IronPig1", 3.f}, {"IronPig2", 0.4f}, {"IronPig3", 4.f}},
         .damageTextures = { {"IronPigDamage1", 3.f}, {"IronPigDamage2", 0.4f}},

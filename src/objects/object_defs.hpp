@@ -15,7 +15,7 @@ namespace ObjectDefs
     {
         b2BodyDef bodyDef;   
         std::unique_ptr<b2Shape> shape;
-        float density;
+        float density=0.0f;
         float maxHp;
         float spriteWidth;
         float spriteHeight;

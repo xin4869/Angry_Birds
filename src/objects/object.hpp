@@ -17,7 +17,10 @@ class Object
 {
 public:
     Object(){}
-    virtual ~Object() { body->GetWorld()->DestroyBody(body); }
+    virtual ~Object() {
+        body->GetWorld()->DestroyBody(body);
+        for (auto i: sounds) i.second.stop();
+    }
 
     Object(
         b2World* world,
@@ -57,7 +60,7 @@ public:
         b2Fixture* fix = body->CreateFixture(shape, density);
         
         // tune these
-        body->SetAngularDamping(0.3f);
+        body->SetAngularDamping(0.5f);
         fix->SetFriction(0.4f);
 
         body->SetTransform(b2Vec2(x,y), body->GetAngle());

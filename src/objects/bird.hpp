@@ -37,6 +37,7 @@ public:
 
     virtual bool TakeDamage(float dmg) override {
         // Textures?
+        canAttack = false;
         bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
         

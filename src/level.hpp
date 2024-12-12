@@ -108,7 +108,7 @@ public:
 	 * @return true if lost
 	 */
 	bool isLost() {
-		bool lost = unusedBirds.empty() && birds.empty();
+		bool lost = unusedBirds.empty() && (birds.empty() || (currentBird && !currentBird->getBody()->IsAwake() && !currentBird->getCanAttack()));
 		if (!lost) return false;
 		if (Object::destroyList.size() > 0) return false;
 		return lost;

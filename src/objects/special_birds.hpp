@@ -7,11 +7,15 @@
 
 namespace ObjectDefs
 {
+    const float birdRadius = 1.0f;
+    const float birdDensity = 1.0f;
+    const float birdMaxHp = 100.0f;
+
     ObjectDefaults normalBirdDefaults = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.0f),
-        .density = 1.0f,
-        .maxHp = 100.0f,
+        .shape = CreateShape(birdRadius),
+        .density = birdDensity,
+        .maxHp = birdMaxHp,
         .normalTextures = {{"NormalBird1", 2.f}, {"NormalBird2", 0.1f}},
         .damageTextures = {{"NormalBirdDead", 0.f}},
         .soundNames = { "bird 01 collision a1", "bird 01 collision a2", "bird 01 collision a3", "bird 01 collision a4",
@@ -20,9 +24,9 @@ namespace ObjectDefs
 
     ObjectDefaults speedBirdDefaults = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.0f),
-        .density = 1.0f,
-        .maxHp = 100.0f,
+        .shape = CreateShape(birdRadius),
+        .density = birdDensity,
+        .maxHp = birdMaxHp,
         .normalTextures = {{"SpeedBird1", 2.f}, {"SpeedBird2", 0.1f}, {"SpeedBird3", 0.8f}, {"SpeedBird4", 0.8f}},
         .damageTextures = {{"SpeedBirdDead", 0.f}},
         .soundNames = { "bird 03 collision a1", "bird 03 collision a2", "bird 03 collision a3", "bird 03 collision a4",
@@ -31,9 +35,9 @@ namespace ObjectDefs
 
     ObjectDefaults explodeBirdDefaults = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(1.0f),
-        .density = 1.0f,
-        .maxHp = 100.0f,
+        .shape = CreateShape(birdRadius),
+        .density = birdDensity,
+        .maxHp = birdMaxHp,
         .normalTextures = {{"ExplodeBird1", 2.f}, {"ExplodeBird2", 0.1f}, {"ExplodeBird3", 0.1f}, {"ExplodeBird4", 0.1f}, {"ExplodeBird5", std::numeric_limits<float>::max()}},
         .damageTextures = {{"ExplodeBirdDead", 0.f}},
         .soundNames = { "bird 05 collision a1", "bird 05 collision a2", "bird 05 collision a3", "bird 05 collision a4",
