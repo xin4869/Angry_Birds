@@ -12,16 +12,16 @@
 class GameRender{
 public: 
     GameRender(sf::RenderWindow& game_window): window(game_window) {
-        init();
         for (size_t i=0; i<trajectoryPoints; i++) {
             trajectorySprites.push_back(ObjectDefs::CreateSprite(TextureManager::getTexture("cloud")));
         }
+        setBounds();
     }
 
     /**
      * @brief Sets game bounds based on window size
      */
-    void init() {
+    void setBounds() {
         // correct scaling
         std::cout << "size: " << window.getSize().x << ", " << window.getSize().y << std::endl;
         float x = window.getSize().x / ObjectDefs::pixel_per_meter;
@@ -29,6 +29,16 @@ public:
         gameXBounds.Set(0, x);
         gameYBounds.Set(0, y);
         setCenter(0, 0.35f * y);
+    }
+
+    bool inBounds(Object* object) {
+        b2Vec2 pos = object->getBody()->GetPosition();
+        sf::Vector2f screenPos = toScreenPos(pos);
+        if (screenPos.x > window.getSize().x || screenPos.x < 0 ||
+            screenPos.y > window.getSize().y || screenPos.y < 0) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -41,12 +51,15 @@ public:
 
         for (auto i: level.getBirds()) {
             renderObject(i);
+            if (!inBounds(i)) {i->setOut();}
         }
         for (auto i: level.getPigs()) {
             renderObject(i);
+            if (!inBounds(i)) {i->setOut();}
         }
         for (auto i: level.getBlocks()) {
             renderObject(i);
+            if (!inBounds(i)) {i->setOut();}
         }
         
         if (level.getDragging()) drawTrajectory(level.getCurrentBird(),
@@ -102,10 +115,10 @@ public:
 private:
     sf::RenderWindow& window;
     const float radToDeg = 180.0f / M_PI;
+    std::vector<sf::Sprite> trajectorySprites;
+    size_t trajectoryPoints = 30;
     b2Vec2 gameXBounds;  // minX, maxX
     b2Vec2 gameYBounds;  // minY, maxY
-    std::vector<sf::Sprite> trajectorySprites;
-    size_t trajectoryPoints = 20;
 
     /**
      * @brief Renders object on screen.

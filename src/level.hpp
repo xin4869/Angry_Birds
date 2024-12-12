@@ -31,7 +31,7 @@ public:
 	void loadLevel(const std::string path) {
 		clearLevel();
 		gravity.Set(0, -10);
-		slingshot.setPos(-15, 2);
+		slingshot.setPos(-15, 3);
 		scoreLimits = { 1000, 2000, 3000 };
 		setScore(0);
 		
@@ -62,40 +62,92 @@ public:
 
 		while (accumulator >= timeStep) {
 			world.Step(timeStep, velocityIterations, positionIterations);
+			
 			addScore(collisionHandler.transferScore());
 
-			for (auto bird : birds) {
-				bird->updateTexture(timeStep);
-			}
-
-			for (auto pig : pigs) {
-				pig->updateTexture(timeStep);
-			}
-
-			for (auto block : blocks) {
-				block->updateTexture(timeStep);
-			}
-
-			for (auto i = Object::destroyList.begin(); i != Object::destroyList.end();) {
-				i->first -= timeStep;
-				// for implicitly detecting birds (score == 0)
-				if (i->second != nullptr && i->second->getScore() > 0) {
-					i->second->getBody()->SetEnabled(false);
-				}
-				if (i->first <= 0) {
-					if (i->second != nullptr){
-						if (i->second == currentBird) currentBird = nullptr;
-						findErase(i->second);
-						delete i->second;
-					}
-					i = Object::destroyList.erase(i);
-				} else {
-					i++;
-				}
-			}
+			updateAllTexture();
+			addToDestroyList();
+			cleanDestroyList();
 
 			accumulator -= timeStep;
 		}
+	}
+
+	void addToDestroyList() {
+		for (auto& bird: birds) {
+			if (bird->getHP() == 0) {bird->Destroy(3.f);} 
+			else if (bird->isUsed() && !bird->isMoving()) {bird->Destroy(3.f);} 
+			else if (bird->isOut()) {bird->Destroy();}
+		}
+
+		for (auto& pig: pigs) {
+			if (pig->getHP() == 0) {pig->Destroy(3.f);} 
+			else if (pig->isOut()) {pig->Destroy();}
+		}
+
+		for (auto& block: blocks) {
+			if (block->getBody()->GetType() == b2_staticBody) {return;}
+			else {
+				if (block->getHP() == 0) {block->Destroy(2.f);}
+				else if (block->isOut()) {block->Destroy();}
+			}			
+		}
+	}
+
+	void disableAllDestroyed() {	
+		for (auto i = Object::destroyList.begin(); i != Object::destroyList.end();) {
+			i->first -= timeStep;
+			// for implicitly detecting birds (score == 0)
+			if ( i->second != nullptr && (i->second->getDisableOnDestroy() || i-> first <= 0) ) {
+				i->second->getBody()->SetEnabled(false);
+				i->second->playSound("bird destroyed");
+				
+			}
+			
+			if (i->first <= -3.f) {
+				if (i->second != nullptr) {
+					if (i->second == currentBird) currentBird = nullptr;
+					findErase(i->second);
+					delete i->second;
+				}
+				i = Object::destroyList.erase(i);
+			} else {i++;}
+		}		
+	}
+
+	void finalDestroy() {	
+		for (auto i = Object::destroyList.begin(); i != Object::destroyList.end();) {
+			i->first -= timeStep;
+			// for implicitly detecting birds (score == 0)
+			if (i->second != nullptr && i->second->getDisableOnDestroy()) {
+				i->second->getBody()->SetEnabled(false);
+			}
+			if (i->first <= 0) {
+				if (i->second != nullptr) {
+					if (i->second == currentBird) currentBird = nullptr;
+					findErase(i->second);
+					delete i->second;
+				}
+				i = Object::destroyList.erase(i);
+			} else {i++;}
+		}		
+	}
+
+	void updateAllTexture() {
+		for (auto& bird : birds) {
+			bird->updateTexture(timeStep);
+		}
+
+		for (auto& pig : pigs) {
+			pig->updateTexture(timeStep);
+		}
+
+		for (auto& block : blocks) {
+			if (block->getBody()->GetType() != b2_staticBody) {
+				block->updateTexture(timeStep);
+			}		
+		}
+
 	}
 
 	/**
@@ -144,7 +196,7 @@ public:
 	 * @return true if succesful
 	 */
 	bool startDragging(const b2Vec2& worldPos) {
-		if  (isDragging || !currentBird) return false;
+		if  (isDragging) return false;
 
 		if (isMouseOnBird(worldPos)) {
 			isDragging = true;
@@ -173,6 +225,7 @@ public:
 
 			currentBird->getBody()->SetAwake(true);
 			currentBird->getBody()->SetEnabled(true);
+			currentBird->useBird();
 
 			isDragging = false;
 		}
@@ -189,11 +242,11 @@ public:
 		unusedBirds.pop();
 
 		if (birdType == "normalbird") {
-			currentBird = new NormalBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
+			currentBird = new NormalBird(&world, slingshot.getPos().x + 0.5f, slingshot.getPos().y + 2.f);
 		} else if (birdType == "speedbird") {
-			currentBird = new SpeedBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
+			currentBird = new SpeedBird(&world, slingshot.getPos().x + 0.5f, slingshot.getPos().y + 2.f);
 		} else if (birdType == "explodebird") {
-			currentBird = new ExplodeBird(&world, slingshot.getPos().x, slingshot.getPos().y + 2.0f);
+			currentBird = new ExplodeBird(&world, slingshot.getPos().x + 0.5f, slingshot.getPos().y + 2.f);
 		} else {
 			currentBird = nullptr;
 		}
@@ -225,23 +278,28 @@ protected:
 	 * @param toDelete remove this from the lists
 	 */
 	void findErase(Object* toDelete) {
-		for (auto i=birds.begin(); i!=birds.end(); i++) {
+		for (auto i=birds.begin(); i!=birds.end();) {
 			if (*i == toDelete) {
 				birds.erase(i);
 				return;
-			}
+			}			
+			++i;
 		}
-		for (auto i=pigs.begin(); i!=pigs.end(); i++) {
+
+		for (auto i=pigs.begin(); i!=pigs.end();) {
 			if (*i == toDelete) {
 				pigs.erase(i);
 				return;
 			}
+			++i;
 		}
+
 		for (auto i=blocks.begin(); i!=blocks.end(); i++) {
 			if (*i == toDelete) {
 				blocks.erase(i);
 				return;
 			}
+			++i;
 		}
 	}
 
@@ -321,17 +379,17 @@ protected:
 	}
 
 
-	static Bird* createBird(b2World* world, float x, float y, const std::string& birdType) {
-        if (birdType == "normalbird") {
-            return new NormalBird(world, x, y);
-        } else if (birdType == "speedbird") {
-            return new SpeedBird(world, x, y);
-        } else if (birdType == "explodebird") {
-            return new ExplodeBird(world, x, y);
-        } else {
-            return nullptr;
-        }
-    }
+	// static Bird* createBird(b2World* world, float x, float y, const std::string& birdType) {
+    //     if (birdType == "normalbird") {
+    //         return new NormalBird(world, x, y);
+    //     } else if (birdType == "speedbird") {
+    //         return new SpeedBird(world, x, y);
+    //     } else if (birdType == "explodebird") {
+    //         return new ExplodeBird(world, x, y);
+    //     } else {
+    //         return nullptr;
+    //     }
+    // }
 
 	/**
 	 * @brief Adds unused bird based on name

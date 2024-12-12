@@ -15,8 +15,8 @@ namespace ObjectDefs
         .shape = CreateShape(pigRadius),
         .density = pigDensity,
         .maxHp = 100.0f,
-        .normalTextures = { {"Pig1", 3.f}, {"Pig2", 0.4f}, {"Pig3", 4.f}},
-        .damageTextures = { {"PigDamage1", 3.f}, {"PigDamage2", 0.4f}},
+        .normalTextures = { {"Pig1", 3.f}, {"Pig2", 0.4f}, {"Pig3", 1.f}},
+        .damageTextures = { {"PigDamage1", 3.f}, {"PigDamage2", 0.4f}, {"PigDamage3", 3.f}, {"PigDamage4", 0.4f}},
         .soundNames = pigSoundNames
     };
 
@@ -25,8 +25,8 @@ namespace ObjectDefs
         .shape = CreateShape(pigRadius),
         .density = pigDensity,
         .maxHp = 300.0f,
-        .normalTextures = { {"IronPig1", 3.f}, {"IronPig2", 0.4f}, {"IronPig3", 4.f}},
-        .damageTextures = { {"IronPigDamage1", 3.f}, {"IronPigDamage2", 0.4f}},
+        .normalTextures = { {"IronPig1", 3.f}, {"IronPig2", 0.4f}, {"IronPig3", 2.f}},
+        .damageTextures = { {"IronPigDamage1", 3.f}, {"IronPigDamage2", 0.4f}, {"IronPigDamage3", 3.f}, {"IronPigDamage4", 0.4f}},
         .soundNames = pigSoundNames
     };
 
@@ -54,31 +54,28 @@ public:
 
 
     virtual bool TakeDamage(float dmg) override {
-        // TODO: Textures?
-        bool isDead = CurrentHP <= 0;
+        // bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
-        
+        float hp_percent = CurrentHP / MaxHP;
+        if (!isDamaged && hp_percent<= 0.6f) {
+            isDamaged = true;
+            currentTextureIdx = 0;
+        }
+       
         if (CurrentHP <= 0) {
             playSound("piglette destroyed");
-            if (!isDead) Destroy(2.0f);
+            // if (!isDead) Destroy(3.0f);
         } else if (dmg > 10.0f) {
             playSound(rand() % 2);
         }
 
-        if (!isDamaged) {isDamaged = true;}
-        
         return CurrentHP <= 0;
     }
 
     virtual void updateTexture(float deltaTime) override {
         animationTimer += deltaTime;
-        if (isDamaged) {
-            if (animationTimer > damageTextures[currentTextureIdx].second) {
-                animationTimer = 0;
-                currentTextureIdx = (currentTextureIdx + 1) % damageTextures.size();
-            }
-            sprite.setTexture(TextureManager::getTexture(damageTextures[currentTextureIdx].first));
-        } else {
+        float hp_percent = CurrentHP / MaxHP;
+        if (hp_percent > 0.6f) {
             if (animationTimer > normalTextures[currentTextureIdx].second) {
                 animationTimer = 0;
                 column += 1; 
@@ -89,6 +86,25 @@ public:
                 currentTextureIdx = texture_order[row][column];
                 sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first));
             }
+        } else if (0.3f < hp_percent && hp_percent <= 0.6f) {
+            // sprite.setTexture(TextureManager::getTexture(damageTextures[currentTextureIdx].first));
+            if (animationTimer > damageTextures[currentTextureIdx].second) {
+                animationTimer = 0; 
+                currentTextureIdx = (currentTextureIdx + 1) % 2;
+            }
+            sprite.setTexture(TextureManager::getTexture(damageTextures[currentTextureIdx].first));
+        } else {
+            if (currentTextureIdx < 2 || currentTextureIdx > damageTextures.size()) {
+                currentTextureIdx = damage_start_idx;
+            }
+            if (animationTimer > damageTextures[currentTextureIdx].second) {
+                animationTimer = 0;
+                currentTextureIdx = currentTextureIdx + 1;
+                if (currentTextureIdx > damageTextures.size() - 1) {
+                    currentTextureIdx = damage_start_idx;
+                }
+            }
+            sprite.setTexture(TextureManager::getTexture(damageTextures[currentTextureIdx].first)); 
         }
     }
 
@@ -96,6 +112,7 @@ private:
     std::vector<std::vector<size_t>> texture_order = {{0,1}, {0,2}};
     size_t row = 0;
     size_t column = 0;
+    size_t damage_start_idx = 2;
 };
 
 #endif

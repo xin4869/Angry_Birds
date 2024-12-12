@@ -160,32 +160,16 @@ public:
             }
         }
         playSound("tnt box explodes");
+
+        disableOnDestroy = true;
         if (CurrentHP > 0) Destroy(2.0f);
     }
-
-    virtual bool TakeDamage(float dmg) override {
-        // Textures?
-        bool isDead = CurrentHP <= 0;
-        CurrentHP = std::max(0.0f, CurrentHP - dmg);
-        
-        if (CurrentHP <= 0) {
-            playSound("bird destroyed");
-            if (!isDead && canAttack) Destroy(2.0f);
-        } else if (dmg > 10.0f) {
-            playSound(rand() % 4);
-        }
-
-        if (!isDamaged) {isDamaged = true;}
-        
-        return CurrentHP <= 0;
-    }
-
 
     virtual void updateTexture(float deltaTime) override {
         if (isDamaged) {
             sprite.setTexture(TextureManager::getTexture(damageTextures[0].first));
         } else {
-            if (!canAttack) {
+            if (!canAttack && isMoving()) {
                 sprite.setTexture(TextureManager::getTexture(normalTextures[4].first));
             } else {
                 animationTimer += deltaTime;

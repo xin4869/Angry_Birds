@@ -13,22 +13,22 @@ public:
 
     Block(b2World* world, float x, float y, Defs* defaults, float rotation=0.0f) :
         Object(world, x, y, defaults, rotation) {
-            isAnimated = false;
             score = 50.0f;
         }
     
     Block(){}
+
     virtual bool TakeDamage(float dmg) override {
         // Better way: sound lists for collision, damage, destroy
         if (MaxHP == FLT_MAX) return false;
-        bool isDead = CurrentHP <= 0;
+        // bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
+ 
         bool isIce = sounds.size() == 8;
-
         if (CurrentHP <= 0) {
             if (isIce) playSound(rand() % 8);
             else playSound(8 + rand() % 3);
-            if (!isDead) Destroy(2.0f);
+            // if (!isDead) Destroy(2.0f);
         } else if (dmg > 10.0f) {
             if (isIce) playSound(rand() % 8);
             else playSound(5 + rand() % 3);
@@ -36,22 +36,22 @@ public:
             if (isIce) playSound(rand() % 8);
             else playSound(rand() % 5);
         }
-
-        if (!isDamaged) {isDamaged = true;}
         
         return CurrentHP <= 0;
     }
-    
+
+ 
     virtual void updateTexture(float deltaTime) override {
-        animationTimer += deltaTime;
-        if (animationTimer > 0.1f) {
-            if (isDamaged) {
-                animationTimer = 0.f;
-                size_t idx = static_cast<size_t>((damageTextures.size() - 1) * (1 - CurrentHP/MaxHP));              
-                idx = std::min(idx, damageTextures.size() - 1);
-                this->sprite.setTexture(TextureManager::getTexture(damageTextures[idx].first));
-            }   
-        }              
+        float hp_percent = CurrentHP / MaxHP; 
+        if (hp_percent > 0.7f) {
+            sprite.setTexture(TextureManager::getTexture(normalTextures[0].first));
+        } else if (0.4f< hp_percent && hp_percent <= 0.7f) {
+            sprite.setTexture(TextureManager::getTexture(damageTextures[0].first));
+        } else if (0.2f< hp_percent && hp_percent <=0.4f) {
+            sprite.setTexture(TextureManager::getTexture(damageTextures[1].first));         
+        } else {
+            sprite.setTexture(TextureManager::getTexture(damageTextures[2].first));
+        }               
     }
 };
 

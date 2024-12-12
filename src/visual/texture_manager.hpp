@@ -199,6 +199,8 @@ public:
        loadTexture("Pig3", "assets/textures/pig/normal/3.png");
        loadTexture("PigDamage1", "assets/textures/pig/damage/1.png");
        loadTexture("PigDamage2", "assets/textures/pig/damage/2.png");
+       loadTexture("PigDamage3", "assets/textures/pig/damage/3.png");
+       loadTexture("PigDamage4", "assets/textures/pig/damage/4.png");
 
        //////////////IRON PIG ////////////////////
        loadTexture("IronPig1", "assets/textures/iron_pig/normal/1.png");
@@ -206,6 +208,8 @@ public:
        loadTexture("IronPig3", "assets/textures/iron_pig/normal/3.png");
        loadTexture("IronPigDamage1", "assets/textures/iron_pig/damage/1.png");
        loadTexture("IronPigDamage2", "assets/textures/iron_pig/damage/2.png");
+       loadTexture("IronPigDamage3", "assets/textures/iron_pig/damage/3.png");
+       loadTexture("IronPigDamage4", "assets/textures/iron_pig/damage/4.png");
 
        /////////////// NORMAL BIRD ////////////////////
        loadTexture("NormalBird1", "assets/textures/normal_bird/normal/1.png");

@@ -2,6 +2,7 @@
 #ground, -15,10, -3,0, 5,5
 
 NormalBird
+explodebird
 normalPig, 15, 7
 normalPig, 15, 1
 woodrectl, 13, 3, 90
@@ -14,5 +15,5 @@ woodTriangleLeft, 17, 8
 
 
 gravity, 0, -10
-slingshot, -15, 2
+#slingshot, -15, 4
 scoreLimits, 1000, 1100, 1200
