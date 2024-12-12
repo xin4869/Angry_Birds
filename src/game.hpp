@@ -129,7 +129,7 @@ public:
         sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
         window.setView(sf::View(visibleArea)); 
         gui->updateScale();
-        renderer->init();
+        renderer->setBounds();
       }
     }
   }
@@ -142,34 +142,70 @@ public:
   /**
    * @brief Handles mouse presses, performs actions based on it
    */
+  // void handleMousePress() {
+  //   sf::Vector2f mousePos(sf::Mouse::getPosition(window));
+  //   auto clicked_button = gui->getClickedButton(mousePos);
+  //   if (clicked_button) {
+  //     handleButtonClicks(*clicked_button);
+  //   } else if (currentState == GameState::in_game && level) {
+  //       if (level->isWin()) {
+  //         currentState = GameState::win;
+  //         return;
+  //       } else if (level->isLost()) {
+  //         currentState = GameState::lost;
+  //         return;
+  //       }
+      
+  //     b2Vec2 b2WorldPos = renderer->toGamePos(mousePos);
+      
+  //     Bird* currentBird = level->getCurrentBird();
+  //     // implicitly choose the action
+  //     if (!currentBird || !currentBird->getCanAttack()) {
+  //       level->setNextBird();
+  //     }
+  //     else if (currentBird->getHP() != currentBird->getMaxHP() ||
+  //           currentBird->getBody()->GetLinearVelocity().LengthSquared() > 0) {
+  //       currentBird->Attack();
+  //     }
+  //     else {
+  //       level->startDragging(b2WorldPos);
+  //     }
+  //   }
+  // }
+
   void handleMousePress() {
     sf::Vector2f mousePos(sf::Mouse::getPosition(window));
     auto clicked_button = gui->getClickedButton(mousePos);
     if (clicked_button) {
       handleButtonClicks(*clicked_button);
     } else if (currentState == GameState::in_game && level) {
-        if (level->isWin()) {
-          currentState = GameState::win;
-          return;
-        } else if (level->isLost()) {
-          currentState = GameState::lost;
-          return;
-        }
+        // if (level->isWin()) {
+        //   currentState = GameState::win;
+        //   return;
+        // } else if (level->isLost()) {
+        //   currentState = GameState::lost;
+        //   return;
+        // }
       
       b2Vec2 b2WorldPos = renderer->toGamePos(mousePos);
       
       Bird* currentBird = level->getCurrentBird();
       // implicitly choose the action
-      if (!currentBird || !currentBird->getCanAttack()) {
-        level->setNextBird();
+      
+      // why (currentBird->getHP() != currentBird->getMaxHP() ????????????????????????? 
+     
+      // if (currentBird->getHP() != currentBird->getMaxHP() ||
+      //       currentBird->isMoving()) {
+      //   currentBird->Attack();
+      // }
+      if (currentBird) {
+        if (currentBird->isMoving() && currentBird->getCanAttack()) {
+          currentBird->Attack();
+        } else if (!currentBird->isUsed()) {
+          level->startDragging(b2WorldPos);
+        }
       }
-      else if (currentBird->getHP() != currentBird->getMaxHP() ||
-            currentBird->getBody()->GetLinearVelocity().LengthSquared() > 0) {
-        currentBird->Attack();
-      }
-      else {
-        level->startDragging(b2WorldPos);
-      }
+      
     }
   }
 
@@ -240,6 +276,7 @@ public:
       case GameState::lost:
           if (button_name == "level_btn") {
             currentState = GameState::level;
+            SoundManager::playMusic("Theme song");
           } else if (button_name == "next_btn") {
             levelNumber++;
             setLevel(levelNumber);  

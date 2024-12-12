@@ -21,7 +21,10 @@ namespace ObjectDefs
         float spriteHeight;
         std::vector<std::pair<std::string, float>> normalTextures;
         std::vector<std::pair<std::string, float>> damageTextures;
-        std::vector<std::string> soundNames;
+        std::vector<std::string> destroySoundNames;
+        std::vector<std::string> collisionSoundNames;
+        std::vector<std::string> damageSoundNames;
+        std::vector<std::string> otherSounds;
     };
 
     /**

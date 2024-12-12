@@ -10,6 +10,12 @@
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
 
+enum class soundType {
+    collision,
+    damage,
+    destroy,
+};
+
 /**
  * @brief Represents a basic physics object.
  */
@@ -28,7 +34,10 @@ public:
         float y,
         std::vector<std::pair<std::string, float>> textureDefs, 
         std::vector<std::pair<std::string, float>> damageTextureDefs,
-        std::vector<std::string> soundNames,
+        std::vector<std::string> destroySoundNames,
+        std::vector<std::string> collisionSoundNames,
+        std::vector<std::string> damageSoundNames,
+        std::vector<std::string> otherSounds,
         float hp,
         float rotation=0.0f
     ): normalTextures(textureDefs), damageTextures(damageTextureDefs), 
@@ -50,7 +59,7 @@ public:
             const sf::Texture& txt = TextureManager::getTexture(normalTextures[0].first);
             sprite = ObjectDefs::CreateSprite(txt);
         }
-        
+
         bodyDef->position.Set(x, y);
         bodyDef->angle = M_PI / 180.0f * rotation;
         body = world->CreateBody(bodyDef);
@@ -70,21 +79,44 @@ public:
     
     bool playSound(const std::string& name)
     {
-        if (sounds.find(name) == sounds.end()) return false;
-        sounds[name].play();
+        if (otherSoundsMap.find(name) == otherSoundsMap.end()) return false;
+        otherSoundsMap[name].play();
         return true;
     }
 
-    bool playSound(size_t index) {
-        if (index >= sounds.size()) return false;
-        auto start = sounds.begin();
-        for (size_t i = 0; i < index; i++) start++;
-        (*start).second.play();
+
+    bool playSound(soundType sound_type) {
+
+        std::vector<sf::Sound>& target_list = {};
+        switch (sound_type)
+        {
+            case soundType::destroy:
+                target_list = destroySounds;
+                break;
+            case soundType::collision:
+                target_list = collisionSounds;
+                break;
+            case soundType::damage:
+                target_list = damageSounds;
+                break;
+            
+        default:
+            return false;
+        }
+
+        size_t idx = rand() % target_list.size();
+        target_list[idx].play();
         return true;
     }
+       
+    
 
-    void Destroy(float timer_s=0.0f) {
-        destroyList.push_back(std::make_pair(timer_s, this));
+    void Destroy(float timer_s=0.f) {
+        if (!toBeDeleted) {
+            destroyList.push_back(std::make_pair(timer_s, this));
+            toBeDeleted = true;
+        }
+       
     }
    
    /**
@@ -107,9 +139,12 @@ public:
     b2Body* getBody() { return body; }
     float getScore() { return score; }
     void setScore(float newScore) { score = newScore; }
+    void setOut() {out = true;}
+    bool isOut() {return out;}
     float getMaxHP() { return MaxHP; }
     float getHP() { return CurrentHP; }
     sf::Sprite& getSprite() { return sprite; }
+    bool getDisableOnDestroy() {return disableOnDestroy;}
     constexpr const static float speedDamageMultiplier = 7.0f;  // tune this value
     static std::list< std::pair< float, Object* > > destroyList;  // <timer, object>
 
@@ -119,13 +154,20 @@ protected :
     std::vector<std::pair<std::string, float>> normalTextures;
     std::vector<std::pair<std::string, float>> damageTextures;
 
-    std::map<std::string, sf::Sound> sounds;  // <name, sound>
+    std::vector<sf::Sound> damageSounds; 
+    std::vector<sf::Sound> collisionSounds;
+    std::vector<sf::Sound> destroySounds;
+    std::map<std::string, sf::Sound> otherSoundsMap;
+
     float MaxHP;
     float CurrentHP;
     float score = 0;
 
-    bool isAnimated = true;
     bool isDamaged = false;
+    bool toBeDeleted = false;
+    bool out = false;
+    bool disableOnDestroy = true; 
+
     size_t currentTextureIdx = 0;
     float animationTimer = 0.0f;
 };
