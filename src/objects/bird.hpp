@@ -73,8 +73,10 @@ public:
         
         if (CurrentHP <= 0) {
             if (!isDead && canAttack) Destroy(2.0f);
-        } else if (dmg > 10.0f) {
-            playSound(rand() % 4);
+        } else if (dmg > 30.f) {
+            playSound(soundType::damage);
+        } else if (dmg > 1.f) {
+            playSound(soundType::collision);
         }
 
         if (!isDamaged) {isDamaged = true;}

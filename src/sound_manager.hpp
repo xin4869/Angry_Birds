@@ -138,8 +138,10 @@ public:
         loadSound("ice light collision a8", "assets/audio/ice light collision a8.wav");
         
         // pigs
+        loadSound("piglette damage a3", "assets/audio/piglette damage a3.wav");
         loadSound("piglette damage a4", "assets/audio/piglette damage a4.wav");
         loadSound("piglette damage a7", "assets/audio/piglette damage a7.wav");
+        loadSound("piglette collision a7", "assets/audio/piglette collision a7.wav");
         loadSound("piglette destroyed", "assets/audio/piglette destroyed.wav");
         
         // rock

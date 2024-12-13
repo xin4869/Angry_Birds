@@ -18,8 +18,10 @@ namespace ObjectDefs
         .maxHp = birdMaxHp,
         .normalTextures = {{"NormalBird1", 2.f}, {"NormalBird2", 0.1f}},
         .damageTextures = {{"NormalBirdDead", 0.f}},
-        .soundNames = { "bird 01 collision a1", "bird 01 collision a2", "bird 01 collision a3", "bird 01 collision a4",
-                "bird 01 flying", "bird 01 select", "bird destroyed" }
+        .destroySoundNames = { "bird destroyed" },
+        .collisionSoundNames = { "bird 01 collision a1", "bird 01 collision a2", "bird 01 collision a3" },
+        .damageSoundNames = { "bird 01 collision a4" },
+        .otherSounds = { "bird 01 flying", "bird 01 select" }
     };
 
     ObjectDefaults speedBirdDefaults = {
@@ -29,8 +31,10 @@ namespace ObjectDefs
         .maxHp = birdMaxHp,
         .normalTextures = {{"SpeedBird1", 2.f}, {"SpeedBird2", 0.1f}, {"SpeedBird3", 0.8f}, {"SpeedBird4", 0.8f}},
         .damageTextures = {{"SpeedBirdDead", 0.f}},
-        .soundNames = { "bird 03 collision a1", "bird 03 collision a2", "bird 03 collision a3", "bird 03 collision a4",
-                "bird 03 flying", "bird 03 select", "bird destroyed", "special boost" }
+        .destroySoundNames = { "bird destroyed" },
+        .collisionSoundNames = { "bird 03 collision a3", "bird 03 collision a4", "bird 03 collision a2" },
+        .damageSoundNames = { "bird 03 collision a1" },
+        .otherSounds = { "bird 03 flying", "bird 03 select", "special boost" }
     };
 
     ObjectDefaults explodeBirdDefaults = {
@@ -40,8 +44,10 @@ namespace ObjectDefs
         .maxHp = birdMaxHp,
         .normalTextures = {{"ExplodeBird1", 2.f}, {"ExplodeBird2", 0.1f}, {"ExplodeBird3", 0.1f}, {"ExplodeBird4", 0.1f}, {"ExplodeBird5", std::numeric_limits<float>::max()}},
         .damageTextures = {{"ExplodeBirdDead", 0.f}},
-        .soundNames = { "bird 05 collision a1", "bird 05 collision a2", "bird 05 collision a3", "bird 05 collision a4",
-                "bird 05 flying", "bird 05 select", "bird destroyed", "tnt box explodes" }
+        .destroySoundNames = { "bird destroyed" },
+        .collisionSoundNames = { "bird 05 collision a1", "bird 05 collision a3", "bird 05 collision a4" },
+        .damageSoundNames = { "bird 05 collision a2" },
+        .otherSounds = { "bird 05 flying", "bird 05 select", "tnt box explodes" }
     };
     
     ObjectDefaults* getBirdDefaults(const std::string& birdName) {
@@ -68,11 +74,6 @@ public:
         canAttack = false;
         playSound("bird 01 select");
     }
-
-    /**
-     * @brief Take damage, play sounds, destroy if killed
-     * @param dmg damage
-     */
 
     virtual void updateTexture(float deltaTime) override {
         if (isDamaged) {
@@ -162,7 +163,7 @@ public:
         playSound("tnt box explodes");
 
         disableOnDestroy = true;
-        if (CurrentHP > 0) Destroy(2.0f);
+        Destroy(2.0f);
     }
 
     virtual void updateTexture(float deltaTime) override {

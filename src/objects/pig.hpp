@@ -6,7 +6,9 @@
 
 namespace ObjectDefs
 {
-    std::vector<std::string> pigSoundNames = { "piglette damage a4", "piglette damage a7", "piglette destroyed" };
+    std::vector<std::string> pigCollisionSoundNames = { "piglette damage a4", "piglette collision a7" };
+    std::vector<std::string> pigDamageSoundNames = { "piglette damage a7", "piglette damage a3" };
+    std::vector<std::string> pigDestroySoundNames = { "piglette destroyed" };
     const float pigRadius = 1.0f;
     const float pigDensity = 1.0f;
 
@@ -17,7 +19,9 @@ namespace ObjectDefs
         .maxHp = 100.0f,
         .normalTextures = { {"Pig1", 3.f}, {"Pig2", 0.4f}, {"Pig3", 1.f}},
         .damageTextures = { {"PigDamage1", 3.f}, {"PigDamage2", 0.4f}, {"PigDamage3", 3.f}, {"PigDamage4", 0.4f}},
-        .soundNames = pigSoundNames
+        .destroySoundNames = pigDestroySoundNames,
+        .collisionSoundNames = pigCollisionSoundNames,
+        .damageSoundNames = pigDamageSoundNames
     };
 
     ObjectDefaults ironPigDefaults = {
@@ -27,7 +31,9 @@ namespace ObjectDefs
         .maxHp = 300.0f,
         .normalTextures = { {"IronPig1", 3.f}, {"IronPig2", 0.4f}, {"IronPig3", 2.f}},
         .damageTextures = { {"IronPigDamage1", 3.f}, {"IronPigDamage2", 0.4f}, {"IronPigDamage3", 3.f}, {"IronPigDamage4", 0.4f}},
-        .soundNames = pigSoundNames
+        .destroySoundNames = pigDestroySoundNames,
+        .collisionSoundNames = pigCollisionSoundNames,
+        .damageSoundNames = pigDamageSoundNames
     };
 
     ObjectDefaults* getPigDefaults(const std::string& pigName) {
@@ -63,10 +69,12 @@ public:
         }
        
         if (CurrentHP <= 0) {
-            playSound("piglette destroyed");
-            // if (!isDead) Destroy(3.0f);
-        } else if (dmg > 10.0f) {
-            playSound(rand() % 2);
+            playSound(soundType::destroy);
+            Destroy(3.0f);
+        } else if (dmg > 30.0f) {
+            playSound(soundType::damage);
+        } else if (dmg > 1.0f) {
+            playSound(soundType::collision);
         }
 
         return CurrentHP <= 0;

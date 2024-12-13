@@ -19,22 +19,16 @@ public:
     Block(){}
 
     virtual bool TakeDamage(float dmg) override {
-        // Better way: sound lists for collision, damage, destroy
         if (MaxHP == FLT_MAX) return false;
-        // bool isDead = CurrentHP <= 0;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
  
-        bool isIce = sounds.size() == 8;
         if (CurrentHP <= 0) {
-            if (isIce) playSound(rand() % 8);
-            else playSound(8 + rand() % 3);
-            // if (!isDead) Destroy(2.0f);
-        } else if (dmg > 10.0f) {
-            if (isIce) playSound(rand() % 8);
-            else playSound(5 + rand() % 3);
+            playSound(soundType::destroy);
+            Destroy(2.0f);
+        } else if (dmg > 30.0f) {
+            playSound(soundType::damage);
         } else if (dmg > 1.0f) {
-            if (isIce) playSound(rand() % 8);
-            else playSound(rand() % 5);
+            playSound(soundType::collision);
         }
         
         return CurrentHP <= 0;
@@ -51,7 +45,7 @@ public:
             sprite.setTexture(TextureManager::getTexture(damageTextures[1].first));         
         } else {
             sprite.setTexture(TextureManager::getTexture(damageTextures[2].first));
-        }               
+        }
     }
 };
 
@@ -69,17 +63,10 @@ namespace ObjectDefs{
     const float rectLWidth = 5.075f;
 
     // ICE
-    std::vector<std::string> iceSoundNames = { "ice light collision a2", "ice light collision a1", "ice light collision a3", "ice light collision a4",
-            "ice light collision a5", "ice light collision a6", "ice light collision a7", "ice light collision a8" };
+    std::vector<std::string> iceCollisionSoundNames = { "ice light collision a1", "ice light collision a2", "ice light collision a3", "ice light collision a4" };
+    std::vector<std::string> iceDamageSoundNames = { "ice light collision a5", "ice light collision a6" };
+    std::vector<std::string> iceDestroySoundNames = { "ice light collision a7", "ice light collision a8" };
     
-    std::vector<std::string> woodSoundNames = { "wood collision a1", "wood collision a2", "wood collision a3", "wood collision a4",
-            "wood collision a5", "wood damage a1", "wood damage a2", "wood damage a3",
-            "wood destroyed a1", "wood destroyed a2", "wood destroyed a3", "wood rolling" };
-    
-    std::vector<std::string> rockSoundNames = { "rock collision a1", "rock collision a2", "rock collision a3", "rock collision a4",
-            "rock collision a5", "rock damage a1", "rock damage a2", "rock damage a3",
-            "rock destroyed a1", "rock destroyed a2", "rock destroyed a3", "rock rolling" };
-
     const float iceDensity = 0.8f;
     const float iceBaseHP = 50.0f;
 
@@ -90,7 +77,9 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(iceBaseHP, circleSRadius),
         .normalTextures = {{"IceCircleS", 0.f}},
         .damageTextures = {{"IceCircleSDamaged1",0.f}, {"IceCircleSDamaged2",0.f}, {"IceCircleSDamaged3", 0.f}},
-        .soundNames = iceSoundNames
+        .destroySoundNames = iceDestroySoundNames,
+        .collisionSoundNames = iceCollisionSoundNames,
+        .damageSoundNames = iceDamageSoundNames
     };
 
     ObjectDefaults iceCircleM = {
@@ -100,7 +89,9 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(iceBaseHP, circleMRadius),
         .normalTextures = {{"IceCircleM",0.f}},
         .damageTextures = {{"IceCircleMDamaged1",0.f}, {"IceCircleMDamaged2", 0.f}, {"IceCircleMDamaged3", 0.f}},
-        .soundNames = iceSoundNames
+        .destroySoundNames = iceDestroySoundNames,
+        .collisionSoundNames = iceCollisionSoundNames,
+        .damageSoundNames = iceDamageSoundNames
     };
 
     ObjectDefaults iceSquare = {
@@ -110,7 +101,9 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(iceBaseHP, squareSize, squareSize),
         .normalTextures = {{"IceSquare", 0.f}},
         .damageTextures = {{"IceSquareDamaged1",0.f}, {"IceSquareDamaged2", 0.f}, {"IceSquareDamaged3", 0.f}},
-        .soundNames = iceSoundNames
+        .destroySoundNames = iceDestroySoundNames,
+        .collisionSoundNames = iceCollisionSoundNames,
+        .damageSoundNames = iceDamageSoundNames
     };
 
     ObjectDefaults iceTriangleLeft = {
@@ -120,7 +113,9 @@ namespace ObjectDefs{
         .maxHp = CalculateHpTriangle(iceBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"IceTriangleLeft", 0.f}},
         .damageTextures = {{"IceTriangleLeftDamaged1",0.f}, {"IceTriangleLeftDamaged2", 0.f}, {"IceTriangleLeftDamaged3", 0.f}},
-        .soundNames = iceSoundNames
+        .destroySoundNames = iceDestroySoundNames,
+        .collisionSoundNames = iceCollisionSoundNames,
+        .damageSoundNames = iceDamageSoundNames
     };
 
     ObjectDefaults iceTriangleRight = {
@@ -130,7 +125,9 @@ namespace ObjectDefs{
         .maxHp = CalculateHpTriangle(iceBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"IceTriangleRight", 0.f}},
         .damageTextures = {{"IceTriangleRightDamaged1",0.f}, {"IceTriangleRightDamaged2", 0.f}, {"IceTriangleRightDamaged3", 0.f}},
-        .soundNames = iceSoundNames
+        .destroySoundNames = iceDestroySoundNames,
+        .collisionSoundNames = iceCollisionSoundNames,
+        .damageSoundNames = iceDamageSoundNames
     };
   
     ObjectDefaults iceRect = {
@@ -140,7 +137,9 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(iceBaseHP, rectWidth, rectHeight),
         .normalTextures = {{"IceRect", 0.f}},
         .damageTextures = {{"IceRectDamaged1",0.f}, {"IceRectDamaged2", 0.f}, {"IceRectDamaged3", 0.f}},
-        .soundNames = iceSoundNames
+        .destroySoundNames = iceDestroySoundNames,
+        .collisionSoundNames = iceCollisionSoundNames,
+        .damageSoundNames = iceDamageSoundNames
     };
 
     ObjectDefaults iceRectS = {
@@ -150,7 +149,9 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(iceBaseHP, rectSWidth, rectXHeight),
         .normalTextures = {{"IceRectS", 0.f}},
         .damageTextures = {{"IceRectSDamaged1",0.f}, {"IceRectSDamaged2", 0.f}, {"IceRectSDamaged3", 0.f}},
-        .soundNames = iceSoundNames
+        .destroySoundNames = iceDestroySoundNames,
+        .collisionSoundNames = iceCollisionSoundNames,
+        .damageSoundNames = iceDamageSoundNames
     };
 
     ObjectDefaults iceRectM = {
@@ -160,7 +161,9 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(iceBaseHP, rectMWidth, rectXHeight),
         .normalTextures = {{"IceRectM", 0.f}},
         .damageTextures = {{"IceRectMDamaged1",0.f}, {"IceRectMDamaged2", 0.f}, {"IceRectMDamaged3", 0.f}},
-        .soundNames = iceSoundNames
+        .destroySoundNames = iceDestroySoundNames,
+        .collisionSoundNames = iceCollisionSoundNames,
+        .damageSoundNames = iceDamageSoundNames
     };
 
     ObjectDefaults iceRectL = {
@@ -170,12 +173,20 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(iceBaseHP, rectLWidth, rectXHeight),
         .normalTextures = {{"IceRectL", 0.f}},
         .damageTextures = {{"IceRectLDamaged1",0.f}, {"IceRectLDamaged2", 0.f}, {"IceRectLDamaged3", 0.f}},
-        .soundNames = iceSoundNames
+        .destroySoundNames = iceDestroySoundNames,
+        .collisionSoundNames = iceCollisionSoundNames,
+        .damageSoundNames = iceDamageSoundNames
     };
 
     // WOOD
     const float woodDensity = 1.2f;
     const float woodBaseHP = 150.0f;
+
+    std::vector<std::string> woodCollisionSoundNames = { "wood collision a1", "wood collision a2", "wood collision a3",
+            "wood collision a4", "wood collision a5" };
+    std::vector<std::string> woodDamageSoundNames = { "wood damage a1", "wood damage a2", "wood damage a3" };
+    std::vector<std::string> woodDestroySoundNames = { "wood destroyed a1", "wood destroyed a2", "wood destroyed a3" };
+    std::vector<std::string> woodOtherSoundNames = { "wood rolling" };
 
     ObjectDefaults woodCircleS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
@@ -184,7 +195,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(woodBaseHP, circleSRadius),
         .normalTextures = {{"WoodCircleS", 0.f}},
         .damageTextures = {{"WoodCircleSDamaged1",0.f}, {"WoodCircleSDamaged2", 0.f}, {"WoodCircleSDamaged3", 0.f}},
-        .soundNames = woodSoundNames
+        .destroySoundNames = woodDestroySoundNames,
+        .collisionSoundNames = woodCollisionSoundNames,
+        .damageSoundNames = woodDamageSoundNames,
+        .otherSounds = woodOtherSoundNames
     };
 
     ObjectDefaults woodCircleM = {
@@ -194,7 +208,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(woodBaseHP, circleMRadius),
         .normalTextures = {{"WoodCircleM", 0.f}},
         .damageTextures = {{"WoodCircleMDamaged1",0.f}, {"WoodCircleMDamaged2", 0.f}, {"WoodCircleMDamaged3", 0.f}},
-        .soundNames = woodSoundNames
+        .destroySoundNames = woodDestroySoundNames,
+        .collisionSoundNames = woodCollisionSoundNames,
+        .damageSoundNames = woodDamageSoundNames,
+        .otherSounds = woodOtherSoundNames
     };
 
     ObjectDefaults woodSquare = {
@@ -204,7 +221,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(woodBaseHP, squareSize, squareSize),
         .normalTextures = {{"WoodSquare", 0.f}},
         .damageTextures = {{"WoodSquareDamaged1",0.f}, {"WoodSquareDamaged2", 0.f}, {"WoodSquareDamaged3", 0.f}},
-        .soundNames = woodSoundNames
+        .destroySoundNames = woodDestroySoundNames,
+        .collisionSoundNames = woodCollisionSoundNames,
+        .damageSoundNames = woodDamageSoundNames,
+        .otherSounds = woodOtherSoundNames
     };
 
     ObjectDefaults woodTriangleLeft = {
@@ -214,7 +234,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHpTriangle(woodBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"WoodTriangleLeft", 0.f}},
         .damageTextures = {{"WoodTriangleLeftDamaged1",0.f}, {"WoodTriangleLeftDamaged2", 0.f}, {"WoodTriangleLeftDamaged3", 0.f}},
-        .soundNames = woodSoundNames
+        .destroySoundNames = woodDestroySoundNames,
+        .collisionSoundNames = woodCollisionSoundNames,
+        .damageSoundNames = woodDamageSoundNames,
+        .otherSounds = woodOtherSoundNames
     };
 
     ObjectDefaults woodTriangleRight = {
@@ -224,7 +247,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHpTriangle(woodBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"WoodTriangleRight", 0.f}},
         .damageTextures = {{"WoodTriangleRightDamaged1",0.f}, {"WoodTriangleRightDamaged2", 0.f}, {"WoodTriangleRightDamaged3", 0.f}},
-        .soundNames = woodSoundNames
+        .destroySoundNames = woodDestroySoundNames,
+        .collisionSoundNames = woodCollisionSoundNames,
+        .damageSoundNames = woodDamageSoundNames,
+        .otherSounds = woodOtherSoundNames
     };
 
     ObjectDefaults woodRect = {
@@ -234,7 +260,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(woodBaseHP, rectWidth, rectHeight),
         .normalTextures = {{"WoodRect", 0.f}},
         .damageTextures = {{"WoodRectDamaged1",0.f}, {"WoodRectDamaged2", 0.f}, {"WoodRectDamaged3", 0.f}},
-        .soundNames = woodSoundNames
+        .destroySoundNames = woodDestroySoundNames,
+        .collisionSoundNames = woodCollisionSoundNames,
+        .damageSoundNames = woodDamageSoundNames,
+        .otherSounds = woodOtherSoundNames
     };
 
     ObjectDefaults woodRectS = {
@@ -244,7 +273,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(woodBaseHP, rectSWidth, rectXHeight),
         .normalTextures = {{"WoodRectS", 0.f}},
         .damageTextures = {{"WoodRectSDamaged1",0.f}, {"WoodRectSDamaged2", 0.f}, {"WoodRectSDamaged3", 0.f}},
-        .soundNames = woodSoundNames
+        .destroySoundNames = woodDestroySoundNames,
+        .collisionSoundNames = woodCollisionSoundNames,
+        .damageSoundNames = woodDamageSoundNames,
+        .otherSounds = woodOtherSoundNames
     };
 
     ObjectDefaults woodRectM = {
@@ -254,7 +286,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(woodBaseHP, rectMWidth, rectXHeight),
         .normalTextures = {{"WoodRectM", 0.f}},
         .damageTextures = {{"WoodRectMDamaged1",0.f}, {"WoodRectMDamaged2", 0.f}, {"WoodRectMDamaged3", 0.f}},
-        .soundNames = woodSoundNames
+        .destroySoundNames = woodDestroySoundNames,
+        .collisionSoundNames = woodCollisionSoundNames,
+        .damageSoundNames = woodDamageSoundNames,
+        .otherSounds = woodOtherSoundNames
     };
 
     ObjectDefaults woodRectL = {
@@ -264,12 +299,20 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(woodBaseHP, rectLWidth, rectXHeight),
         .normalTextures = {{"WoodRectL", 0.f}},
         .damageTextures = {{"WoodRectLDamaged1",0.f}, {"WoodRectLDamaged2", 0.f}, {"WoodRectLDamaged3", 0.f}},
-        .soundNames = woodSoundNames
+        .destroySoundNames = woodDestroySoundNames,
+        .collisionSoundNames = woodCollisionSoundNames,
+        .damageSoundNames = woodDamageSoundNames,
+        .otherSounds = woodOtherSoundNames
     };
 
     // STONE
     const float stoneDensity = 2.6f;
-    const float stoneBaseHP = 300.0f;
+    const float stoneBaseHP = 350.0f;
+
+    std::vector<std::string> stoneCollisionSoundNames = { "rock collision a1", "rock collision a2", "rock collision a3", "rock collision a4", "rock collision a5" };
+    std::vector<std::string> stoneDamageSoundNames = { "rock damage a1", "rock damage a2", "rock damage a3" };
+    std::vector<std::string> stoneDestroySoundNames = { "rock destroyed a1", "rock destroyed a2", "rock destroyed a3" };
+    std::vector<std::string> stoneOtherSoundNames = { "rock rolling" };    
 
     ObjectDefaults stoneCircleS = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
@@ -278,7 +321,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(stoneBaseHP, circleSRadius),
         .normalTextures = {{"StoneCircleS", 0.f}},
         .damageTextures = {{"StoneCircleSDamaged1",0.f}, {"StoneCircleSDamaged2", 0.f}, {"StoneCircleSDamaged3", 0.f}},
-        .soundNames = rockSoundNames
+        .destroySoundNames = stoneDestroySoundNames,
+        .collisionSoundNames = stoneCollisionSoundNames,
+        .damageSoundNames = stoneDamageSoundNames,
+        .otherSounds = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneCircleM = {
@@ -288,7 +334,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(stoneBaseHP, circleMRadius),
         .normalTextures = {{"StoneCircleM", 0.f}},
         .damageTextures = {{"StoneCircleMDamaged1",0.f}, {"StoneCircleMDamaged2", 0.f}, {"StoneCircleMDamaged3", 0.f}},
-        .soundNames = rockSoundNames
+        .destroySoundNames = stoneDestroySoundNames,
+        .collisionSoundNames = stoneCollisionSoundNames,
+        .damageSoundNames = stoneDamageSoundNames,
+        .otherSounds = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneSquare = {
@@ -298,7 +347,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(stoneBaseHP, squareSize, squareSize),
         .normalTextures = {{"StoneSquare", 0.f}},
         .damageTextures = {{"StoneSquareDamaged1",0.f}, {"StoneSquareDamaged2", 0.f}, {"StoneSquareDamaged3", 0.f}},
-        .soundNames = rockSoundNames
+        .destroySoundNames = stoneDestroySoundNames,
+        .collisionSoundNames = stoneCollisionSoundNames,
+        .damageSoundNames = stoneDamageSoundNames,
+        .otherSounds = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneTriangleLeft = {
@@ -308,7 +360,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHpTriangle(stoneBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"StoneTriangleLeft", 0.f}},
         .damageTextures = {{"StoneTriangleLeftDamaged1", 0.f}, {"StoneTriangleLeftDamaged2", 0.f}, {"StoneTriangleLeftDamaged3", 0.f}},
-        .soundNames = rockSoundNames
+        .destroySoundNames = stoneDestroySoundNames,
+        .collisionSoundNames = stoneCollisionSoundNames,
+        .damageSoundNames = stoneDamageSoundNames,
+        .otherSounds = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneTriangleRight = {
@@ -318,7 +373,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHpTriangle(stoneBaseHP, triangleSize, triangleSize),
         .normalTextures = {{"StoneTriangleRight", 0.f}},
         .damageTextures = {{"StoneTriangleRightDamaged1", 0.f}, {"StoneTriangleRightDamaged2", 0.f}, {"StoneTriangleRightDamaged3", 0.f}},
-        .soundNames = rockSoundNames
+        .destroySoundNames = stoneDestroySoundNames,
+        .collisionSoundNames = stoneCollisionSoundNames,
+        .damageSoundNames = stoneDamageSoundNames,
+        .otherSounds = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneRect = {
@@ -328,7 +386,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(stoneBaseHP, rectWidth, rectHeight),
         .normalTextures = {{"StoneRect", 0.f}},
         .damageTextures = {{"StoneRectDamaged1", 0.f}, {"StoneRectDamaged2", 0.f}, {"StoneRectDamaged3", 0.f}},
-        .soundNames = rockSoundNames
+        .destroySoundNames = stoneDestroySoundNames,
+        .collisionSoundNames = stoneCollisionSoundNames,
+        .damageSoundNames = stoneDamageSoundNames,
+        .otherSounds = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneRectS = {
@@ -338,7 +399,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(stoneBaseHP, rectSWidth, rectXHeight),
         .normalTextures = {{"StoneRectS", 0.f}},
         .damageTextures = {{"StoneRectSDamaged1", 0.f}, {"StoneRectSDamaged2", 0.f}, {"StoneRectSDamaged3", 0.f}},
-        .soundNames = rockSoundNames
+        .destroySoundNames = stoneDestroySoundNames,
+        .collisionSoundNames = stoneCollisionSoundNames,
+        .damageSoundNames = stoneDamageSoundNames,
+        .otherSounds = stoneOtherSoundNames
     };
     
     ObjectDefaults stoneRectM = {
@@ -348,7 +412,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(stoneBaseHP, rectMWidth, rectXHeight),
         .normalTextures = {{"StoneRectM", 0.f}},
         .damageTextures = {{"StoneRectMDamaged1", 0.f}, {"StoneRectMDamaged2", 0.f}, {"StoneRectMDamaged3", 0.f}},
-        .soundNames = rockSoundNames
+        .destroySoundNames = stoneDestroySoundNames,
+        .collisionSoundNames = stoneCollisionSoundNames,
+        .damageSoundNames = stoneDamageSoundNames,
+        .otherSounds = stoneOtherSoundNames
     };
     
     ObjectDefaults stoneRectL = {
@@ -358,7 +425,10 @@ namespace ObjectDefs{
         .maxHp = CalculateHp(stoneBaseHP, rectLWidth, rectXHeight),
         .normalTextures = {{"StoneRectL", 0.f}},
         .damageTextures = {{"StoneRectLDamaged1", 0.f}, {"StoneRectLDamaged2", 0.f}, {"StoneRectLDamaged3", 0.f}},
-        .soundNames = rockSoundNames
+        .destroySoundNames = stoneDestroySoundNames,
+        .collisionSoundNames = stoneCollisionSoundNames,
+        .damageSoundNames = stoneDamageSoundNames,
+        .otherSounds = stoneOtherSoundNames
     };
 
     // FIXED
