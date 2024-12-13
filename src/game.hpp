@@ -71,6 +71,11 @@ public:
       int currentScore = static_cast<int>(level->getScore());
       gui->updateScore(currentScore);
       gui->updateBirdsLeft(level->getUnusedBirds().size());
+      if (currentState == GameState::in_game && level->isWin()) {
+        currentState = GameState::win;
+      } else if (currentState == GameState::in_game && level->isLost()) {
+        currentState = GameState::lost;
+      }
     }
   }
 

@@ -68,6 +68,7 @@ public:
 			updateAllTexture();
 			addToDestroyList();
 			disableAndDestroy();
+			setNextBird();
 
 			accumulator -= timeStep;
 		}
@@ -222,7 +223,7 @@ public:
 	 */
 	void setNextBird() {
 		if (unusedBirds.empty()) return;
-		if (currentBird && currentBird->getCanAttack()) return;
+		if (currentBird) return;
 
 		std::string birdType = unusedBirds.front();
 		unusedBirds.pop();

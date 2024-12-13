@@ -61,7 +61,8 @@ public:
         bodyDef->angle = M_PI / 180.0f * rotation;
         body = world->CreateBody(bodyDef);
         b2Fixture* fix = body->CreateFixture(shape, density);
-        
+        fix->SetRestitution(0.3f);
+
         // tune these
         body->SetAngularDamping(1.f);
         fix->SetFriction(0.4f);

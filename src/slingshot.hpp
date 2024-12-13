@@ -50,7 +50,6 @@ public:
      * @param x, y drag here (limited by maxRadius)
      */
     void drag(Object* object, float x, float y) {
-        // update textures, play audio?
         b2Vec2 offset(x, y);
         offset -= launchPos;
         if (offset.LengthSquared() > maxRadius * maxRadius) {
@@ -59,6 +58,7 @@ public:
         }
         object->getBody()->SetLinearVelocity(b2Vec2(0, 0));
         object->getBody()->SetTransform(launchPos + offset, 0);
+        sounds["slingshot streched"].play();
         sprite.setTexture(TextureManager::getTexture(textures[1]));
     }
 
@@ -67,9 +67,9 @@ public:
      * @param x, y point of release
      */
     void release(Object* object, float x, float y) {
-        // update textures, play audio?
         object->getBody()->SetTransform(b2Vec2(x, y), 0);
         launchObject(object);
+        sounds["shot1"].play();
         sprite.setTexture(TextureManager::getTexture(textures[0]));
     }
     
@@ -94,6 +94,12 @@ protected:
     float powerMult = 50.0f;  // likely off. modify if necessary
     sf::Sprite sprite;
     std::vector< std::string > textures = { "slingshot1", "slingshot2", "slingshot3" };
+    std::map<std::string, sf::Sound> sounds;
+
+    void loadSounds() {
+        sounds["slingshot streched"] =sf::Sound(*SoundManager::getSound("slingshot streched"));
+        sounds["shot1"] = sf::Sound(*SoundManager::getSound("shot1"));
+    }
 };
 
 #endif // SLINGSHOT_HPP
