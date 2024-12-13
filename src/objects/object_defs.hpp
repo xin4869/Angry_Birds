@@ -24,7 +24,7 @@ namespace ObjectDefs
         std::vector<std::string> destroySoundNames;
         std::vector<std::string> collisionSoundNames;
         std::vector<std::string> damageSoundNames;
-        std::vector<std::string> otherSounds;
+        std::vector<std::string> otherSoundNames;
     };
 
     /**

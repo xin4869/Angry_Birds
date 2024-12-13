@@ -25,7 +25,7 @@ public:
     Object(){}
     virtual ~Object() {
         body->GetWorld()->DestroyBody(body);
-        for (auto i: sounds) i.second.stop();
+        stopSounds();
     }
 
     Object(
@@ -35,13 +35,13 @@ public:
         float density,
         float x,
         float y,
+        float hp,
         std::vector<std::pair<std::string, float>> textureDefs, 
         std::vector<std::pair<std::string, float>> damageTextureDefs,
         std::vector<std::string> destroySoundNames,
         std::vector<std::string> collisionSoundNames,
         std::vector<std::string> damageSoundNames,
-        std::vector<std::string> otherSounds,
-        float hp,
+        std::vector<std::string> otherSoundNames,
         float rotation=0.0f
     ): normalTextures(textureDefs), damageTextures(damageTextureDefs), 
         MaxHP(hp), CurrentHP(hp) {
@@ -50,13 +50,7 @@ public:
             std::cout << "No textures for object" << std::endl;
         }
 
-        for (auto i: soundNames)
-        {
-            const sf::SoundBuffer* sound = SoundManager::getSound(i);
-            if (!sound) continue;
-            sounds.emplace(std::make_pair(i, sf::Sound()));
-            sounds[i].setBuffer(*sound);
-        }
+        loadSounds(destroySoundNames, collisionSoundNames, damageSoundNames, otherSoundNames);
 
         if (normalTextures.size() > 0) {
             const sf::Texture& txt = TextureManager::getTexture(normalTextures[0].first);
@@ -78,7 +72,9 @@ public:
 
     Object(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults, float rotation=0.0f) :
         Object(world, &defaults->bodyDef, defaults->shape.get(), defaults->density,
-            x, y, defaults->normalTextures, defaults->damageTextures, defaults->soundNames, defaults->maxHp, rotation) {}
+            x, y, defaults->maxHp, defaults->normalTextures, defaults->damageTextures,
+            defaults->destroySoundNames, defaults->collisionSoundNames, defaults->damageSoundNames,
+            defaults->otherSoundNames, rotation) {}
     
     bool playSound(const std::string& name)
     {
@@ -87,29 +83,62 @@ public:
         return true;
     }
 
-
-    bool playSound(soundType sound_type) {
-
-        std::vector<sf::Sound>& target_list = {};
-        switch (sound_type)
-        {
-            case soundType::destroy:
-                target_list = destroySounds;
-                break;
-            case soundType::collision:
-                target_list = collisionSounds;
-                break;
-            case soundType::damage:
-                target_list = damageSounds;
-                break;
-            
-        default:
-            return false;
+    void loadSounds(std::vector<std::string> destroySoundNames, std::vector<std::string> collisionSoundNames, 
+        std::vector<std::string> damageSoundNames, std::vector<std::string> otherSoundNames) {
+        for (auto i: destroySoundNames) {
+            const sf::SoundBuffer* sound = SoundManager::getSound(i);
+            if (!sound) continue;
+            destroySounds.push_back(sf::Sound(*sound));
         }
 
-        size_t idx = rand() % target_list.size();
-        target_list[idx].play();
-        return true;
+        for (auto i: collisionSoundNames) {
+            const sf::SoundBuffer* sound = SoundManager::getSound(i);
+            if (!sound) continue;
+            collisionSounds.push_back(sf::Sound(*sound));
+        }
+
+        for (auto i: damageSoundNames) {
+            const sf::SoundBuffer* sound = SoundManager::getSound(i);
+            if (!sound) continue;
+            damageSounds.push_back(sf::Sound(*sound));
+        }
+
+        for (auto i: otherSoundNames) {
+            const sf::SoundBuffer* sound = SoundManager::getSound(i);
+            if (!sound) continue;
+            otherSoundsMap.emplace(std::make_pair(i, sf::Sound(*sound)));
+        }
+    }
+
+    void stopSounds() {
+        for (auto i: destroySounds) {i.stop();}
+        for (auto i: collisionSounds) {i.stop();}
+        for (auto i: damageSounds) {i.stop();}
+        for (auto i: otherSoundsMap) {i.second.stop();}
+    }
+
+    bool playSound(soundType sound_type) {
+        std::vector<sf::Sound>* target_list = nullptr;
+        switch (sound_type) {
+            case soundType::destroy:
+                target_list = &destroySounds;
+                break;
+            case soundType::collision:
+                target_list = &collisionSounds;
+                break;
+            case soundType::damage:
+                target_list = &damageSounds;
+                break;
+            
+            // default:
+            //     return false;
+        }
+        if (target_list && !target_list->empty()) {
+            size_t idx = rand() % target_list->size();
+            (*target_list)[idx].play();
+            return true;
+        }
+        return false;
     }
        
     
@@ -154,6 +183,7 @@ public:
 protected :
     b2Body* body;
     sf::Sprite sprite;
+
     std::vector<std::pair<std::string, float>> normalTextures;
     std::vector<std::pair<std::string, float>> damageTextures;
 
@@ -165,14 +195,14 @@ protected :
     float MaxHP;
     float CurrentHP;
     float score = 0;
+    size_t currentTextureIdx = 0;
+    float animationTimer = 0.0f;
 
     bool isDamaged = false;
     bool toBeDeleted = false;
     bool out = false;
     bool disableOnDestroy = true; 
 
-    size_t currentTextureIdx = 0;
-    float animationTimer = 0.0f;
 };
 
 std::list< std::pair< float, Object* > > Object::destroyList;
