@@ -28,8 +28,8 @@ enum class GameState {
 class Game {
 public:
   Game() {
-    window.create(sf::VideoMode(2000, 1250), "Angry Birds");
-    window.setPosition(sf::Vector2i(0, 50));
+    window.create(sf::VideoMode(defaultWindowWidth, defaultWindowHeight), "Angry Birds");
+    centerWindow();
     window.setFramerateLimit(frameRate);
 
     TextureManager::loadAllTextures();
@@ -184,13 +184,13 @@ public:
     if (clicked_button) {
       handleButtonClicks(*clicked_button);
     } else if (currentState == GameState::in_game && level) {
-        // if (level->isWin()) {
-        //   currentState = GameState::win;
-        //   return;
-        // } else if (level->isLost()) {
-        //   currentState = GameState::lost;
-        //   return;
-        // }
+        if (level->isWin()) {
+          currentState = GameState::win;
+          return;
+        } else if (level->isLost()) {
+          currentState = GameState::lost;
+          return;
+        }
       
       b2Vec2 b2WorldPos = renderer->toGamePos(mousePos);
       
@@ -207,7 +207,7 @@ public:
         if (currentBird->isMoving() && currentBird->getCanAttack()) {
           currentBird->Attack();
         } else if (!currentBird->isUsed()) {
-          level->startDragging(b2WorldPos);
+
         }
       }
       
@@ -311,8 +311,20 @@ public:
     level->setActive(true);
   }
 
+  void centerWindow() {
+    int desktop_width = sf::VideoMode::getDesktopMode().width;
+    int desktop_height = sf::VideoMode::getDesktopMode().height;
 
-  
+    float scaleFactorW = desktop_width * 0.9f / (window.getSize().x);
+    float scaleFactorH = desktop_height * 0.9f / (window.getSize().y);
+    float scaleFactor = std::min(scaleFactorW, scaleFactorH);
+    window.setSize(sf::Vector2u(window.getSize().x * scaleFactor, window.getSize().y * scaleFactor));
+
+    int windowPosX = std::max(0.f, (desktop_width - window.getSize().x) / 2.f);
+    int windowPosY = std::max(0.f, (desktop_height - window.getSize().y) / 2.f);
+    window.setPosition(sf::Vector2i(windowPosX ,windowPosY));
+  }
+
 private:
   sf::Music music;
   sf::RenderWindow window;
@@ -322,6 +334,9 @@ private:
   GameState currentState = GameState::home;
   int levelNumber;
   const int MAX_LEVELS = 3;
+
+  size_t defaultWindowWidth = 2000;
+  size_t defaultWindowHeight = 1250;
 
   const float frameRate = 60.0f;
 };

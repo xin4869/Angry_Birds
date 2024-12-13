@@ -103,9 +103,7 @@ public:
 				if (i->second->getBody()->IsEnabled()) {
 					i->second->playSound(soundType::destroy);	
 				}
-				i->second->getBody()->SetEnabled(false);
-
-							
+				i->second->getBody()->SetEnabled(false);							
 			}
 			
 			if (i->first <= -3.f) {

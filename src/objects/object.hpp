@@ -64,7 +64,7 @@ public:
         fix->SetRestitution(0.3f);
 
         // tune these
-        body->SetAngularDamping(1.f);
+        body->SetAngularDamping(0.8f);
         fix->SetFriction(0.4f);
 
         body->SetTransform(b2Vec2(x,y), body->GetAngle());
@@ -137,7 +137,10 @@ public:
         }
         if (target_list && !target_list->empty()) {
             size_t idx = rand() % target_list->size();
-            (*target_list)[idx].play();
+            sf::Sound& sound = (*target_list)[idx];
+            if (sound.getStatus() != sf::Sound::Playing) {
+                sound.play();
+            }
             return true;
         }
         return false;
