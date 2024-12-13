@@ -63,7 +63,7 @@ public:
         b2Fixture* fix = body->CreateFixture(shape, density);
         
         // tune these
-        body->SetAngularDamping(0.5f);
+        body->SetAngularDamping(1.f);
         fix->SetFriction(0.4f);
 
         body->SetTransform(b2Vec2(x,y), body->GetAngle());
@@ -76,12 +76,6 @@ public:
             defaults->destroySoundNames, defaults->collisionSoundNames, defaults->damageSoundNames,
             defaults->otherSoundNames, rotation) {}
     
-    bool playSound(const std::string& name)
-    {
-        if (otherSoundsMap.find(name) == otherSoundsMap.end()) return false;
-        otherSoundsMap[name].play();
-        return true;
-    }
 
     void loadSounds(std::vector<std::string> destroySoundNames, std::vector<std::string> collisionSoundNames, 
         std::vector<std::string> damageSoundNames, std::vector<std::string> otherSoundNames) {
@@ -117,6 +111,13 @@ public:
         for (auto i: otherSoundsMap) {i.second.stop();}
     }
 
+    bool playSound(const std::string& name)
+    {
+        if (otherSoundsMap.find(name) == otherSoundsMap.end()) return false;
+        otherSoundsMap[name].play();
+        return true;
+    }
+
     bool playSound(soundType sound_type) {
         std::vector<sf::Sound>* target_list = nullptr;
         switch (sound_type) {
@@ -150,13 +151,23 @@ public:
         }
        
     }
-   
-   /**
-    * @brief Overridden in subclasses. Set functionality there.
-    * @param dmg damage taken
-    * @return true if killed
-    */
-    virtual bool TakeDamage(float dmg) = 0;
+
+    virtual bool TakeDamage(float dmg) {
+        if (MaxHP == FLT_MAX) return false;
+        CurrentHP = std::max(0.0f, CurrentHP - dmg);
+
+        checkDamage();
+ 
+        if (dmg > 30.0f) {
+            playSound(soundType::damage);
+        } else if (dmg > 1.0f) {
+            playSound(soundType::collision);
+        }
+        
+        return CurrentHP <= 0;
+    }
+
+    virtual void checkDamage() {};
 
     /**
      * @brief Delete object in timer_s seconds (deleted by Level).

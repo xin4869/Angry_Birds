@@ -59,25 +59,11 @@ public:
         Object(world, x, y, defaults, rot) { score = 500.0f; }
 
 
-    virtual bool TakeDamage(float dmg) override {
-        // bool isDead = CurrentHP <= 0;
-        CurrentHP = std::max(0.0f, CurrentHP - dmg);
-        float hp_percent = CurrentHP / MaxHP;
-        if (!isDamaged && hp_percent<= 0.6f) {
+    virtual void checkDamage() override {
+        if (!isDamaged && CurrentHP/MaxHP <= 0.6f) {
             isDamaged = true;
             currentTextureIdx = 0;
         }
-       
-        if (CurrentHP <= 0) {
-            playSound(soundType::destroy);
-            Destroy(3.0f);
-        } else if (dmg > 30.0f) {
-            playSound(soundType::damage);
-        } else if (dmg > 1.0f) {
-            playSound(soundType::collision);
-        }
-
-        return CurrentHP <= 0;
     }
 
     virtual void updateTexture(float deltaTime) override {

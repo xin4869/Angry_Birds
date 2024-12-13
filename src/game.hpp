@@ -29,7 +29,7 @@ class Game {
 public:
   Game() {
     window.create(sf::VideoMode(2000, 1250), "Angry Birds");
-    window.setPosition(sf::Vector2i(400, 50));
+    window.setPosition(sf::Vector2i(0, 50));
     window.setFramerateLimit(frameRate);
 
     TextureManager::loadAllTextures();

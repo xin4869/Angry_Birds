@@ -67,7 +67,7 @@ public:
 
 			updateAllTexture();
 			addToDestroyList();
-			cleanDestroyList();
+			disableAndDestroy();
 
 			accumulator -= timeStep;
 		}
@@ -94,14 +94,17 @@ public:
 		}
 	}
 
-	void disableAllDestroyed() {	
+	void disableAndDestroy() {	
 		for (auto i = Object::destroyList.begin(); i != Object::destroyList.end();) {
 			i->first -= timeStep;
 			// for implicitly detecting birds (score == 0)
 			if ( i->second != nullptr && (i->second->getDisableOnDestroy() || i-> first <= 0) ) {
+				if (i->second->getBody()->IsEnabled()) {
+					i->second->playSound(soundType::destroy);	
+				}
 				i->second->getBody()->SetEnabled(false);
-				i->second->playSound("bird destroyed");
-				
+
+							
 			}
 			
 			if (i->first <= -3.f) {
@@ -115,23 +118,6 @@ public:
 		}		
 	}
 
-	void finalDestroy() {	
-		for (auto i = Object::destroyList.begin(); i != Object::destroyList.end();) {
-			i->first -= timeStep;
-			// for implicitly detecting birds (score == 0)
-			if (i->second != nullptr && i->second->getDisableOnDestroy()) {
-				i->second->getBody()->SetEnabled(false);
-			}
-			if (i->first <= 0) {
-				if (i->second != nullptr) {
-					if (i->second == currentBird) currentBird = nullptr;
-					findErase(i->second);
-					delete i->second;
-				}
-				i = Object::destroyList.erase(i);
-			} else {i++;}
-		}		
-	}
 
 	void updateAllTexture() {
 		for (auto& bird : birds) {
@@ -294,7 +280,7 @@ protected:
 			++i;
 		}
 
-		for (auto i=blocks.begin(); i!=blocks.end(); i++) {
+		for (auto i=blocks.begin(); i!=blocks.end();) {
 			if (*i == toDelete) {
 				blocks.erase(i);
 				return;

@@ -36,57 +36,12 @@ public:
 
     bool getCanAttack() { return canAttack; }
 
-
-    // virtual bool TakeDamage(float dmg) override {
-    //     bool isDead = CurrentHP <= 0;
-    //     CurrentHP = std::max(0.0f, CurrentHP - dmg);
-        
-    //     if (CurrentHP <= 0) {
-    //         playSound("bird destroyed");
-    //         if (!isDead) Destroy(3.0f);
-    //     } else if (dmg > 10.0f) {
-    //         playSound(rand() % 4);
-    //     }
-
-    //     if (!isDamaged) {isDamaged = true;}
-
-    //     return CurrentHP <= 0;
-    // }
-
-    virtual bool TakeDamage(float dmg) override {
-        CurrentHP = std::max(0.0f, CurrentHP - dmg);
-
-        if (!isDamaged) {
-            isDamaged = true;
-            playSound("bird destroyed");
-            // Destroy(3.0f);
-        }
-
-        return CurrentHP <= 0;
-    }
-
-    virtual bool TakeDamage(float dmg) override {
-        // Textures?
-        canAttack = false;
-        bool isDead = CurrentHP <= 0;
-        CurrentHP = std::max(0.0f, CurrentHP - dmg);
-        
-        if (CurrentHP <= 0) {
-            if (!isDead && canAttack) Destroy(2.0f);
-        } else if (dmg > 30.f) {
-            playSound(soundType::damage);
-        } else if (dmg > 1.f) {
-            playSound(soundType::collision);
-        }
-
+    virtual void checkDamage() override {
         if (!isDamaged) {isDamaged = true;}
-
-        return CurrentHP <= 0;
     }
-
 
     bool isMoving() const {
-        return body->GetLinearVelocity().LengthSquared() > 0;
+        return body->GetLinearVelocity().LengthSquared() > 1.f;
     }
 
     void useBird() {used = true;}

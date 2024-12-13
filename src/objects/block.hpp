@@ -18,22 +18,6 @@ public:
     
     Block(){}
 
-    virtual bool TakeDamage(float dmg) override {
-        if (MaxHP == FLT_MAX) return false;
-        CurrentHP = std::max(0.0f, CurrentHP - dmg);
- 
-        if (CurrentHP <= 0) {
-            playSound(soundType::destroy);
-            Destroy(2.0f);
-        } else if (dmg > 30.0f) {
-            playSound(soundType::damage);
-        } else if (dmg > 1.0f) {
-            playSound(soundType::collision);
-        }
-        
-        return CurrentHP <= 0;
-    }
-
  
     virtual void updateTexture(float deltaTime) override {
         float hp_percent = CurrentHP / MaxHP; 
