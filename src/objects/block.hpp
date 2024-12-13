@@ -198,7 +198,7 @@ namespace ObjectDefs{
         .destroySoundNames = woodDestroySoundNames,
         .collisionSoundNames = woodCollisionSoundNames,
         .damageSoundNames = woodDamageSoundNames,
-        .otherSounds = woodOtherSoundNames
+        .otherSoundNames = woodOtherSoundNames
     };
 
     ObjectDefaults woodCircleM = {
@@ -211,7 +211,7 @@ namespace ObjectDefs{
         .destroySoundNames = woodDestroySoundNames,
         .collisionSoundNames = woodCollisionSoundNames,
         .damageSoundNames = woodDamageSoundNames,
-        .otherSounds = woodOtherSoundNames
+        .otherSoundNames = woodOtherSoundNames
     };
 
     ObjectDefaults woodSquare = {
@@ -224,7 +224,7 @@ namespace ObjectDefs{
         .destroySoundNames = woodDestroySoundNames,
         .collisionSoundNames = woodCollisionSoundNames,
         .damageSoundNames = woodDamageSoundNames,
-        .otherSounds = woodOtherSoundNames
+        .otherSoundNames = woodOtherSoundNames
     };
 
     ObjectDefaults woodTriangleLeft = {
@@ -237,7 +237,7 @@ namespace ObjectDefs{
         .destroySoundNames = woodDestroySoundNames,
         .collisionSoundNames = woodCollisionSoundNames,
         .damageSoundNames = woodDamageSoundNames,
-        .otherSounds = woodOtherSoundNames
+        .otherSoundNames = woodOtherSoundNames
     };
 
     ObjectDefaults woodTriangleRight = {
@@ -250,7 +250,7 @@ namespace ObjectDefs{
         .destroySoundNames = woodDestroySoundNames,
         .collisionSoundNames = woodCollisionSoundNames,
         .damageSoundNames = woodDamageSoundNames,
-        .otherSounds = woodOtherSoundNames
+        .otherSoundNames = woodOtherSoundNames
     };
 
     ObjectDefaults woodRect = {
@@ -263,7 +263,7 @@ namespace ObjectDefs{
         .destroySoundNames = woodDestroySoundNames,
         .collisionSoundNames = woodCollisionSoundNames,
         .damageSoundNames = woodDamageSoundNames,
-        .otherSounds = woodOtherSoundNames
+        .otherSoundNames = woodOtherSoundNames
     };
 
     ObjectDefaults woodRectS = {
@@ -276,7 +276,7 @@ namespace ObjectDefs{
         .destroySoundNames = woodDestroySoundNames,
         .collisionSoundNames = woodCollisionSoundNames,
         .damageSoundNames = woodDamageSoundNames,
-        .otherSounds = woodOtherSoundNames
+        .otherSoundNames = woodOtherSoundNames
     };
 
     ObjectDefaults woodRectM = {
@@ -289,7 +289,7 @@ namespace ObjectDefs{
         .destroySoundNames = woodDestroySoundNames,
         .collisionSoundNames = woodCollisionSoundNames,
         .damageSoundNames = woodDamageSoundNames,
-        .otherSounds = woodOtherSoundNames
+        .otherSoundNames = woodOtherSoundNames
     };
 
     ObjectDefaults woodRectL = {
@@ -302,7 +302,7 @@ namespace ObjectDefs{
         .destroySoundNames = woodDestroySoundNames,
         .collisionSoundNames = woodCollisionSoundNames,
         .damageSoundNames = woodDamageSoundNames,
-        .otherSounds = woodOtherSoundNames
+        .otherSoundNames = woodOtherSoundNames
     };
 
     // STONE
@@ -324,7 +324,7 @@ namespace ObjectDefs{
         .destroySoundNames = stoneDestroySoundNames,
         .collisionSoundNames = stoneCollisionSoundNames,
         .damageSoundNames = stoneDamageSoundNames,
-        .otherSounds = stoneOtherSoundNames
+        .otherSoundNames = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneCircleM = {
@@ -337,7 +337,7 @@ namespace ObjectDefs{
         .destroySoundNames = stoneDestroySoundNames,
         .collisionSoundNames = stoneCollisionSoundNames,
         .damageSoundNames = stoneDamageSoundNames,
-        .otherSounds = stoneOtherSoundNames
+        .otherSoundNames = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneSquare = {
@@ -350,7 +350,7 @@ namespace ObjectDefs{
         .destroySoundNames = stoneDestroySoundNames,
         .collisionSoundNames = stoneCollisionSoundNames,
         .damageSoundNames = stoneDamageSoundNames,
-        .otherSounds = stoneOtherSoundNames
+        .otherSoundNames = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneTriangleLeft = {
@@ -363,7 +363,7 @@ namespace ObjectDefs{
         .destroySoundNames = stoneDestroySoundNames,
         .collisionSoundNames = stoneCollisionSoundNames,
         .damageSoundNames = stoneDamageSoundNames,
-        .otherSounds = stoneOtherSoundNames
+        .otherSoundNames = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneTriangleRight = {
@@ -376,7 +376,7 @@ namespace ObjectDefs{
         .destroySoundNames = stoneDestroySoundNames,
         .collisionSoundNames = stoneCollisionSoundNames,
         .damageSoundNames = stoneDamageSoundNames,
-        .otherSounds = stoneOtherSoundNames
+        .otherSoundNames = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneRect = {
@@ -389,7 +389,7 @@ namespace ObjectDefs{
         .destroySoundNames = stoneDestroySoundNames,
         .collisionSoundNames = stoneCollisionSoundNames,
         .damageSoundNames = stoneDamageSoundNames,
-        .otherSounds = stoneOtherSoundNames
+        .otherSoundNames = stoneOtherSoundNames
     };
 
     ObjectDefaults stoneRectS = {
@@ -402,7 +402,7 @@ namespace ObjectDefs{
         .destroySoundNames = stoneDestroySoundNames,
         .collisionSoundNames = stoneCollisionSoundNames,
         .damageSoundNames = stoneDamageSoundNames,
-        .otherSounds = stoneOtherSoundNames
+        .otherSoundNames = stoneOtherSoundNames
     };
     
     ObjectDefaults stoneRectM = {
@@ -415,7 +415,7 @@ namespace ObjectDefs{
         .destroySoundNames = stoneDestroySoundNames,
         .collisionSoundNames = stoneCollisionSoundNames,
         .damageSoundNames = stoneDamageSoundNames,
-        .otherSounds = stoneOtherSoundNames
+        .otherSoundNames = stoneOtherSoundNames
     };
     
     ObjectDefaults stoneRectL = {
@@ -428,7 +428,7 @@ namespace ObjectDefs{
         .destroySoundNames = stoneDestroySoundNames,
         .collisionSoundNames = stoneCollisionSoundNames,
         .damageSoundNames = stoneDamageSoundNames,
-        .otherSounds = stoneOtherSoundNames
+        .otherSoundNames = stoneOtherSoundNames
     };
 
     // FIXED

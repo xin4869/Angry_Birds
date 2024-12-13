@@ -21,7 +21,7 @@ namespace ObjectDefs
         .destroySoundNames = { "bird destroyed" },
         .collisionSoundNames = { "bird 01 collision a1", "bird 01 collision a2", "bird 01 collision a3" },
         .damageSoundNames = { "bird 01 collision a4" },
-        .otherSounds = { "bird 01 flying", "bird 01 select" }
+        .otherSoundNames = { "bird 01 flying", "bird 01 select" }
     };
 
     ObjectDefaults speedBirdDefaults = {
@@ -34,7 +34,7 @@ namespace ObjectDefs
         .destroySoundNames = { "bird destroyed" },
         .collisionSoundNames = { "bird 03 collision a3", "bird 03 collision a4", "bird 03 collision a2" },
         .damageSoundNames = { "bird 03 collision a1" },
-        .otherSounds = { "bird 03 flying", "bird 03 select", "special boost" }
+        .otherSoundNames = { "bird 03 flying", "bird 03 select", "special boost" }
     };
 
     ObjectDefaults explodeBirdDefaults = {
@@ -47,7 +47,7 @@ namespace ObjectDefs
         .destroySoundNames = { "bird destroyed" },
         .collisionSoundNames = { "bird 05 collision a1", "bird 05 collision a3", "bird 05 collision a4" },
         .damageSoundNames = { "bird 05 collision a2" },
-        .otherSounds = { "bird 05 flying", "bird 05 select", "tnt box explodes" }
+        .otherSoundNames = { "bird 05 flying", "bird 05 select", "tnt box explodes" }
     };
     
     ObjectDefaults* getBirdDefaults(const std::string& birdName) {
