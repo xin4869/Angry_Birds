@@ -147,36 +147,6 @@ public:
   /**
    * @brief Handles mouse presses, performs actions based on it
    */
-  // void handleMousePress() {
-  //   sf::Vector2f mousePos(sf::Mouse::getPosition(window));
-  //   auto clicked_button = gui->getClickedButton(mousePos);
-  //   if (clicked_button) {
-  //     handleButtonClicks(*clicked_button);
-  //   } else if (currentState == GameState::in_game && level) {
-  //       if (level->isWin()) {
-  //         currentState = GameState::win;
-  //         return;
-  //       } else if (level->isLost()) {
-  //         currentState = GameState::lost;
-  //         return;
-  //       }
-      
-  //     b2Vec2 b2WorldPos = renderer->toGamePos(mousePos);
-      
-  //     Bird* currentBird = level->getCurrentBird();
-  //     // implicitly choose the action
-  //     if (!currentBird || !currentBird->getCanAttack()) {
-  //       level->setNextBird();
-  //     }
-  //     else if (currentBird->getHP() != currentBird->getMaxHP() ||
-  //           currentBird->getBody()->GetLinearVelocity().LengthSquared() > 0) {
-  //       currentBird->Attack();
-  //     }
-  //     else {
-  //       level->startDragging(b2WorldPos);
-  //     }
-  //   }
-  // }
 
   void handleMousePress() {
     sf::Vector2f mousePos(sf::Mouse::getPosition(window));
@@ -195,22 +165,14 @@ public:
       b2Vec2 b2WorldPos = renderer->toGamePos(mousePos);
       
       Bird* currentBird = level->getCurrentBird();
-      // implicitly choose the action
-      
-      // why (currentBird->getHP() != currentBird->getMaxHP() ????????????????????????? 
-     
-      // if (currentBird->getHP() != currentBird->getMaxHP() ||
-      //       currentBird->isMoving()) {
-      //   currentBird->Attack();
-      // }
+ 
       if (currentBird) {
-        if (currentBird->isMoving() && currentBird->getCanAttack()) {
+        if (currentBird->isMoving()) {
           currentBird->Attack();
         } else if (!currentBird->isUsed()) {
-
+          level->startDragging(b2WorldPos);
         }
       }
-      
     }
   }
 

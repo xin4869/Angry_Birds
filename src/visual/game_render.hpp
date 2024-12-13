@@ -161,17 +161,6 @@ private:
         }
     }
 
-
-    // void renderGround(const std::unique_ptr<Ground>& ground) const {
-    //     if (!ground) return;
-    //     b2Vec2 bodyPos = ground->getBody()->GetPosition();   
-    //     std::cout << "Ground pos: " << bodyPos.x << ", " << bodyPos.y << std::endl;
-    //     sf::Vector2f windowPos = toScreenPos(bodyPos);
-    //     std::cout << "Window pos: " << windowPos.x << ", " << windowPos.y << std::endl;
-    //     ground->getGroundShape().setPosition(windowPos.x, windowPos.y);
-    //     window.draw(ground->getGroundShape());
-    // }
-
     void renderGround(const std::unique_ptr<Ground>& ground) const {
         if (!ground) return;
         sf::ConvexShape groundShape;
@@ -185,7 +174,11 @@ private:
             groundShape.setPoint(i, toScreenPos(vertices[i]));
         }
 
-        groundShape.setTexture(&TextureManager::getTexture("ground"));
+        sf::Texture& ground_texture = TextureManager::getTexture("ground");
+        ground_texture.setRepeated(true);
+        groundShape.setTexture(&ground_texture);
+        sf::IntRect textureRect(0, 0, groundShape.getLocalBounds().width, groundShape.getLocalBounds().height);
+        groundShape.setTextureRect(textureRect);
 
         window.draw(groundShape);
     }

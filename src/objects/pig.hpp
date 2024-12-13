@@ -81,7 +81,6 @@ public:
                 sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first));
             }
         } else if (0.3f < hp_percent && hp_percent <= 0.6f) {
-            // sprite.setTexture(TextureManager::getTexture(damageTextures[currentTextureIdx].first));
             if (animationTimer > damageTextures[currentTextureIdx].second) {
                 animationTimer = 0; 
                 currentTextureIdx = (currentTextureIdx + 1) % 2;

@@ -98,7 +98,6 @@ public:
 	void disableAndDestroy() {	
 		for (auto i = Object::destroyList.begin(); i != Object::destroyList.end();) {
 			i->first -= timeStep;
-			// for implicitly detecting birds (score == 0)
 			if ( i->second != nullptr && (i->second->getDisableOnDestroy() || i-> first <= 0) ) {
 				if (i->second->getBody()->IsEnabled()) {
 					i->second->playSound(soundType::destroy);	
@@ -106,7 +105,7 @@ public:
 				i->second->getBody()->SetEnabled(false);							
 			}
 			
-			if (i->first <= -3.f) {
+			if (i->first <= -1.f) {
 				if (i->second != nullptr) {
 					if (i->second == currentBird) currentBird = nullptr;
 					findErase(i->second);
@@ -163,8 +162,6 @@ public:
 	}
 
 	std::unique_ptr<Ground>& getGround() { return ground; }
-
-	// std::vector<b2Vec2>& getGroundPoints() { return groundPoints; }
 
 	/**
 	 * @brief Is position on current active bird?

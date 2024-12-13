@@ -34,7 +34,7 @@ public:
      * @param name Name of the texture
      * @return const sf::Texture& the texture
      */
-    static const sf::Texture& getTexture(const std::string& name)
+    static sf::Texture& getTexture(const std::string& name)
     {
         auto it = textures.find(name);
         if (it != textures.end())
