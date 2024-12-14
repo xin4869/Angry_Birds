@@ -1,19 +1,19 @@
 # See instructions for format
-ground, -15,10, -3,0, 5,5
+#ground, -11,10, -3,0, 5,5
 
 NormalBird
 explodebird
-normalPig, 15, 7
+normalPig, 15, 6.5
 normalPig, 15, 1
-woodrectl, 13, 3, 90
-woodrectl, 17, 3, 90
-stonerectl, 13.5, 3, 90
-stonerectl, 17.5, 3, 90
-woodrectl, 15, 6
-woodTriangleRight, 13, 8
-woodTriangleLeft, 17, 8
+woodrectl, 13, 2.5, 90
+woodrectl, 17, 2.5, 90
+stonerectl, 13.5, 2.5, 90
+stonerectl, 17.5, 2.5, 90
+woodrectl, 15, 5.5
+woodTriangleRight, 13, 6.7
+woodTriangleLeft, 17, 6.7
 
 
 gravity, 0, -10
-#slingshot, -15, 4
+slingshot, -15, 3
 scoreLimits, 1000, 1100, 1200

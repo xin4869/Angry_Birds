@@ -98,7 +98,6 @@ public:
         case GameState::in_game:
           gui->drawGame(levelNumber);
           renderer->renderGame(*level);
-          //renderer->drawGameObjects(levelNumber);
           break;
         case GameState::win:
           gui->drawWin(level->getStars());

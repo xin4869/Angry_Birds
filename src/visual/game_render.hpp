@@ -61,10 +61,10 @@ public:
             if (!inBounds(i)) {i->setOut();}
         }
         
+        renderGrounds(level.getGrounds());
+        
         if (level.getDragging()) drawTrajectory(level.getCurrentBird(),
                 level.getSlingshot().getLaunchImpulse(level.getCurrentBird()), level.getGravity());
-
-        renderGround(level.getGround());
     }
     
     void setXBounds(b2Vec2 bounds) { gameXBounds = bounds; }
@@ -160,26 +160,28 @@ private:
         }
     }
 
-    void renderGround(const std::unique_ptr<Ground>& ground) const {
-        if (!ground) return;
-        sf::ConvexShape groundShape;
-        const std::vector<b2Vec2>& vertices = ground->getVertices();
-        
-        // groundShape.setOrigin(toScreenPos(ground->getBody()->GetPosition()));
-        // groundShape.setPosition(toScreenPos(ground->getBody()->GetPosition()));
-        
-        groundShape.setPointCount(vertices.size());
-        for (size_t i = 0; i < vertices.size(); ++i) {
-            groundShape.setPoint(i, toScreenPos(vertices[i]));
-        }
-
+    void renderGrounds(const std::vector<std::unique_ptr<Ground>>& grounds) const {
         sf::Texture& ground_texture = TextureManager::getTexture("ground");
         ground_texture.setRepeated(true);
-        groundShape.setTexture(&ground_texture);
-        sf::IntRect textureRect(0, 0, groundShape.getGlobalBounds().width, groundShape.getGlobalBounds().height);
-        groundShape.setTextureRect(textureRect);
+        
+        for (auto ground = grounds.begin(); ground != grounds.end(); ++ground) {
+            if (!*ground) return;
+            sf::ConvexShape groundShape;
+            groundShape.setOutlineColor(sf::Color::Black);
+            groundShape.setOutlineThickness(3);
+            const std::vector<b2Vec2>& vertices = (*ground)->getVertices();
+            
+            groundShape.setPointCount(vertices.size());
+            for (size_t i = 0; i < vertices.size(); ++i) {
+                groundShape.setPoint(i, toScreenPos(vertices[i]));
+            }
 
-        window.draw(groundShape);
+            groundShape.setTexture(&ground_texture);
+            sf::IntRect textureRect(0, 0, groundShape.getGlobalBounds().width, groundShape.getGlobalBounds().height);
+            groundShape.setTextureRect(textureRect);
+
+            window.draw(groundShape);
+        }
 
         // In renderGround function, after drawing the ConvexShape
         // Draw Box2D shape for debugging

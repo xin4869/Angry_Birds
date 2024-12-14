@@ -22,13 +22,13 @@ public:
     virtual void updateTexture(float deltaTime) override {
         float hp_percent = CurrentHP / MaxHP; 
         if (hp_percent > 0.7f) {
-            sprite.setTexture(TextureManager::getTexture(normalTextures[0].first));
+            sprite.setTexture(TextureManager::getTexture(normalTextures[0].first), true);
         } else if (0.4f< hp_percent && hp_percent <= 0.7f) {
-            sprite.setTexture(TextureManager::getTexture(damageTextures[0].first));
+            sprite.setTexture(TextureManager::getTexture(damageTextures[0].first), true);
         } else if (0.2f< hp_percent && hp_percent <=0.4f) {
-            sprite.setTexture(TextureManager::getTexture(damageTextures[1].first));         
+            sprite.setTexture(TextureManager::getTexture(damageTextures[1].first), true);         
         } else {
-            sprite.setTexture(TextureManager::getTexture(damageTextures[2].first));
+            sprite.setTexture(TextureManager::getTexture(damageTextures[2].first), true);
         }
     }
 };

@@ -87,11 +87,8 @@ public:
 		}
 
 		for (auto& block: blocks) {
-			if (block->getBody()->GetType() == b2_staticBody) {return;}
-			else {
-				if (block->getHP() == 0) {block->Destroy(2.f);}
-				else if (block->isOut()) {block->Destroy();}
-			}			
+			if (block->getHP() <= 0) {block->Destroy(2.f);}
+			else if (block->isOut()) {block->Destroy();}
 		}
 	}
 
@@ -161,7 +158,7 @@ public:
 		return scoreLimits.size();
 	}
 
-	std::unique_ptr<Ground>& getGround() { return ground; }
+	std::vector<std::unique_ptr<Ground>>& getGrounds() { return grounds; }
 
 	/**
 	 * @brief Is position on current active bird?
@@ -430,6 +427,7 @@ protected:
 	bool addGround(const std::string& parameter, std::stringstream& lineStream) {
 		if (parameter != "ground") return false;
 		float x, y;
+		groundPoints.clear();
 		while (true) {
 			x = readFloat(lineStream);
 			y = readFloat(lineStream);
@@ -437,7 +435,7 @@ protected:
 			groundPoints.push_back(b2Vec2(x, y));
 		}
 		if (!groundPoints.empty()) {
-			ground = std::make_unique<Ground>(&world, groundPoints);
+			grounds.push_back(std::make_unique<Ground>(&world, groundPoints));
 		}
 		return true;
 	}
@@ -512,7 +510,7 @@ protected:
 	std::vector<Bird*>birds;
 	std::vector<Pig*>pigs;
 	std::vector<Block*> blocks;
-	std::unique_ptr<Ground> ground;
+	std::vector<std::unique_ptr<Ground>> grounds;
 	Slingshot slingshot;
 	ObjectCollisions collisionHandler;
 };

@@ -1,0 +1,31 @@
+explodebird
+speedBird
+
+ground, 13,0, 13,4.6, 10,4.6, 10,0
+
+icerect, 17, 1.2, 90
+icerect, 17, 3.7, 90
+icerectL, 15, 4.8
+
+normalPig, 15, 1
+woodSquare, 14, 5.7
+woodSquare, 15, 5.7
+woodSquare, 16, 5.7
+stoneSquare, 14, 6.7
+stoneSquare, 15, 6.7
+stoneSquare, 16, 6.7
+
+normalPig, 9, 1
+woodRect, 7, 1, 90
+stoneRect, 5.7, 1, 90
+stoneRectM, 4.4, 2.5, 90
+woodRectM, 3.8, 2.5, 90
+iceRectM, 3.2, 2.5, 90
+stoneRectM, 8, 2.5
+woodRectM, 8, 3
+iceRectM, 8, 3.5
+
+
+gravity, 0, -10
+slingshot, -17, 3
+scoreLimits, 1100, 1300, 1600
