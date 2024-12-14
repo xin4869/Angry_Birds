@@ -75,10 +75,15 @@ public:
 	}
 
 	void addToDestroyList() {
+
 		for (auto& bird: birds) {
-			if (bird->getHP() == 0) {bird->Destroy(3.f);} 
-			else if (bird->isUsed() && !bird->isMoving()) {bird->Destroy(3.f);} 
-			else if (bird->isOut()) {bird->Destroy();}
+			if (bird->isOut()) {
+				bird->Destroy();
+			} else if (bird->canAttackOnCollision() && bird->getIsDamaged()) {
+				bird->scheduleAttack(timeStep);
+			} else if (bird->isUsed() && !bird->isMoving()) {
+				bird->Destroy(3.f);
+			} else if (bird->getHP() == 0) {bird->Destroy(3.f);} 
 		}
 
 		for (auto& pig: pigs) {
