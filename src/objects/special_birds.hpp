@@ -29,7 +29,7 @@ namespace ObjectDefs
         .shape = CreateShape(birdRadius),
         .density = birdDensity,
         .maxHp = birdMaxHp,
-        .normalTextures = {{"SpeedBird1", 2.f}, {"SpeedBird2", 0.1f}, {"SpeedBird3", 0.8f}, {"SpeedBird4", 0.8f}},
+        .normalTextures = {{"SpeedBird1", 2.f}, {"SpeedBird2", 0.1f}, {"SpeedBird3", 0.3f}, {"SpeedBird4", 0.3f}},
         .damageTextures = {{"SpeedBirdDead", 0.f}},
         .destroySoundNames = { "bird destroyed" },
         .collisionSoundNames = { "bird 03 collision a3", "bird 03 collision a4", "bird 03 collision a2" },
@@ -42,7 +42,8 @@ namespace ObjectDefs
         .shape = CreateShape(birdRadius),
         .density = birdDensity,
         .maxHp = birdMaxHp,
-        .normalTextures = {{"ExplodeBird1", 2.f}, {"ExplodeBird2", 0.1f}, {"ExplodeBird3", 0.5f}, {"ExplodeBird4", 0.3f}, {"ExplodeBird5", 0.1f}, {"ExplodeBird6", 0.f}, {"ExplodeBird7", 0.f}, {"ExplodeBird8", 0.f}},
+        .normalTextures = {{"ExplodeBird1", 2.f}, {"ExplodeBird2", 0.1f}, {"ExplodeBird3", 0.5f}, {"ExplodeBird4", 0.3f},
+                            {"ExplodeBird5", 0.8f}, {"ExplodeBird6", 0.f}, {"ExplodeBird7", 0.f}, {"ExplodeBird8", 0.f}},
         .damageTextures = {{"ExplodeBirdDead", 0.f}},
         .destroySoundNames = { "bird destroyed" },
         .collisionSoundNames = { "bird 05 collision a1", "bird 05 collision a3", "bird 05 collision a4" },
@@ -127,7 +128,7 @@ public:
 
 protected:
     const float abilitySpeedGain = 20.0f;  // tune this value
-    std::vector<std::vector<size_t>> texture_order = {{0,1}, {0,2,3,2}};
+    std::vector<std::vector<size_t>> texture_order = {{0,1}, {0,2}, {0,3}};
     size_t row = 0;
     size_t column = 0;
 
@@ -198,7 +199,7 @@ protected:
     float blastPower = 1000.0f;
     size_t row = 0;
     size_t column = 0;
-    std::vector<std::vector<size_t>> texture_order = {{0,1}, {0,2,3}, {0,4}};
+    std::vector<std::vector<size_t>> texture_order = {{0,1}, {0,2}, {0,3}, {0,4}};
 };
 
 
