@@ -14,11 +14,10 @@ public:
         // b2Vec2 centerPos = calculateCenter(vertices);
         b2BodyDef bodyDef;
         bodyDef.type = b2_staticBody;
-        bodyDef.position.Set(0, 0);
         body = world->CreateBody(&bodyDef);
 
         b2ChainShape chainShape;
-        chainShape.CreateChain(vertices.data(), vertices.size(), vertices.front(), vertices.back());
+        chainShape.CreateLoop(vertices.data(), vertices.size());
 
         b2FixtureDef fixtureDef;
         fixtureDef.shape = &chainShape;

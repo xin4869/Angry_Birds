@@ -161,6 +161,7 @@ public:
         // misc
         loadSound("chainsaw", "assets/audio/chainsaw.wav");
         loadSound("slingshot streched", "assets/audio/slingshot streched.wav");
+        loadSound("shot1", "assets/audio/bird shot-a1.wav");
         loadSound("special boost", "assets/audio/special boost.wav");
         loadSound("tnt box explodes", "assets/audio/tnt box explodes.wav");
         
