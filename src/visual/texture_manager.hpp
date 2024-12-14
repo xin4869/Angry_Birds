@@ -229,6 +229,9 @@ public:
        loadTexture("ExplodeBird3", "assets/textures/explode_bird/normal/3.png");
        loadTexture("ExplodeBird4", "assets/textures/explode_bird/normal/4.png");
        loadTexture("ExplodeBird5", "assets/textures/explode_bird/normal/5.png");
+       loadTexture("ExplodeBird6", "assets/textures/explode_bird/normal/6.png");
+       loadTexture("ExplodeBird7", "assets/textures/explode_bird/normal/7.png");
+       loadTexture("ExplodeBird8", "assets/textures/explode_bird/normal/8.png");
        loadTexture("ExplodeBirdDead", "assets/textures/explode_bird/damage/1.png");
 
        //////////////BUTTONS//////////////////////////

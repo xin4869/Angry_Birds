@@ -13,8 +13,8 @@ class Bird : public Object
 {
 public:
     Bird(){}
-    Bird(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults, float rot=0.0f) :
-        Object(world, x, y, defaults, rot) {
+    Bird(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults, float rot=0.f, bool attackFlag=false) :
+        Object(world, x, y, defaults, rot), attackOnCollision(attackFlag) {
             disableOnDestroy = false;
         }
 
@@ -36,8 +36,22 @@ public:
 
     bool getCanAttack() { return canAttack; }
 
+    bool canAttackOnCollision() {return attackOnCollision;}
+    bool getIsDamaged(){ return isDamaged;}
+
+    void scheduleAttack(float deltaTime) {
+        attackTimer += deltaTime;
+        if (attackTimer > 3.f) {
+            Attack();
+            std::cout<<"scheduleAttack() calling" << std::endl;
+        }
+    }
+
     virtual void checkDamage() override {
-        if (!isDamaged) {isDamaged = true;}
+        if (!isDamaged) {
+            animationTimer = 0;
+            isDamaged = true;
+        }
     }
 
     bool isMoving() const {
@@ -50,6 +64,8 @@ public:
 protected:
     bool canAttack = true;
     bool used = false;
+    bool attackOnCollision;
+    float attackTimer = 0.f;
 };
 
 

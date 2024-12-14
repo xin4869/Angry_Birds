@@ -144,9 +144,7 @@ public:
             return true;
         }
         return false;
-    }
-       
-    
+    }    
 
     void Destroy(float timer_s=0.f) {
         if (!toBeDeleted) {
@@ -167,7 +165,6 @@ public:
         } else if (dmg > 1.0f) {
             playSound(soundType::collision);
         }
-        
         return CurrentHP <= 0;
     }
 

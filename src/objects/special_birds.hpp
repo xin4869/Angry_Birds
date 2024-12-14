@@ -42,7 +42,7 @@ namespace ObjectDefs
         .shape = CreateShape(birdRadius),
         .density = birdDensity,
         .maxHp = birdMaxHp,
-        .normalTextures = {{"ExplodeBird1", 2.f}, {"ExplodeBird2", 0.1f}, {"ExplodeBird3", 0.1f}, {"ExplodeBird4", 0.1f}, {"ExplodeBird5", std::numeric_limits<float>::max()}},
+        .normalTextures = {{"ExplodeBird1", 2.f}, {"ExplodeBird2", 0.1f}, {"ExplodeBird3", 0.5f}, {"ExplodeBird4", 0.3f}, {"ExplodeBird5", 0.1f}, {"ExplodeBird6", 0.f}, {"ExplodeBird7", 0.f}, {"ExplodeBird8", 0.f}},
         .damageTextures = {{"ExplodeBirdDead", 0.f}},
         .destroySoundNames = { "bird destroyed" },
         .collisionSoundNames = { "bird 05 collision a1", "bird 05 collision a3", "bird 05 collision a4" },
@@ -65,8 +65,8 @@ namespace ObjectDefs
 class NormalBird : public Bird {
 public:
     NormalBird(){}
-    NormalBird(b2World* world, float x, float y, float rot=0.0f) :
-        Bird(world, x, y, &ObjectDefs::normalBirdDefaults, rot) {}
+    NormalBird(b2World* world, float x, float y) :
+        Bird(world, x, y, &ObjectDefs::normalBirdDefaults) {}
 
 
     void Attack() override {
@@ -83,7 +83,7 @@ public:
             if (animationTimer >= normalTextures[currentTextureIdx].second) {
                 animationTimer = 0.0f;               
                 currentTextureIdx = (currentTextureIdx + 1) % normalTextures.size();
-                sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first));
+                sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first), true);
             }
         }
     }
@@ -93,8 +93,8 @@ public:
 class SpeedBird : public Bird
 {
 public:
-    SpeedBird(b2World* world, float x, float y, float rot=0.0f) :
-        Bird(world, x, y, &ObjectDefs::speedBirdDefaults, rot) {}
+    SpeedBird(b2World* world, float x, float y) :
+        Bird(world, x, y, &ObjectDefs::speedBirdDefaults) {}
 
     void Attack() override {
         if (!canAttack) return;
@@ -120,7 +120,7 @@ public:
                     row = rand() % texture_order.size();
                 }
                 currentTextureIdx = texture_order[row][column];
-                sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first));
+                sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first), true);
             }     
         }
     }
@@ -136,8 +136,8 @@ protected:
 class ExplodeBird : public Bird
 {
 public:
-    ExplodeBird(b2World* world, float x, float y, float rot=0.0f) :
-        Bird(world, x, y, &ObjectDefs::explodeBirdDefaults, rot) {}
+    ExplodeBird(b2World* world, float x, float y, bool flag=true) :
+        Bird(world, x, y, &ObjectDefs::explodeBirdDefaults, 0.f, flag) {}
 
     void Attack() override {
         if (!canAttack) return;
@@ -167,26 +167,29 @@ public:
     }
 
     virtual void updateTexture(float deltaTime) override {
+        animationTimer += deltaTime;
         if (isDamaged) {
-            sprite.setTexture(TextureManager::getTexture(damageTextures[0].first));
-        } else {
-            if (!canAttack && isMoving()) {
-                sprite.setTexture(TextureManager::getTexture(normalTextures[4].first));
-            } else {
-                animationTimer += deltaTime;
-                if (animationTimer > normalTextures[currentTextureIdx].second) {
-                    animationTimer = 0;
-                    column += 1;
-                    if (column > texture_order[row].size() - 1) {
-                        column = 0;
-                        row = rand() % texture_order.size();
-                    }  
-                    currentTextureIdx = texture_order[row][column];
-                    sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first));
-                }
+            if (animationTimer > 2.f) {
+                sprite.setTexture(TextureManager::getTexture(normalTextures[7].first), true);
+            } else if (animationTimer > 1.f) {
+                sprite.setTexture(TextureManager::getTexture(normalTextures[6].first), true);
+            }else if (animationTimer > 0.f) {
+                sprite.setTexture(TextureManager::getTexture(normalTextures[5].first), true);
+            }
+        } else {       
+            if (animationTimer > normalTextures[currentTextureIdx].second) {
+                animationTimer = 0;
+                column += 1;
+                if (column > texture_order[row].size() - 1) {
+                    column = 0;
+                    row = rand() % texture_order.size();
+                }  
+                currentTextureIdx = texture_order[row][column];
+                sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first), true);
             }
         }
     }
+    
 
 protected:
     // tune these values
@@ -195,7 +198,7 @@ protected:
     float blastPower = 1000.0f;
     size_t row = 0;
     size_t column = 0;
-    std::vector<std::vector<size_t>> texture_order = {{0,1}, {0,2}, {0,3}};
+    std::vector<std::vector<size_t>> texture_order = {{0,1}, {0,2,3}, {0,4}};
 };
 
 
