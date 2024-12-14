@@ -34,8 +34,7 @@ public:
     bool inBounds(Object* object) {
         b2Vec2 pos = object->getBody()->GetPosition();
         sf::Vector2f screenPos = toScreenPos(pos);
-        if (screenPos.x > window.getSize().x || screenPos.x < 0 ||
-            screenPos.y > window.getSize().y || screenPos.y < 0) {
+        if (screenPos.x > window.getSize().x || screenPos.x < 0) {
             return false;
         }
         return true;
@@ -166,8 +165,8 @@ private:
         sf::ConvexShape groundShape;
         const std::vector<b2Vec2>& vertices = ground->getVertices();
         
-        groundShape.setOrigin(toScreenPos(ground->getBody()->GetPosition()));
-        groundShape.setPosition(toScreenPos(ground->getBody()->GetPosition()));
+        // groundShape.setOrigin(toScreenPos(ground->getBody()->GetPosition()));
+        // groundShape.setPosition(toScreenPos(ground->getBody()->GetPosition()));
         
         groundShape.setPointCount(vertices.size());
         for (size_t i = 0; i < vertices.size(); ++i) {
@@ -177,10 +176,20 @@ private:
         sf::Texture& ground_texture = TextureManager::getTexture("ground");
         ground_texture.setRepeated(true);
         groundShape.setTexture(&ground_texture);
-        sf::IntRect textureRect(0, 0, groundShape.getLocalBounds().width, groundShape.getLocalBounds().height);
+        sf::IntRect textureRect(0, 0, groundShape.getGlobalBounds().width, groundShape.getGlobalBounds().height);
         groundShape.setTextureRect(textureRect);
 
         window.draw(groundShape);
+
+        // In renderGround function, after drawing the ConvexShape
+        // Draw Box2D shape for debugging
+        // sf::VertexArray lines(sf::LineStrip, vertices.size() + 1);
+        // for (size_t i = 0; i < vertices.size(); ++i) {
+        //     lines[i].position = toScreenPos(vertices[i]);
+        //     lines[i].color = sf::Color::Red;
+        // }
+        // lines[vertices.size()] = lines[0]; // Close the shape
+        // window.draw(lines);
     }
 };
 

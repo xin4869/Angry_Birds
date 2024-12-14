@@ -360,19 +360,6 @@ protected:
 		if (addBlock(parameter, x, y, z)) return;
 	}
 
-
-	// static Bird* createBird(b2World* world, float x, float y, const std::string& birdType) {
-    //     if (birdType == "normalbird") {
-    //         return new NormalBird(world, x, y);
-    //     } else if (birdType == "speedbird") {
-    //         return new SpeedBird(world, x, y);
-    //     } else if (birdType == "explodebird") {
-    //         return new ExplodeBird(world, x, y);
-    //     } else {
-    //         return nullptr;
-    //     }
-    // }
-
 	/**
 	 * @brief Adds unused bird based on name
 	 * @param className name of bird class
