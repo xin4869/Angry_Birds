@@ -271,6 +271,7 @@ public:
        loadTexture("cloud", "assets/textures/elements/cloud.png");
        loadTexture("blast","assets/textures/elements/blast.png" );
        loadTexture("yellow_feathers", "assets/textures/elements/yellow_feathers.png");
+       loadTexture("red_feathers", "assets/textures/elements/red_feathers.png");
        loadTexture("disappear", "assets/textures/elements/disappear.png");
     }
 
