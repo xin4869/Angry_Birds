@@ -96,18 +96,26 @@ public:
 			else if (block->isOut()) {block->Destroy();}
 		}
 	}
-
+ 
 	void disableAndDestroy() {	
 		for (auto i = Object::destroyList.begin(); i != Object::destroyList.end();) {
 			i->first -= timeStep;
 			if ( i->second != nullptr && (i->second->getDisableOnDestroy() || i-> first <= 0) ) {
 				if (i->second->getBody()->IsEnabled()) {
-					i->second->playSound(soundType::destroy);	
-				}
-				i->second->getBody()->SetEnabled(false);							
+					i->second->playSound(soundType::destroy);
+				}	
+
+				i->second->getBody()->SetEnabled(false);
+
+				if (i->second->getHasDestroyTexture()) {
+					i->second->setDestroyTexture();
+				}	
+
+				float scoreToAdd = i->second->transferScore();
+				if (scoreToAdd > FLT_MIN) {addScore(scoreToAdd);}							
 			}
-			
-			if (i->first <= -1.f) {
+		
+			if (i->first <= -0.65f) {
 				if (i->second != nullptr) {
 					if (i->second == currentBird) currentBird = nullptr;
 					findErase(i->second);
@@ -133,7 +141,6 @@ public:
 				block->updateTexture(timeStep);
 			}		
 		}
-
 	}
 
 	/**
@@ -522,3 +529,4 @@ protected:
 };
 
 #endif // LEVEL_HPP
+

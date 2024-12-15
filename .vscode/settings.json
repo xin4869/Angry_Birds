@@ -76,7 +76,8 @@
         "numbers": "cpp",
         "semaphore": "cpp",
         "numeric": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "list": "cpp"
     },
     "cSpell.words": [
         "ctest",

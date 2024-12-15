@@ -78,14 +78,14 @@ public:
                     row = rand() % texture_order.size();
                 }
                 currentTextureIdx = texture_order[row][column];
-                sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first));
+                sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first), true);
             }
         } else if (0.3f < hp_percent && hp_percent <= 0.6f) {
             if (animationTimer > damageTextures[currentTextureIdx].second) {
                 animationTimer = 0; 
                 currentTextureIdx = (currentTextureIdx + 1) % 2;
             }
-            sprite.setTexture(TextureManager::getTexture(damageTextures[currentTextureIdx].first));
+            sprite.setTexture(TextureManager::getTexture(damageTextures[currentTextureIdx].first), true);
         } else {
             if (currentTextureIdx < 2 || currentTextureIdx > damageTextures.size()) {
                 currentTextureIdx = damage_start_idx;
@@ -97,7 +97,7 @@ public:
                     currentTextureIdx = damage_start_idx;
                 }
             }
-            sprite.setTexture(TextureManager::getTexture(damageTextures[currentTextureIdx].first)); 
+            sprite.setTexture(TextureManager::getTexture(damageTextures[currentTextureIdx].first), true); 
         }
     }
 

@@ -266,9 +266,12 @@ public:
        loadTexture("slingshot1", "assets/textures/elements/slingshot_1.png");
        loadTexture("slingshot2", "assets/textures/elements/slingshot_2.png");
        loadTexture("slingshot3", "assets/textures/elements/slingshot_3.png");
-       loadTexture("ground", "assets/textures/ground.png");
-       loadTexture("ground1", "assets/textures/elements/ground2.png");
+       loadTexture("ground", "assets/textures/elements/ground.png");
+       loadTexture("block_transparent", "assets/textures/elements/block_transparent.png");
        loadTexture("cloud", "assets/textures/elements/cloud.png");
+       loadTexture("blast","assets/textures/elements/blast.png" );
+       loadTexture("yellow_feathers", "assets/textures/elements/yellow_feathers.png");
+       loadTexture("disappear", "assets/textures/elements/disappear.png");
     }
 
     TextureManager() = delete;

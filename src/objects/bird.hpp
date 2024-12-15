@@ -16,6 +16,7 @@ public:
     Bird(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults, float rot=0.f, bool attackFlag=false) :
         Object(world, x, y, defaults, rot), attackOnCollision(attackFlag) {
             disableOnDestroy = false;
+            hasDestroyTexture = true;
         }
 
     /**
@@ -34,16 +35,10 @@ public:
         return fixture->TestPoint(worldPos);        
     }
 
-    bool getCanAttack() { return canAttack; }
-
-    bool canAttackOnCollision() {return attackOnCollision;}
-    bool getIsDamaged(){ return isDamaged;}
-
     void scheduleAttack(float deltaTime) {
         attackTimer += deltaTime;
-        if (attackTimer > 3.f) {
+        if (attackTimer > 2.f) {
             Attack();
-            std::cout<<"scheduleAttack() calling" << std::endl;
         }
     }
 
@@ -57,7 +52,10 @@ public:
     bool isMoving() const {
         return body->GetLinearVelocity().LengthSquared() > 1.f;
     }
-
+    
+    bool getCanAttack() { return canAttack; }
+    bool canAttackOnCollision() {return attackOnCollision;}
+    bool getIsDamaged(){ return isDamaged;}
     void useBird() {used = true;}
     bool isUsed() {return used;}
 

@@ -175,7 +175,8 @@ public:
         return CurrentHP <= 0;
     }
 
-    virtual void checkDamage() {};
+    virtual void checkDamage(){}
+    virtual void setDestroyTexture(){}
 
     /**
      * @brief Delete object in timer_s seconds (deleted by Level).
@@ -196,6 +197,7 @@ public:
     float getHP() { return CurrentHP; }
     sf::Sprite& getSprite() { return sprite; }
     bool getDisableOnDestroy() {return disableOnDestroy;}
+    bool getHasDestroyTexture() {return hasDestroyTexture;}
     constexpr const static float speedDamageMultiplier = 7.0f;  // tune this value
     static std::list< std::pair< float, Object* > > destroyList;  // <timer, object>
 
@@ -221,6 +223,7 @@ protected :
     bool toBeDeleted = false;
     bool out = false;
     bool disableOnDestroy = true; 
+    bool hasDestroyTexture = false;
 
 };
 

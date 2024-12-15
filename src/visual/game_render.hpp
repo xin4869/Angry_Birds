@@ -125,7 +125,7 @@ private:
      * @param object render this
      */
     void renderObject(Object* object) const {
-        if (!object->getBody()->IsEnabled()) return;
+        if (!object->getBody()->IsEnabled() && !object->getHasDestroyTexture()) return;
         renderSprite(object->getSprite(), object->getBody()->GetPosition(), -object->getBody()->GetAngle() * radToDeg);
     }
 

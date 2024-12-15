@@ -72,6 +72,7 @@ public:
 
     void Attack() override {
         if (!canAttack) return;
+        if (isDamaged) return;
         canAttack = false;
         playSound("bird 01 select");
     }
@@ -99,6 +100,7 @@ public:
 
     void Attack() override {
         if (!canAttack) return;
+        if (isDamaged) return;
         canAttack = false;
         b2Vec2 vel = body->GetLinearVelocity();
         float length = vel.Length();
@@ -124,6 +126,10 @@ public:
                 sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first), true);
             }     
         }
+    }
+
+    virtual void setDestroyTexture() override {
+        sprite.setTexture(TextureManager::getTexture("yellow_feathers"), true);
     }
 
 protected:
@@ -161,20 +167,21 @@ public:
                 raycast.hitLatest = nullptr;
             }
         }
+
         playSound("tnt box explodes");
 
         disableOnDestroy = true;
-        Destroy(2.0f);
+        Destroy();
     }
 
     virtual void updateTexture(float deltaTime) override {
         animationTimer += deltaTime;
         if (isDamaged) {
-            if (animationTimer > 2.f) {
+            if (animationTimer > 1.2f) {
                 sprite.setTexture(TextureManager::getTexture(normalTextures[7].first), true);
-            } else if (animationTimer > 1.f) {
+            } else if (animationTimer > 0.6f) {
                 sprite.setTexture(TextureManager::getTexture(normalTextures[6].first), true);
-            }else if (animationTimer > 0.f) {
+            } else if (animationTimer > 0.f) {
                 sprite.setTexture(TextureManager::getTexture(normalTextures[5].first), true);
             }
         } else {       
@@ -189,6 +196,10 @@ public:
                 sprite.setTexture(TextureManager::getTexture(normalTextures[currentTextureIdx].first), true);
             }
         }
+    }
+
+    virtual void setDestroyTexture() override {
+        sprite.setTexture(TextureManager::getTexture("blast"), true);
     }
     
 

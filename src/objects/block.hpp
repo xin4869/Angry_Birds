@@ -17,7 +17,6 @@ public:
         }
     
     Block(){}
-
  
     virtual void updateTexture(float deltaTime) override {
         float hp_percent = CurrentHP / MaxHP; 
@@ -414,48 +413,12 @@ namespace ObjectDefs{
         .damageSoundNames = stoneDamageSoundNames,
         .otherSoundNames = stoneOtherSoundNames
     };
-
-    // FIXED
-    ObjectDefaults fixedCircleS = {
-        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShape(circleSRadius),
-        .maxHp = FLT_MAX,
-        .normalTextures = {{"StoneCircleS", 0.f}}
-    };
-
-    ObjectDefaults fixedCircleM = {
-        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShape(circleMRadius),
-        .maxHp = FLT_MAX,
-        .normalTextures = {{"StoneCircleM", 0.f}}
-    };
-
-    ObjectDefaults fixedSquare = {
-        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShape(squareSize, squareSize),
-        .maxHp = FLT_MAX,
-        .normalTextures = {{"StoneSquare", 0.f}}
-    };
-
-    ObjectDefaults fixedTriangleLeft = {
-        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShapeTriangle(triangleSize, triangleSize, true),
-        .maxHp = FLT_MAX,
-        .normalTextures = {{"StoneTriangleLeft", 0.f}}
-    };
-
-    ObjectDefaults fixedTriangleRight = {
-        .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
-        .shape = CreateShapeTriangle(triangleSize, triangleSize, false),
-        .maxHp = FLT_MAX,
-        .normalTextures = {{"StoneTriangleRight", 0.f}}
-    };
     
     ObjectDefaults fixedRectL = {
         .bodyDef = GetBodyDef(b2BodyType::b2_staticBody),
         .shape = CreateShape(rectLWidth, rectXHeight),
         .maxHp = FLT_MAX,
-        .normalTextures = {{"ground1", 0.f}}
+        .normalTextures = {{"block_transparent", 0.f}}
     };
 
     ObjectDefaults* getBlockDefaults(const std::string& name){
@@ -486,11 +449,6 @@ namespace ObjectDefs{
         if (name == "stonerects") return &stoneRectS;
         if (name == "stonerectm") return &stoneRectM;
         if (name == "stonerectl") return &stoneRectL;
-        if (name == "fixedcircles") return &fixedCircleS;
-        if (name == "fixedcirclem") return &fixedCircleM;
-        if (name == "fixedsquare") return &fixedSquare;
-        if (name == "fixedtriangleleft") return &fixedTriangleLeft;
-        if (name == "fixedtriangleright") return &fixedTriangleRight;
         if (name == "fixedrectl") return &fixedRectL;
         return nullptr;
     }
