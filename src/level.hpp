@@ -8,6 +8,9 @@
 #include "objects/object.hpp"
 #include "objects/ground.hpp"
 
+/**
+ * @brief Represents a level
+ */
 class Level
 {
 public:
@@ -74,12 +77,13 @@ public:
 		}
 	}
 
+	/**
+	 * @brief Adds objects to destroy list if necessary
+	 */
 	void addToDestroyList() {
 
 		for (auto& bird: birds) {
-			if (bird->isOut()) {
-				bird->Destroy();
-			} else if (bird->canAttackOnCollision() && bird->getIsDamaged()) {
+			if (bird->canAttackOnCollision() && bird->getIsDamaged()) {
 				bird->scheduleAttack(timeStep);
 			} else if (bird->isUsed() && !bird->isMoving()) {
 				bird->Destroy(3.f);
@@ -88,15 +92,16 @@ public:
 
 		for (auto& pig: pigs) {
 			if (pig->getHP() == 0) {pig->Destroy(3.f);} 
-			else if (pig->isOut()) {pig->Destroy();}
 		}
 
 		for (auto& block: blocks) {
 			if (block->getHP() <= 0) {block->Destroy(2.f);}
-			else if (block->isOut()) {block->Destroy();}
 		}
 	}
- 
+	
+	/**
+	 * @brief Disables and destroys objects in destroy list
+	 */
 	void disableAndDestroy() {	
 		for (auto i = Object::destroyList.begin(); i != Object::destroyList.end();) {
 			i->first -= timeStep;
@@ -126,7 +131,9 @@ public:
 		}		
 	}
 
-
+	/**
+	 * @brief Updates all textures
+	 */
 	void updateAllTexture() {
 		for (auto& bird : birds) {
 			bird->updateTexture(timeStep);
@@ -258,6 +265,7 @@ public:
 	float getScore() { return score + isWin() * (unusedBirds.size() + (currentBird && !currentBird->isUsed())) * scorePerUnusedBird; }
 	void setScore(float value) { score = value; }
 	void addScore(float add) { score += add; }
+	float getTimestep() { return timeStep; }
 	const std::vector<Bird*>& getBirds() { return birds; }
 	const std::vector<Block*>& getBlocks() { return blocks; }
 	const std::vector<Pig*>& getPigs() { return pigs; }
@@ -436,6 +444,12 @@ protected:
 		return false;
 	}
 
+	/**
+	 * @brief Adds a ground to world
+	 * @param parameter parameter from line
+	 * @param lineStream line to read
+	 * @return true if succesful
+	 */
 	bool addGround(const std::string& parameter, std::stringstream& lineStream) {
 		if (parameter != "ground") return false;
 		float x, y;
@@ -456,7 +470,7 @@ protected:
 	 * @brief Adds an invisible fixed ground to world
 	 */
 	void addGroundBlocks() {
-		for (float x=-100; x<100; x+=5.075f) {
+		for (float x=-500; x<500; x+=5.075f) {
 			blocks.push_back(new Block(&world, x, -0.55f/2.0f, &ObjectDefs::fixedRectL));
 		}
 	}

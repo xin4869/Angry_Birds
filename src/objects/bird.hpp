@@ -35,6 +35,10 @@ public:
         return fixture->TestPoint(worldPos);        
     }
 
+    /**
+     * @brief Reduce attack timer, attack when timer reaches 0
+     * @param deltaTime Time since last frame
+     */
     void scheduleAttack(float deltaTime) {
         attackTimer += deltaTime;
         if (attackTimer > 2.f) {

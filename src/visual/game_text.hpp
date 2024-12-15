@@ -5,6 +5,9 @@
 #include <string>
 
 
+/**
+ * @brief Represents a visual text object.
+ */
 class GameText {
 public: 
     GameText(sf::Font font, int size, const sf::Color& color, const sf::Color& outlineColor, const sf::Vector2f& position, const std::string& text):

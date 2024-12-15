@@ -5,6 +5,9 @@
 #ifndef VISUAL_BUTTON_HPP
 #define VISUAL_BUTTON_HPP
 
+/**
+ * @brief Visual button class.
+ */
 class Button {
 public:
     Button(const sf::Texture& texture) {

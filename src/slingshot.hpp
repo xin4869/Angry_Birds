@@ -7,6 +7,9 @@
 #include "visual/texture_manager.hpp"
 #include "objects/object_defs.hpp"
 
+/**
+ * @brief Launches objects
+ */
 class Slingshot
 {
 public:

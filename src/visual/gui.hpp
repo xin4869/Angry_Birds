@@ -11,13 +11,18 @@
 #define GUI_HPP
 
 
-
+/**
+ * @brief GUI class for the game.
+ */
 class GUI {
 public:
     GUI(sf::RenderWindow& game_window): window(game_window) {
         init();
     }
 
+    /**
+     * @brief Sets up the GUI
+     */
     void init(){
         if (!font.loadFromFile("assets/font/angrybirds.ttf")) {
                 throw std::runtime_error("Failed to load font");
@@ -29,6 +34,11 @@ public:
         setBackground("home_bg");
     }
 
+    /**
+     * @brief Get name of button pos is on
+     * @param mousePos 
+     * @return std::optional<std::string> name of button
+     */
     std::optional<std::string> getClickedButton(const sf::Vector2f& mousePos) {
         for (const auto& [name, button] : buttons) {
             if (button.isClicked(mousePos)) {
@@ -38,6 +48,9 @@ public:
         return std::nullopt;
     }
 
+    /**
+     * @brief Updates the scale of the GUI based on window size
+     */
     void updateScale(){
         sf::Vector2f windowSize(window.getSize());
         sf::Vector2f textureSize(background_sprite.getTexture()->getSize());
@@ -53,6 +66,9 @@ public:
         updateAllSizes();
     } 
 
+    /**
+     * @brief Update positions of all GUI elements
+     */
     void updateAllPositions(){
         for (auto& [name, button] : buttons) {
             button.updatePosition(scaleX, scaleY);
@@ -65,6 +81,9 @@ public:
         }
    } 
 
+    /**
+     * @brief Update sizes of all GUI elements
+     */
    void updateAllSizes() {
         for (auto& [name, button] : buttons) {
             button.updateSize(scaleX, scaleY);
@@ -77,11 +96,19 @@ public:
         }
    }
 
+    /**
+     * @brief Update score texts
+     * @param score 
+     */
     void updateScore(int score) {
         texts["score"].setString("Score: " + std::to_string(score));
         texts["final_score"].setString(std::to_string(score));
     }
 
+    /**
+     * @brief Update birds left text
+     * @param count 
+     */
     void updateBirdsLeft(int count) {
         texts["birds_left"].setString("Birds Left: " + std::to_string(count));
     }
@@ -90,6 +117,9 @@ public:
         isMusicOn = !isMusicOn;
     }
 
+    /**
+     * @brief Draws the home screen.
+     */
     void drawHome(){
         setBackground("home_bg");
         window.draw(background_sprite);
@@ -111,6 +141,9 @@ public:
 
     }
 
+    /**
+     * @brief Draw help screen
+     */
     void drawHelp(){
         setBackground("help_bg");
         window.draw(background_sprite);
@@ -121,6 +154,9 @@ public:
         texts["help_body"].draw(window);
     }
 
+    /**
+     * @brief Draw level screen
+     */
     void drawLevel(){
         setBackground("level_bg");
         window.draw(background_sprite);
@@ -136,6 +172,10 @@ public:
         texts["level3"].draw(window);
     }    
 
+    /**
+     * @brief Draws the ingame screen
+     * @param level level number
+     */
     void drawGame(int level){
         currentLevel = level;
         switch (currentLevel) {
@@ -151,6 +191,10 @@ public:
         texts["birds_left"].draw(window);
     }
 
+    /**
+     * @brief Draw win screen
+     * @param starCount amount of stars
+     */
     void drawWin(int starCount){
         switch (currentLevel) {
             case 1: setBackground("level1_bg"); break;
@@ -171,6 +215,9 @@ public:
         }
     }
 
+    /**
+     * @brief Draw lose screen
+     */
     void drawLost(){
         switch (currentLevel)
         {
@@ -291,7 +338,7 @@ private:
 
     void initText() {
         texts["score"] = GameText(56, sf::Vector2f(1686.2f, 10.4f), "");
-        texts["final_score"] = GameText(56, sf::Vector2f(1686.2f, 10.4f), "");
+        texts["final_score"] = GameText(140, sf::Vector2f(830.0f, 700.0f), "");
         texts["birds_left"] = GameText(56, sf::Vector2f(1286.2f, 10.4f), "");
         texts["help_title"] = GameText(203, sf::Vector2f(795.f, 128.8f), "Help", sf::Color::Black, sf::Color::White);
         texts["help_body"] = GameText(75, sf::Vector2f(632.8f, 472.8f), "Drag the bird and shot!\n          That's it! :D", sf::Color::Black, sf::Color::White);

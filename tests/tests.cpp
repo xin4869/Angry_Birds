@@ -64,7 +64,7 @@ TEST(LevelTests, Load) {
 	EXPECT_NE(level.getPigs().size(), 0);
 	EXPECT_EQ(level.getScore(), 0);
 	EXPECT_EQ(level.getStars(), 0);
-	EXPECT_EQ(level.getUnusedBirds().size(), 0);
+	EXPECT_EQ(level.getUnusedBirds().size(), 1);
 }
 
 #endif

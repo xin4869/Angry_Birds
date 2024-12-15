@@ -11,6 +11,9 @@ namespace ObjectDefs
     float default_pixel_per_meter = 40;
     float pixel_per_meter = default_pixel_per_meter;
 
+    /**
+     * @brief Default values for objects
+     */
     struct ObjectDefaults
     {
         b2BodyDef bodyDef;   
@@ -122,6 +125,11 @@ namespace ObjectDefs
         return baseHP * area;
     }
 
+    /**
+     * @brief Create a centered Sprite
+     * @param texture 
+     * @return sf::Sprite 
+     */
     sf::Sprite CreateSprite(const sf::Texture& texture)
     {
         sf::Sprite sprite(texture);

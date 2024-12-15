@@ -4,7 +4,6 @@ speedBird
 ground, 20,-1, 14,15, 12,15, 6,-1
 
 stoneCircleM, 13, 16
-fixedRectL, 25, 3, 90
 
 ironPig, 3.5, 2.4
 woodRect, 3.5, 0.5

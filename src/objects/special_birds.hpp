@@ -39,7 +39,7 @@ namespace ObjectDefs
 
     ObjectDefaults explodeBirdDefaults = {
         .bodyDef = GetBodyDef(b2BodyType::b2_dynamicBody),
-        .shape = CreateShape(birdRadius),
+        .shape = CreateShape(birdRadius * 1.2f),
         .density = birdDensity,
         .maxHp = birdMaxHp,
         .normalTextures = {{"ExplodeBird1", 2.f}, {"ExplodeBird2", 0.1f}, {"ExplodeBird3", 0.5f}, {"ExplodeBird4", 0.3f},

@@ -28,6 +28,22 @@ public:
         stopSounds();
     }
 
+    /**
+     * @brief Main constructor
+     * @param world World to add in
+     * @param bodyDef body def
+     * @param shape collider
+     * @param density 
+     * @param x, y world pos
+     * @param hp max HP
+     * @param textureDefs normal textures
+     * @param damageTextureDefs damage textures
+     * @param destroySoundNames 
+     * @param collisionSoundNames 
+     * @param damageSoundNames 
+     * @param otherSoundNames 
+     * @param rotation in degrees
+     */
     Object(
         b2World* world,
         b2BodyDef* bodyDef,
@@ -71,13 +87,22 @@ public:
         body->GetUserData().pointer = (uintptr_t)this;
     }
 
+    /**
+     * @brief Constructor used by derived classes
+     */
     Object(b2World* world, float x, float y, ObjectDefs::ObjectDefaults* defaults, float rotation=0.0f) :
         Object(world, &defaults->bodyDef, defaults->shape.get(), defaults->density,
             x, y, defaults->maxHp, defaults->normalTextures, defaults->damageTextures,
             defaults->destroySoundNames, defaults->collisionSoundNames, defaults->damageSoundNames,
             defaults->otherSoundNames, rotation) {}
     
-
+    /**
+     * @brief Loads sounds
+     * @param destroySoundNames 
+     * @param collisionSoundNames 
+     * @param damageSoundNames 
+     * @param otherSoundNames 
+     */
     void loadSounds(std::vector<std::string> destroySoundNames, std::vector<std::string> collisionSoundNames, 
         std::vector<std::string> damageSoundNames, std::vector<std::string> otherSoundNames) {
         for (auto i: destroySoundNames) {
@@ -105,6 +130,9 @@ public:
         }
     }
 
+    /**
+     * @brief Stops all sounds
+     */
     void stopSounds() {
         for (auto i: destroySounds) {i.stop();}
         for (auto i: collisionSounds) {i.stop();}
@@ -112,6 +140,12 @@ public:
         for (auto i: otherSoundsMap) {i.second.stop();}
     }
 
+    /**
+     * @brief Plays a sound by name
+     * @param name name of the sound
+     * @return true if sound was played
+     * @return false if sound was not found
+     */
     bool playSound(const std::string& name)
     {
         if (otherSoundsMap.find(name) == otherSoundsMap.end()) return false;
@@ -146,6 +180,10 @@ public:
         return false;
     }    
 
+    /**
+     * @brief Sets object to be deleted
+     * @param timer_s time to deletion
+     */
     void Destroy(float timer_s=0.f) {
         if (!toBeDeleted && body->GetType() != b2_staticBody) {
             destroyList.push_back(std::make_pair(timer_s, this));
@@ -154,6 +192,10 @@ public:
        
     }
 
+    /**
+     * @brief Gives score if destroyed, resets
+     * @return score to add
+     */
     float transferScore() {
         if (!toBeDeleted) return 0;
         float oldScore = score;
@@ -161,6 +203,11 @@ public:
         return oldScore;
     }
 
+    /**
+     * @brief Takes damage, plays sound
+     * @param dmg damage taken
+     * @return true if destroyed
+     */
     virtual bool TakeDamage(float dmg) {
         if (MaxHP == FLT_MAX) return false;
         CurrentHP = std::max(0.0f, CurrentHP - dmg);
@@ -184,15 +231,11 @@ public:
      * @brief and sounds take time to finish.
      * @param timer_s time to deletion
      */
-
     virtual void updateTexture(float deltaTime) = 0;
-
 
     b2Body* getBody() { return body; }
     float getScore() { return score; }
     void setScore(float newScore) { score = newScore; }
-    void setOut() {out = true;}
-    bool isOut() {return out;}
     float getMaxHP() { return MaxHP; }
     float getHP() { return CurrentHP; }
     sf::Sprite& getSprite() { return sprite; }
@@ -221,7 +264,6 @@ protected :
 
     bool isDamaged = false;
     bool toBeDeleted = false;
-    bool out = false;
     bool disableOnDestroy = true; 
     bool hasDestroyTexture = false;
 
@@ -232,7 +274,7 @@ std::list< std::pair< float, Object* > > Object::destroyList;
 class ObjectCollisions : public b2ContactListener
 {
     /**
-     * @brief Handles collisions between Objects, adds score.
+     * @brief Handles collisions between Objects.
      * @brief Damage increases linearly with difference in velocity.
      * @param contact supplied by box2d
      */
@@ -253,46 +295,21 @@ class ObjectCollisions : public b2ContactListener
         
         // consider mass / density too?
         float dmg = deltaVel * Object::speedDamageMultiplier;
-        bool killed;
         Object* object;
 
         if (bodyData1) {
             object = static_cast<Object*>(bodyData1);
-            killed = object->TakeDamage(dmg);
-            // set special value for score to recognize and only count score once
-            if (killed && object->getScore() > FLT_MIN) {
-                scoreToAdd += object->getScore();
-                //object->setScore(FLT_MIN);
-            }
+            object->TakeDamage(dmg);
         }
         if (bodyData2) {
             object = static_cast<Object*>(bodyData2);
-            killed = object->TakeDamage(dmg);
-            if (killed && object->getScore() > FLT_MIN) {
-                scoreToAdd += object->getScore();
-                //object->setScore(FLT_MIN);
-            }
+            object->TakeDamage(dmg);
         }
     }
-
-public:
-    /**
-     * @brief Gives score from collisions, resets.
-     * @brief Does not need to know about other score sources.
-     * @return score
-     */
-    float transferScore() {
-        float score = scoreToAdd;
-        scoreToAdd = 0;
-        return score;
-    }
-
-private:
-    float scoreToAdd = 0;
 };
 
 /**
- * @brief Raycasting for explosions :D.
+ * @brief Raycasting for explosions.
  * @brief Hits first target in the way
  */
 class RayCastHitFirst : public b2RayCastCallback

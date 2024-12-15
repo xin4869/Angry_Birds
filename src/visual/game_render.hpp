@@ -9,6 +9,9 @@
 #include "../slingshot.hpp"
 
 
+/**
+ * @brief Renders the game on screen.
+ */
 class GameRender{
 public: 
     GameRender(sf::RenderWindow& game_window): window(game_window) {
@@ -31,6 +34,11 @@ public:
         setCenter(0, 0.35f * y);
     }
 
+    /**
+     * @brief Checks if an object is in bounds
+     * @param object 
+     * @return true if in bounds
+     */
     bool inBounds(Object* object) {
         b2Vec2 pos = object->getBody()->GetPosition();
         sf::Vector2f screenPos = toScreenPos(pos);
@@ -51,15 +59,12 @@ public:
 
         for (auto i: level.getBirds()) {
             renderObject(i);
-            if (!inBounds(i)) {i->setOut();}
         }
         for (auto i: level.getPigs()) {
             renderObject(i);
-            if (!inBounds(i)) {i->setOut();}
         }
         for (auto i: level.getBlocks()) {
             renderObject(i);
-            if (!inBounds(i)) {i->setOut();}
         }
         
         renderGrounds(level.getGrounds());
@@ -72,6 +77,9 @@ public:
     void setXBounds(float x, float y) { gameXBounds.Set(x, y); }
     void setYBounds(b2Vec2 bounds) { gameYBounds = bounds; }
     void setYBounds(float x, float y) { gameYBounds.Set(x, y); }
+    b2Vec2 getXBounds() { return gameXBounds; }
+    b2Vec2 getYBounds() { return gameYBounds; }
+    b2Vec2 getCenter() { return b2Vec2((gameXBounds.x + gameXBounds.y) / 2.0f, (gameYBounds.x + gameYBounds.y) / 2.0f); }
     
     /**
      * @brief Sets the center of game bounds such that bounds size stays the same
@@ -161,6 +169,10 @@ private:
         }
     }
 
+    /**
+     * @brief Renders grounds
+     * @param grounds 
+     */
     void renderGrounds(const std::vector<std::unique_ptr<Ground>>& grounds) const {
         sf::Texture& ground_texture = TextureManager::getTexture("ground");
         ground_texture.setRepeated(true);
@@ -168,8 +180,6 @@ private:
         for (auto ground = grounds.begin(); ground != grounds.end(); ++ground) {
             if (!*ground) return;
             sf::ConvexShape groundShape;
-            groundShape.setOutlineColor(sf::Color::Black);
-            groundShape.setOutlineThickness(3);
             const std::vector<b2Vec2>& vertices = (*ground)->getVertices();
             
             groundShape.setPointCount(vertices.size());
@@ -195,6 +205,10 @@ private:
         // window.draw(lines);
     }
 
+    /**
+     * @brief Draws both slingshot bands
+     * @param level 
+     */
     void drawSlingshotBand(Level& level) {
         if (!level.getDragging() || !level.getCurrentBird()) return;
         
@@ -206,6 +220,11 @@ private:
         drawBand(start, end2);
     }
 
+    /**
+     * @brief Draws a band
+     * @param start start game pos
+     * @param end end game pos
+     */
     void drawBand(b2Vec2 start, b2Vec2 end) {
         b2Vec2 offset = end - start;
         sf::RectangleShape band1(sf::Vector2f(offset.Length() * 1.05f, std::min(0.6f / offset.Length(), 0.6f)));

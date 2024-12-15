@@ -25,6 +25,9 @@ enum class GameState {
 };
 
 
+/**
+ * @brief Game class for the game.
+ */
 class Game {
 public:
   Game() {
@@ -70,6 +73,11 @@ public:
    */
   void update(float deltaTime){
     if (level) {
+      if (level->getCurrentBird() && level->getCurrentBird()->isUsed()) {
+        renderer->setCenter(std::max(0.0f, level->getCurrentBird()->getBody()->GetPosition().x + 5.0f), renderer->getCenter().y);
+      } else if (level) {
+        renderer->setCenter(std::max(0.0f, renderer->getCenter().x - level->getTimestep() * 30.0f), renderer->getCenter().y);
+      }
       level->update(deltaTime);
       int currentScore = static_cast<int>(level->getScore());
       gui->updateScore(currentScore);
@@ -141,6 +149,11 @@ public:
     }
   }
 
+  /**
+   * @brief Transforms screen position to world position
+   * @param screenPos to transform
+   * @return b2Vec2 game pos
+   */
   b2Vec2 screenToWorldPos(const sf::Vector2i& screenPos) {
     sf::Vector2f worldPos = window.mapPixelToCoords(screenPos);
     return b2Vec2(worldPos.x / ObjectDefs::pixel_per_meter, worldPos.y / ObjectDefs::pixel_per_meter);
@@ -228,8 +241,8 @@ public:
           button_name == "lvl1_btn" || 
           button_name == "lvl2_btn"|| 
           button_name == "lvl3_btn"){
-          int level = (button_name == "lvl1_btn") ? 1 : (button_name == "lvl2_btn") ? 2 : 3;
-          setLevel(level);
+          int levelNum = (button_name == "lvl1_btn") ? 1 : (button_name == "lvl2_btn") ? 2 : 3;
+          setLevel(levelNum);
           currentState = GameState::in_game;
           SoundManager::playMusic("Forest ambient");
         } break;
@@ -271,10 +284,14 @@ public:
     }
     level = std::make_unique<Level>(level_number);
     levelNumber = level_number;
+    renderer->setBounds();
 
     level->setActive(true);
   }
 
+  /**
+   * @brief Resizes and centers the window
+   */
   void centerWindow() {
     int desktop_width = sf::VideoMode::getDesktopMode().width;
     int desktop_height = sf::VideoMode::getDesktopMode().height;

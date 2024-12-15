@@ -6,6 +6,9 @@
 #include <string>
 #include <stdexcept>
 
+/**
+ * @brief Manages textures in the game.
+ */
 class TextureManager
 {
 private:
