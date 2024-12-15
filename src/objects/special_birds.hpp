@@ -90,6 +90,10 @@ public:
         }
     }
 
+    virtual void setDestroyTexture() override {
+        sprite.setTexture(TextureManager::getTexture("red_feathers"), true);
+    }
+
 };
 
 class SpeedBird : public Bird
