@@ -150,16 +150,6 @@ public:
   }
 
   /**
-   * @brief Transforms screen position to world position
-   * @param screenPos to transform
-   * @return b2Vec2 game pos
-   */
-  b2Vec2 screenToWorldPos(const sf::Vector2i& screenPos) {
-    sf::Vector2f worldPos = window.mapPixelToCoords(screenPos);
-    return b2Vec2(worldPos.x / ObjectDefs::pixel_per_meter, worldPos.y / ObjectDefs::pixel_per_meter);
-  }
-
-  /**
    * @brief Handles mouse presses, performs actions based on it
    */
 
