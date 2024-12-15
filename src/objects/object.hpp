@@ -147,11 +147,18 @@ public:
     }    
 
     void Destroy(float timer_s=0.f) {
-        if (!toBeDeleted) {
+        if (!toBeDeleted && body->GetType() != b2_staticBody) {
             destroyList.push_back(std::make_pair(timer_s, this));
             toBeDeleted = true;
         }
        
+    }
+
+    float transferScore() {
+        if (!toBeDeleted) return 0;
+        float oldScore = score;
+        score = std::min(score, FLT_MIN);
+        return oldScore;
     }
 
     virtual bool TakeDamage(float dmg) {
@@ -252,7 +259,7 @@ class ObjectCollisions : public b2ContactListener
             // set special value for score to recognize and only count score once
             if (killed && object->getScore() > FLT_MIN) {
                 scoreToAdd += object->getScore();
-                object->setScore(FLT_MIN);
+                //object->setScore(FLT_MIN);
             }
         }
         if (bodyData2) {
@@ -260,7 +267,7 @@ class ObjectCollisions : public b2ContactListener
             killed = object->TakeDamage(dmg);
             if (killed && object->getScore() > FLT_MIN) {
                 scoreToAdd += object->getScore();
-                object->setScore(FLT_MIN);
+                //object->setScore(FLT_MIN);
             }
         }
     }

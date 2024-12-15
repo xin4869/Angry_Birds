@@ -63,7 +63,7 @@ public:
 		while (accumulator >= timeStep) {
 			world.Step(timeStep, velocityIterations, positionIterations);
 			
-			addScore(collisionHandler.transferScore());
+			//addScore(collisionHandler.transferScore());
 
 			updateAllTexture();
 			addToDestroyList();
@@ -158,7 +158,7 @@ public:
 	 */
 	int getStars() {
 		for (size_t stars=0; stars<scoreLimits.size(); stars++) {
-			if (score < scoreLimits[stars]) return stars;
+			if (getScore() < scoreLimits[stars]) return stars;
 		}
 		return scoreLimits.size();
 	}
@@ -248,7 +248,7 @@ public:
 	bool getActive() { return isActive; }
 	bool getDragging() { return isDragging; }
 	b2Vec2 getGravity() { return gravity; }
-	float getScore() { return score; }
+	float getScore() { return score + isWin() * (unusedBirds.size() + (currentBird && !currentBird->isUsed())) * scorePerUnusedBird; }
 	void setScore(float value) { score = value; }
 	void addScore(float add) { score += add; }
 	const std::vector<Bird*>& getBirds() { return birds; }
@@ -500,6 +500,7 @@ protected:
 	float frameRate;
 	float timeStep;
 	bool isActive = false;
+	float scorePerUnusedBird = 200.0f;
 
 	b2Vec2 gravity;
 	b2World world; 

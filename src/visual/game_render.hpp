@@ -45,6 +45,7 @@ public:
      * @param level render this level
      */
     void renderGame(Level& level) {
+        drawSlingshotBand(level);
         Slingshot& ss = level.getSlingshot();
         renderSprite(ss.getSprite(), ss.getPos(), 0);
 
@@ -192,6 +193,32 @@ private:
         // }
         // lines[vertices.size()] = lines[0]; // Close the shape
         // window.draw(lines);
+    }
+
+    void drawSlingshotBand(Level& level) {
+        if (!level.getDragging() || !level.getCurrentBird()) return;
+        
+        b2Vec2 start = level.getCurrentBird()->getBody()->GetPosition();
+        b2Vec2 end = level.getSlingshot().getPos() + b2Vec2(0, 2);
+        b2Vec2 end1 = end + b2Vec2(0.6f, -0.3f);
+        b2Vec2 end2 = end + b2Vec2(-0.6f, -0.3f);
+        drawBand(start, end1);
+        drawBand(start, end2);
+    }
+
+    void drawBand(b2Vec2 start, b2Vec2 end) {
+        b2Vec2 offset = end - start;
+        sf::RectangleShape band1(sf::Vector2f(offset.Length() * 1.05f, std::min(0.6f / offset.Length(), 0.6f)));
+        float angle = 90.0f;
+        if (offset.x != 0) angle = -atan(offset.y / offset.x) * radToDeg;
+        band1.setRotation(angle);
+        band1.setFillColor(sf::Color(47, 24, 13));
+        band1.setOrigin(band1.getSize() / 2.f);
+        b2Vec2 bandPos = start + 0.5 * offset;
+        float scale = ObjectDefs::pixel_per_meter;
+        band1.scale(scale, scale);
+        band1.setPosition(toScreenPos(bandPos));
+        window.draw(band1);
     }
 };
 

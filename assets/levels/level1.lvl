@@ -16,4 +16,4 @@ woodTriangleLeft, 17, 6.7
 
 gravity, 0, -10
 slingshot, -15, 3
-scoreLimits, 1000, 1100, 1200
+scoreLimits, 1000, 1150, 1400

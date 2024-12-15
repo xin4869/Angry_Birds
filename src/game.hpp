@@ -29,6 +29,9 @@ class Game {
 public:
   Game() {
     window.create(sf::VideoMode(defaultWindowWidth, defaultWindowHeight), "Angry Birds");
+    sf::Image icon;
+    icon.loadFromFile("assets/textures/normal_bird/normal/1.png");
+    window.setIcon(80, 76, icon.getPixelsPtr());
     centerWindow();
     window.setFramerateLimit(frameRate);
 
