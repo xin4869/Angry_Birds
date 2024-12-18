@@ -78,6 +78,7 @@ public:
       } else if (level) {
         renderer->setCenter(std::max(0.0f, renderer->getCenter().x - level->getTimestep() * 30.0f), renderer->getCenter().y);
       }
+
       level->update(deltaTime);
       int currentScore = static_cast<int>(level->getScore());
       gui->updateScore(currentScore);
@@ -206,11 +207,9 @@ public:
    * @param button_name Name of button clicked (see gui)
    */
   void handleButtonClicks(const std::string& button_name){
-    std::cout << "Button clicked: " << button_name << std::endl;
     switch (currentState){
       case GameState::home: 
         if(button_name == "play_btn") {
-          std::cout << "Changing state to level" << std::endl;
           currentState = GameState::level;
         } else if (button_name == "help_btn") {
           currentState = GameState::help;

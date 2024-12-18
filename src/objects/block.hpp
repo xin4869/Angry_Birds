@@ -11,6 +11,7 @@ using Defs = ObjectDefs::ObjectDefaults;
 class Block : public Object{
 public:
 
+
     Block(b2World* world, float x, float y, Defs* defaults, float rotation=0.0f) :
         Object(world, x, y, defaults, rotation) {
             score = 50.0f;

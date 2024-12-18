@@ -76,9 +76,6 @@ public:
         if (textObject.getFont() == nullptr) {
             throw std::runtime_error("Font is not set");
         }
-        // std::cout << "Drawing text: " << textObject.getString().toAnsiString() << std::endl;
-        // std::cout << "Position: " << textObject.getPosition().x << ", " << textObject.getPosition().y << std::endl;
-        // std::cout << "Character size: " << textObject.getCharacterSize() << std::endl;
         window.draw(textObject);
     }
 

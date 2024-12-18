@@ -26,7 +26,7 @@ public:
      */
     void setBounds() {
         // correct scaling
-        std::cout << "size: " << window.getSize().x << ", " << window.getSize().y << std::endl;
+        // std::cout << "size: " << window.getSize().x << ", " << window.getSize().y << std::endl;
         float x = window.getSize().x / ObjectDefs::pixel_per_meter;
         float y = window.getSize().y / ObjectDefs::pixel_per_meter;
         gameXBounds.Set(0, x);

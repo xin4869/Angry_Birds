@@ -129,15 +129,6 @@ public:
         buttons["help_btn"].draw(window);
         buttons["music_btn"].draw(window); //button.draw will only draw active btn
         buttons["no_music_btn"].draw(window); 
-          
-        // if (buttons.find("play_btn") != buttons.end()) {
-        //     std::cout << "Drawing play button at position: " 
-        //             << buttons["play_btn"].getPosition().x << ", " 
-        //             << buttons["play_btn"].getPosition().y << std::endl;
-        //     buttons["play_btn"].draw(window);
-        // } else {
-        //     std::cout << "Play button not found in buttons map" << std::endl;
-        // }
 
     }
 
@@ -309,17 +300,6 @@ private:
         initButtonPosition();
     }
 
-    // void scaleButtons() {
-    //     buttons["help_btn"].setScale(sf::Vector2f(94.f,95.f));
-    //     buttons["music_btn"].setScale(sf::Vector2f(112.f,114.f));  
-    //     buttons["no_music_btn"].setScale(sf::Vector2f(112.f,114.f));
-    //     buttons["home_btn"].setScale(sf::Vector2f(112.f,114.f));
-    //     buttons["lvl1_btn"].setScale(sf::Vector2f(336.f,653.f));
-    //     buttons["lvl2_btn"].setScale(sf::Vector2f(336.f,653.f));
-    //     buttons["lvl3_btn"].setScale(sf::Vector2f(336.f,653.f));
-    //     buttons["replay_btn"].setScale(sf::Vector2f(112.f,114.f));
-    // }
-
     void initButtonPosition() {
         buttons["play_btn"].setDefaultPosition(730.f, 472.f);  
         buttons["help_btn"].setDefaultPosition(1800.0f, 990.f);     
@@ -338,7 +318,7 @@ private:
 
     void initText() {
         texts["score"] = GameText(56, sf::Vector2f(1686.2f, 10.4f), "");
-        texts["final_score"] = GameText(140, sf::Vector2f(830.0f, 700.0f), "");
+        texts["final_score"] = GameText(80, sf::Vector2f(903.0f, 700.0f), "");
         texts["birds_left"] = GameText(56, sf::Vector2f(1286.2f, 10.4f), "");
         texts["help_title"] = GameText(203, sf::Vector2f(795.f, 128.8f), "Help", sf::Color::Black, sf::Color::White);
         texts["help_body"] = GameText(75, sf::Vector2f(632.8f, 472.8f), "Drag the bird and shot!\n          That's it! :D", sf::Color::Black, sf::Color::White);
