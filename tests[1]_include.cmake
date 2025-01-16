@@ -1,0 +1,5 @@
+if(EXISTS "/Users/xin/Files/Sutdies_review/Angry_Birds/tests[1]_tests.cmake")
+  include("/Users/xin/Files/Sutdies_review/Angry_Birds/tests[1]_tests.cmake")
+else()
+  add_test(tests_NOT_BUILT tests_NOT_BUILT)
+endif()
