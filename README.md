@@ -6,7 +6,7 @@ Fortresses are built of destroyable and non-destroyable construction elements.
 Failing, i.e not destroying all of the enemies, means the level is reset and all points are lost.
 The player’s points should correlate with their throwing skills.
 
-# Team member
+# Developers
 - Jaakko Rautapää
 - Xin Lin
 
